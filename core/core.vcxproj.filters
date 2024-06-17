@@ -15,11 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\test.ixx">
+    <ClCompile Include="src\carnival.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\test.cpp">
+    <ClCompile Include="src\carnival\Application.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\carnival\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\carnival\macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\carnival\EntryPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
