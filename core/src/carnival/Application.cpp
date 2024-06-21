@@ -14,5 +14,4 @@ namespace Carnival {
 		while (true);
 	}
 
-	extern Application* CreateApplication();
 }

@@ -1,12 +1,15 @@
 #pragma once
+#include "macros.h"
 
 #ifdef CL_PLATFORM_WINDOWS
+
+extern Carnival::Application* Carnival::CreateApplication();
 
 int main(int argc, char** argv) {
 	Carnival::Log::Init(); // to be moved to general initialization function later
 
-	Carnival::Log::GetCoreLogger()->warn("Initialized Log!");
-	Carnival::Log::GetClientLogger()->info("WILL THIS FINALLY WORK!");
+	CL_CORE_CRITICAL("Initialized Log!");
+	CL_INFO("WILL THIS FINALLY WORK!");
 
 	auto app = Carnival::CreateApplication();
 	app->Run();
