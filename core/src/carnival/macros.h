@@ -10,7 +10,7 @@
 	#error Carnival Only Supports Windows! :(
 #endif
 
-
+	
 // --------------- LOGGING MACROS ------------------------------//
 // Core Logger
 #define CL_CORE_TRACE(...)		::Carnival::Log::GetCoreLogger()->trace(__VA_ARGS__)
