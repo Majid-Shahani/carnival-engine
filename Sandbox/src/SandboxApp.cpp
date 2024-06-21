@@ -1,5 +1,4 @@
-#include <EntryPoint.h>
-import carnival;
+#include <Carnival.h>
 
 class Sandbox : public Carnival::Application {
 public:

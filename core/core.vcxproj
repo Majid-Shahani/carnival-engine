@@ -11,12 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\carnival.ixx" />
     <ClCompile Include="src\carnival\Application.cpp" />
-    <ClCompile Include="src\carnival\Application.ixx" />
+    <ClCompile Include="src\carnival\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Carnival.h" />
+    <ClInclude Include="src\carnival\Application.h" />
     <ClInclude Include="src\carnival\EntryPoint.h" />
+    <ClInclude Include="src\carnival\Log.h" />
     <ClInclude Include="src\carnival\macros.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -67,10 +69,19 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);CL_PLATFORM_WINDOWS;CL_BUILD_DLL</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>Default</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <BuildStlModules>false</BuildStlModules>
+      <BuildStlModules>true</BuildStlModules>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\spdlog\include\;</AdditionalIncludeDirectories>
+      <EnableModules>true</EnableModules>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <TranslateIncludes>false</TranslateIncludes>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -84,10 +95,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);CL_PLATFORM_WINDOWS;CL_BUILD_DLL</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>Default</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <BuildStlModules>false</BuildStlModules>
+      <BuildStlModules>true</BuildStlModules>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\spdlog\include\;</AdditionalIncludeDirectories>
+      <EnableModules>true</EnableModules>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <TranslateIncludes>false</TranslateIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

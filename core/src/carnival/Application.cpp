@@ -1,4 +1,5 @@
-module Application;
+#include "macros.h"
+#include "Application.h"
 
 namespace Carnival {
 	Application::Application() {

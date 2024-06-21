@@ -60,12 +60,21 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalModuleDependencies>
       </AdditionalModuleDependencies>
-      <AdditionalIncludeDirectories>$(SolutionDir)core\src\carnival\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)core\src\;$(SolutionDir)vendor\spdlog\include\;</AdditionalIncludeDirectories>
       <AdditionalBMIDirectories>
       </AdditionalBMIDirectories>
-      <TranslateIncludes>true</TranslateIncludes>
+      <TranslateIncludes>false</TranslateIncludes>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <EnableModules>true</EnableModules>
+      <BuildStlModules>true</BuildStlModules>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -83,12 +92,16 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalModuleDependencies>
       </AdditionalModuleDependencies>
-      <AdditionalIncludeDirectories>$(SolutionDir)core\src\carnival\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)core\src\;$(SolutionDir)vendor\spdlog\include\;</AdditionalIncludeDirectories>
       <AdditionalBMIDirectories>
       </AdditionalBMIDirectories>
-      <TranslateIncludes>true</TranslateIncludes>
+      <TranslateIncludes>false</TranslateIncludes>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <EnableModules>true</EnableModules>
+      <BuildStlModules>true</BuildStlModules>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
