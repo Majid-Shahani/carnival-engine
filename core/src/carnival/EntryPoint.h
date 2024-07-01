@@ -1,5 +1,7 @@
 #pragma once
+
 #include "macros.h"
+
 
 #ifdef CL_PLATFORM_WINDOWS
 
