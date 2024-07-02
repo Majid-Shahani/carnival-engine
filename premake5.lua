@@ -25,6 +25,7 @@ project "Core"
 	
 	includedirs
 	{
+		"%{prj.name}/src",
 		"vendor/spdlog/include"
 	}
 	

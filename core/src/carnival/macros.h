@@ -26,3 +26,8 @@
 #define CL_ERROR(...)			::Carnival::Log::GetClientLogger()->error(__VA_ARGS__)
 #define CL_CRITICAL(...)		::Carnival::Log::GetClientLogger()->critical(__VA_ARGS__)
 // -------------- END OF LOGGING MACROS ------------------------//
+
+
+// -------------- EVENT MACROS -------------------//
+#define BIT(x) (1 << x)
+// there are more macros defined in Event.h for ease of writing subclasses //

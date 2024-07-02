@@ -10,5 +10,5 @@ namespace Carnival {
 		void Run();
 	};
 
-	Application* CreateApplication(); // TO BE DEFINED IN THE CLIENT
+	Carnival::Application* CreateApplication(); // TO BE DEFINED IN THE CLIENT
 }

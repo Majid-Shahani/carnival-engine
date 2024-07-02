@@ -19,6 +19,8 @@
     <ClInclude Include="src\carnival\macros.h">
       <Filter>carnival</Filter>
     </ClInclude>
+    <ClInclude Include="src\carnival\Event\Event.h" />
+    <ClInclude Include="src\carnival\Event\ApplicationEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\carnival\Application.cpp">
