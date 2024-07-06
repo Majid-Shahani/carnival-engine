@@ -146,6 +146,7 @@
     <ClInclude Include="src\carnival\EntryPoint.h" />
     <ClInclude Include="src\carnival\Event\ApplicationEvent.h" />
     <ClInclude Include="src\carnival\Event\Event.h" />
+    <ClInclude Include="src\carnival\Event\KeyEvent.h" />
     <ClInclude Include="src\carnival\Log.h" />
     <ClInclude Include="src\carnival\macros.h" />
   </ItemGroup>

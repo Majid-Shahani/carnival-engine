@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <string>
 #include <functional>
+#include <iostream>
 
 
 
@@ -70,23 +71,23 @@ namespace Carnival
 
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 //-----------------------------------END OF MACROS------------------------------------//
-	
+	/*
 	template<typename T>
 	concept IsEvent = requires {
-		std::convertible_to<T ,Event>;
-	};
+		//std::convertible_to<T ,Event>;
+	}; */
 
 	class EventDispatcher
 	{
-		template<IsEvent T>
+		template<typename T>
 		using EventFn = std::function<bool(T&)>;
 	public:
 		EventDispatcher(Event& event)
 			: m_Event(event)
 		{
 		}
-
-		template<IsEvent T>
+		// This shit doesn't even work, expect redesign or skill up cause I've no clue how to make it work or why it's here
+		template<typename T>
 		bool Dispatch(EventFn<T> func)
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())

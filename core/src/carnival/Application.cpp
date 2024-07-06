@@ -13,12 +13,14 @@ namespace Carnival {
 
 	}
 
+
 	void Application::Run() {
 
-		WindowResizeEvent e(1280, 720);
-		std::cout << e;
+		WindowResizeEvent ev(1280, 720);
+		CL_INFO(ev.ToString()); // ostr.h requires custom sink I guess, removed for now
+		if (ev.IsInCategory(EventCategory::Input)) CL_CRITICAL(ev.ToString());
+
 
 		while (true);
 	}
-
 }

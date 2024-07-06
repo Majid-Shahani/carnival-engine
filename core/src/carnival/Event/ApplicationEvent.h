@@ -34,4 +34,65 @@ namespace Carnival
 	private:
 		uint32_t m_Width, m_Height;
 	};
+
+	class CL_API WindowCloseEvent : public Event
+	{
+	public:
+		EVENT_CLASS_TYPE(WindowClose)
+		EVENT_CLASS_CATEGORY(Application)
+
+#ifdef CL_DEBUG
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "WindowCloseEvent: Window Closed!";
+			return ss.str();
+		}
+#endif
+	};
+
+	class CL_API AppTickEvent : public Event
+	{
+	public:
+		EVENT_CLASS_TYPE(AppTick)
+		EVENT_CLASS_CATEGORY(Application)
+#ifdef CL_DEBUG
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "AppTickEvent!";
+			return ss.str();
+		}
+#endif
+	};
+
+	class CL_API AppUpdateEvent : public Event
+	{
+	public:
+		EVENT_CLASS_TYPE(AppUpdate)
+		EVENT_CLASS_CATEGORY(Application)
+#ifdef CL_DEBUG
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "AppUpdateEvent!";
+			return ss.str();
+		}
+#endif
+	};
+
+	class CL_API AppRenderEvent : public Event
+	{
+	public:
+		EVENT_CLASS_TYPE(AppRender)
+		EVENT_CLASS_CATEGORY(Application)
+#ifdef CL_DEBUG
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "AppRenderEvent!";
+			return ss.str();
+		}
+#endif
+	};
 }

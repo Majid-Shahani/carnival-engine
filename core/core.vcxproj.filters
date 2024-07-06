@@ -21,6 +21,7 @@
     </ClInclude>
     <ClInclude Include="src\carnival\Event\Event.h" />
     <ClInclude Include="src\carnival\Event\ApplicationEvent.h" />
+    <ClInclude Include="src\carnival\Event\KeyEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\carnival\Application.cpp">

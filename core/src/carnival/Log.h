@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "spdlog/spdlog.h"
-#include "spdlog/fmt/ostr.h"
 
 namespace Carnival {
 	class CL_API Log {
