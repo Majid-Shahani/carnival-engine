@@ -2,9 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
-
 namespace Carnival {
 	
 	class CL_API MouseMovedEvent : public Event

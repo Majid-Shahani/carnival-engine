@@ -4,6 +4,9 @@
     <Filter Include="carnival">
       <UniqueIdentifier>{F5D7E715-E1A4-4221-0ABE-30C9F6E977AF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="carnival\Event">
+      <UniqueIdentifier>{06BD6EEE-F28A-62F4-DB1E-D31AC78B3E59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Carnival.h" />
@@ -13,15 +16,25 @@
     <ClInclude Include="src\carnival\EntryPoint.h">
       <Filter>carnival</Filter>
     </ClInclude>
+    <ClInclude Include="src\carnival\Event\ApplicationEvent.h">
+      <Filter>carnival\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\carnival\Event\Event.h">
+      <Filter>carnival\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\carnival\Event\KeyEvent.h">
+      <Filter>carnival\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\carnival\Event\MouseEvent.h">
+      <Filter>carnival\Event</Filter>
+    </ClInclude>
     <ClInclude Include="src\carnival\Log.h">
       <Filter>carnival</Filter>
     </ClInclude>
     <ClInclude Include="src\carnival\macros.h">
       <Filter>carnival</Filter>
     </ClInclude>
-    <ClInclude Include="src\carnival\Event\Event.h" />
-    <ClInclude Include="src\carnival\Event\ApplicationEvent.h" />
-    <ClInclude Include="src\carnival\Event\KeyEvent.h" />
+    <ClInclude Include="src\clpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\carnival\Application.cpp">
@@ -30,5 +43,6 @@
     <ClCompile Include="src\carnival\Log.cpp">
       <Filter>carnival</Filter>
     </ClCompile>
+    <ClCompile Include="src\clpch.cpp" />
   </ItemGroup>
 </Project>

@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Carnival {
 	
 	class CL_API KeyEvent : public Event

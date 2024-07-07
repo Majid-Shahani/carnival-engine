@@ -1,12 +1,6 @@
 #pragma once
 
-#include "../macros.h" // change to <Carnival/macros.h> after project re-set
-
-#include <cstdint>
-#include <string>
-#include <functional>
-#include <iostream>
-
+#include "carnival/macros.h"
 
 
 namespace Carnival
