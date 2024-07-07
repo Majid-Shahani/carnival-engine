@@ -36,7 +36,7 @@ namespace Carnival
 		virtual std::string ToString() const { return GetName(); }
 #endif
 		virtual EventType	GetEventType() const = 0;
-		virtual int			GetCategoryFlags() const = 0;
+		virtual uint8_t			GetCategoryFlags() const = 0;
 
 		inline bool IsInCategory(EventCategory category) const
 		{
@@ -63,7 +63,7 @@ namespace Carnival
 								virtual EventType GetEventType() const override { return GetStaticType();}
 #endif
 
-#define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
+#define EVENT_CLASS_CATEGORY(category) virtual uint8_t GetCategoryFlags() const override { return category; }
 //-----------------------------------END OF MACROS------------------------------------//
 	/*
 	template<typename T>

@@ -11,10 +11,10 @@ namespace Carnival {
 		{}
 		EVENT_CLASS_TYPE(MouseMoved)
 		EVENT_CLASS_CATEGORY(Input | Mouse)
-
+		
 		float GetX() const { return m_MouseX; }
 		float GetY() const { return m_MouseY; }
-
+		
 		#ifdef CL_DEBUG
 			std::string ToString() const 
 			{

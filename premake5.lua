@@ -9,6 +9,12 @@ workspace "Carnival"
 
 outputdir = "%{cfg.system}%{cfg.architecture}-%{cfg.buildcfg}"	
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "./vendor/GLFW/include"
+IncludeDir["spdlog"] = "./vendor/spdlog/include"
+
+include "vendor/GLFW"
+
 project "Core"
 	location "Core"
 	kind "SharedLib"
@@ -29,7 +35,14 @@ project "Core"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"vendor/spdlog/include"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.GLFW}"
+	}
+	
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 	
 	filter "system:windows"
