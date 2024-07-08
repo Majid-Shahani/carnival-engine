@@ -14,7 +14,7 @@ namespace Carnival
 		inline uint32_t GetWidth() const { return m_Width; }
 		inline uint32_t GetHeight() const{ return m_Height; }
 
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(ApplicationEC)
 		EVENT_CLASS_TYPE(WindowResize)
 
 
@@ -36,7 +36,7 @@ namespace Carnival
 	{
 	public:
 		EVENT_CLASS_TYPE(WindowClose)
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(ApplicationEC)
 
 		#ifdef CL_DEBUG
 			std::string ToString() const override
@@ -52,7 +52,7 @@ namespace Carnival
 	{
 	public:
 		EVENT_CLASS_TYPE(AppTick)
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(ApplicationEC)
 		#ifdef CL_DEBUG
 				std::string ToString() const override
 				{
@@ -67,7 +67,7 @@ namespace Carnival
 	{
 	public:
 		EVENT_CLASS_TYPE(AppUpdate)
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(ApplicationEC)
 		#ifdef CL_DEBUG
 				std::string ToString() const override
 				{
@@ -82,7 +82,7 @@ namespace Carnival
 	{
 	public:
 		EVENT_CLASS_TYPE(AppRender)
-		EVENT_CLASS_CATEGORY(Application)
+		EVENT_CLASS_CATEGORY(ApplicationEC)
 		#ifdef CL_DEBUG
 				std::string ToString() const override
 				{

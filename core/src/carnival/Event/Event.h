@@ -20,7 +20,7 @@ namespace Carnival
 	enum EventCategory : uint8_t
 	{
 		None = 0,
-		Application = BIT(0),
+		ApplicationEC = BIT(0),
 		Input = BIT(1),
 		Keyboard = BIT(2),
 		Mouse = BIT(3),
