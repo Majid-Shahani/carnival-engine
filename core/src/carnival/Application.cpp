@@ -5,24 +5,20 @@
 #include "Log.h"
 
 namespace Carnival {
-	Application::Application() {
 
+	Application::Application() 
+	{
+		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Running = true;
 	}
 
-	Application::~Application() {
-
-	}
+	Application::~Application() {}
 
 
 	void Application::Run() {
-
-		WindowResizeEvent ev(1280, 720);
-#ifdef CL_DEBUG
-		CL_INFO(ev.ToString()); // ostr.h requires custom sink I guess, removed for now
-		if (ev.IsInCategory(EventCategory::Input)) CL_CRITICAL(ev.ToString());
-#endif
-
-
-		while (true);
+		while (m_Running) 
+		{
+			m_Window->OnUpdate();
+		}
 	}
 }
