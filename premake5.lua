@@ -47,7 +47,7 @@ project "Core"
 	
 	filter "system:windows"
 		cppdialect "C++latest"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 		
 		defines
@@ -57,17 +57,24 @@ project "Core"
 		}
 		
 	filter "configurations:Debug"
-		defines "CL_DEBUG"
+		defines 
+		{
+			"CL_DEBUG",
+			"CL_ENABLE_ASSERTS"
+		}
 		symbols "Full"
+		runtime "Debug"
 		optimize "Off"
 			
 	filter "configurations:Release"
 		defines "CL_RELEASE"
+		runtime "Release"
 		optimize "On"
 		symbols "Off"
 			
 	filter "configurations:Dist"
 		defines "CL_DIST"
+		runtime "Release"
 		optimize "Full"
 		symbols "Off"			
 			
@@ -113,16 +120,19 @@ project "Sandbox"
 		
 	filter "configurations:Debug"
 		defines "CL_DEBUG"
+		runtime "Debug"
 		symbols "Full"
 		optimize "Off"
 			
 	filter "configurations:Release"
 		defines "CL_RELEASE"
+		runtime "Release"
 		optimize "On"
 		symbols "Off"
 			
 	filter "configurations:Dist"
 		defines "CL_DIST"
+		runtime "Release"
 		optimize "Full"
 		symbols "Off"
 			
