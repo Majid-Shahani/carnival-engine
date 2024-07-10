@@ -26,11 +26,10 @@ namespace Carnival {
 		virtual void* GetNativeWindow() const { return m_Window; }
 	private:
 		// Member Functions 
-	
-		// I yet cannot fathom the point of init and shutdown other than calling them manually from multiple places 
-		// will come back to these if the need rises
+
 		// virtual void Init(const WindowProperties& props); 
-		// virtual void Shutdown();
+		virtual void Shutdown();
+		virtual void SetCallbacks();
 
 		// Member Variables
 		struct WindowData

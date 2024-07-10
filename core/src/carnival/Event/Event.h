@@ -36,7 +36,7 @@ namespace Carnival
 		virtual std::string ToString() const { return GetName(); }
 #endif
 		virtual EventType	GetEventType() const = 0;
-		virtual uint8_t			GetCategoryFlags() const = 0;
+		virtual uint8_t		GetCategoryFlags() const = 0;
 
 		inline bool IsInCategory(EventCategory category) const
 		{
@@ -55,9 +55,9 @@ namespace Carnival
 	{
 		return os << e.ToString();
 	}
-#define EVENT_CLASS_TYPE(type)	static EventType GetStaticType(){ return EventType::##type;}\
-								virtual EventType GetEventType() const override { return GetStaticType();}\
-								virtual const char* GetName() const override { return #type;}
+#define EVENT_CLASS_TYPE(type)	consteval inline static EventType GetStaticType(){ return EventType::##type;}\
+								inline virtual EventType GetEventType() const override { return GetStaticType();}\
+								inline virtual const char* GetName() const override { return #type;}
 #else
 #define EVENT_CLASS_TYPE(type)	static EventType GetStaticType(){ return EventType::##type;}\
 								virtual EventType GetEventType() const override { return GetStaticType();}

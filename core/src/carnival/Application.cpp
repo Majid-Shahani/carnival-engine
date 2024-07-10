@@ -8,14 +8,15 @@ namespace Carnival {
 
 	Application::Application() 
 	{
-		Init();
+		Carnival::Log::Init();
+		CL_CORE_CRITICAL("Initialized Log!");
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Running = true;
 	}
 
 	Application::~Application() 
 	{
-		Shutdown();
 	}
 
 	void Application::Run() 
@@ -26,14 +27,4 @@ namespace Carnival {
 		}
 	}
 
-	void Application::Init()
-	{
-		Carnival::Log::Init();
-		CL_CORE_CRITICAL("Initialized Log!");
-	}
-
-	void Application::Shutdown()
-	{
-		Window::Shutdown();
-	}
 }

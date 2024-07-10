@@ -6,15 +6,16 @@
 namespace Carnival 
 {
 	static bool s_GLFWInitialized = false;
+	static uint32_t s_WindowCount = 0;
 
 	Window* Window::Create(const WindowProperties& props)
 	{
 		return new WindowsWindow(props);
 	}
 
-	void Window::Shutdown()
+	void WindowsWindow::Shutdown()
 	{
-		glfwTerminate(); // glfw already checks for initialization, no need for a second change
+		glfwTerminate(); // glfw already checks for initialization
 		s_GLFWInitialized = false;
 	}
 
@@ -27,19 +28,28 @@ namespace Carnival
 		{
 			int success = glfwInit();
 			CL_CORE_ASSERT(success, "Could not Initialize GLFW");
-
 			s_GLFWInitialized = true;
 		}
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr); // Implicit conversion to int
-		glfwMakeContextCurrent(m_Window);
-		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
+		if (m_Window)
+		{
+			glfwMakeContextCurrent(m_Window);
+			glfwSetWindowUserPointer(m_Window, &m_Data);
+			SetVSync(true);
+			s_WindowCount++;
+		}
+		else CL_CORE_ERROR("GLFW Window Creation Failed!");
+
+
+		SetCallbacks();
 	}
 
 	WindowsWindow::~WindowsWindow() 
 	{
 		glfwDestroyWindow(m_Window);
+		s_WindowCount--;
+		if (!s_WindowCount)	Shutdown();
 	}
 
 	void WindowsWindow::OnUpdate()
@@ -59,4 +69,9 @@ namespace Carnival
 	}
 
 	bool WindowsWindow::IsVSync() const { return m_Data.VSync; }
+
+	void WindowsWindow::SetCallbacks()
+	{
+
+	}
 }
