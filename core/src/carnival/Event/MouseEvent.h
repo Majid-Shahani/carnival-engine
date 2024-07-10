@@ -70,7 +70,7 @@ namespace Carnival {
 				std::string ToString() const
 				{
 					std::stringstream ss;
-					ss << "MousePressedEvent: " << m_Button;
+					ss << "MousePressedEvent: " << static_cast<int>(m_Button);
 					return ss.str();
 				}
 		#endif
@@ -86,7 +86,7 @@ namespace Carnival {
 				std::string ToString() const
 				{
 					std::stringstream ss;
-					ss << "MouseReleasedEvent: ";
+					ss << "MouseReleasedEvent: " << static_cast<int>(m_Button);
 					return ss.str();
 				}
 		#endif
