@@ -32,5 +32,6 @@ namespace Carnival {
 		virtual void SetVSync(bool enabled) = 0;
 
 		static Window* Create(const WindowProperties& props = WindowProperties());
+		static void Shutdown();
 	};
 }

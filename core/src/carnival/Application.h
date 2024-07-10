@@ -5,13 +5,17 @@
 
 namespace Carnival {
 
-	class CL_API Application {
+	class CL_API Application { // Class is meant to be singleton for now
 	public:
 		Application();
 		virtual ~Application();
 		void Run();
 
 	private:
+		// Functions
+		void Init();
+		void Shutdown();
+		// Variables
 		std::unique_ptr<Window> m_Window;
 		bool m_Running;
 	};

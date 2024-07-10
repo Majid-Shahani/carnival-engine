@@ -12,6 +12,12 @@ namespace Carnival
 		return new WindowsWindow(props);
 	}
 
+	void Window::Shutdown()
+	{
+		if (s_GLFWInitialized)	glfwTerminate();
+	}
+
+
 	WindowsWindow::WindowsWindow(const WindowProperties& props) : m_Data(props.Title, props.Width, props.Height)
 	{
 		CL_CORE_INFO("Creating window {0} ({1} x {2})", props.Title, props.Width, props.Height);

@@ -8,9 +8,6 @@
 extern Carnival::Application* Carnival::CreateApplication();
 
 int main(int argc, char** argv) {
-	Carnival::Log::Init(); // to be moved to general initialization function later
-
-	CL_CORE_CRITICAL("Initialized Log!");
 
 	auto app = Carnival::CreateApplication();
 	app->Run();
