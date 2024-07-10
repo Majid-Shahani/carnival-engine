@@ -1,6 +1,9 @@
 #pragma once
 
 #include "macros.h"
+
+#include "Event/Event.h"
+#include "Event/ApplicationEvent.h"
 #include "Window.h"
 
 namespace Carnival {
@@ -11,7 +14,10 @@ namespace Carnival {
 		virtual ~Application();
 		void Run();
 
+		void OnEvent(Event& e);
 	private:
+		// Functions
+		bool OnWindowClose(WindowCloseEvent& e);
 		// Variables
 		std::unique_ptr<Window> m_Window;
 		bool m_Running;

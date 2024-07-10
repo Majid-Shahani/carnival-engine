@@ -11,7 +11,7 @@ namespace Carnival
 	enum class EventType : uint8_t
 	{
 		None = 0,
-		WindowClose, WindowResize, WindowFocus, WindowLostFoucs, WindowMoved,
+		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
@@ -40,7 +40,7 @@ namespace Carnival
 
 		inline bool IsInCategory(EventCategory category) const
 		{
-			return GetCategoryFlags() & category; // AND Operation
+			return GetCategoryFlags() & category; // bit-wise AND Operation
 		}
 
 	protected:
@@ -59,8 +59,8 @@ namespace Carnival
 								inline virtual EventType GetEventType() const override { return GetStaticType();}\
 								inline virtual const char* GetName() const override { return #type;}
 #else
-#define EVENT_CLASS_TYPE(type)	static EventType GetStaticType(){ return EventType::##type;}\
-								virtual EventType GetEventType() const override { return GetStaticType();}
+#define EVENT_CLASS_TYPE(type)	consteval inline static EventType GetStaticType(){ return EventType::##type;}\
+								inline virtual EventType GetEventType() const override { return GetStaticType();}
 #endif
 
 #define EVENT_CLASS_CATEGORY(category) virtual uint8_t GetCategoryFlags() const override { return category; }
@@ -80,7 +80,6 @@ namespace Carnival
 			: m_Event(event)
 		{
 		}
-		// This shit doesn't even work, expect redesign or skill up cause I've no clue how to make it work or why it's here
 		template<typename T>
 		bool Dispatch(EventFn<T> func)
 		{

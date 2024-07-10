@@ -7,7 +7,7 @@ namespace Carnival {
 	class CL_API MouseMovedEvent : public Event
 	{
 	public:
-		MouseMovedEvent(float xPos, float yPos) : m_MouseX(xPos), m_MouseY(yPos)
+		MouseMovedEvent(double xPos, double yPos) : m_MouseX(xPos), m_MouseY(yPos)
 		{}
 		EVENT_CLASS_TYPE(MouseMoved)
 		EVENT_CLASS_CATEGORY(Input | Mouse)
@@ -30,7 +30,7 @@ namespace Carnival {
 	class CL_API MouseScrolledEvent : public Event
 	{
 	public:
-		MouseScrolledEvent(float XOffset, float YOffset, bool down) : m_Xoffset(XOffset), m_Yoffset(YOffset), m_direction(down)
+		MouseScrolledEvent(double XOffset, double YOffset) : m_Xoffset(XOffset), m_Yoffset(YOffset)
 		{}
 		EVENT_CLASS_TYPE(MouseScrolled)
 		EVENT_CLASS_CATEGORY(Input | Mouse)
@@ -42,14 +42,12 @@ namespace Carnival {
 				std::string ToString() const
 				{
 					std::stringstream ss;
-					ss << "MouseScrolledEvent:\tX: " << m_Xoffset << "\tY: " << m_Yoffset
-						<< "\nDirection: " << (m_direction ? "Down":"False");
+					ss << "MouseScrolledEvent:\tX: " << m_Xoffset << "\tY: " << m_Yoffset;
 					return ss.str();
 				}
 		#endif
 	private:
 		float m_Xoffset, m_Yoffset;
-		bool m_direction; // 1 = down , 0 = up
 	};
 
 	class CL_API MouseButtonEvent : public Event
