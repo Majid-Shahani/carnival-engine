@@ -14,7 +14,8 @@ namespace Carnival
 
 	void Window::Shutdown()
 	{
-		if (s_GLFWInitialized)	glfwTerminate();
+		glfwTerminate(); // glfw already checks for initialization, no need for a second change
+		s_GLFWInitialized = false;
 	}
 
 
