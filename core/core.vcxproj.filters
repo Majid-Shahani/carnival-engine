@@ -47,6 +47,8 @@
       <Filter>carnival</Filter>
     </ClInclude>
     <ClInclude Include="src\clpch.h" />
+    <ClInclude Include="src\carnival\Layer.h" />
+    <ClInclude Include="src\carnival\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
@@ -59,5 +61,6 @@
       <Filter>carnival</Filter>
     </ClCompile>
     <ClCompile Include="src\clpch.cpp" />
+    <ClCompile Include="src\carnival\LayerStack.cpp" />
   </ItemGroup>
 </Project>

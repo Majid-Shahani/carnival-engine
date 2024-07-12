@@ -98,19 +98,19 @@ project "Sandbox"
 		"vendor/spdlog/include"
 	}
 	
+		links
+	{
+		"Core"
+	}
+	
 	filter "system:windows"
 		cppdialect "C++latest"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 		
 		defines
 		{
 			"CL_PLATFORM_WINDOWS"
-		}
-		
-		links
-		{
-			"Core"
 		}
 		
 		postbuildcommands

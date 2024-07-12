@@ -148,6 +148,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Carnival.h" />
+    <ClInclude Include="src\carnival\Layer.h" />
+    <ClInclude Include="src\carnival\LayerStack.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\carnival\Application.h" />
     <ClInclude Include="src\carnival\EntryPoint.h" />
@@ -161,6 +163,7 @@
     <ClInclude Include="src\clpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\carnival\LayerStack.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\carnival\Application.cpp" />
     <ClCompile Include="src\carnival\Log.cpp" />

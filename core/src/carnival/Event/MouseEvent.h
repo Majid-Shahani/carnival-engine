@@ -12,8 +12,8 @@ namespace Carnival {
 		EVENT_CLASS_TYPE(MouseMoved)
 		EVENT_CLASS_CATEGORY(Input | Mouse)
 		
-		float GetX() const { return m_MouseX; }
-		float GetY() const { return m_MouseY; }
+		double GetX() const { return m_MouseX; }
+		double GetY() const { return m_MouseY; }
 		
 		#ifdef CL_DEBUG
 			std::string ToString() const 
@@ -24,7 +24,7 @@ namespace Carnival {
 			}
 		#endif
 	private:
-		float m_MouseX, m_MouseY;
+		double m_MouseX, m_MouseY;
 	};
 
 	class CL_API MouseScrolledEvent : public Event
@@ -35,8 +35,8 @@ namespace Carnival {
 		EVENT_CLASS_TYPE(MouseScrolled)
 		EVENT_CLASS_CATEGORY(Input | Mouse)
 
-		float GetXoffset() const { return m_Xoffset; }
-		float GetYoffset() const { return m_Yoffset; }
+		double GetXoffset() const { return m_Xoffset; }
+		double GetYoffset() const { return m_Yoffset; }
 
 		#ifdef CL_DEBUG
 				std::string ToString() const
@@ -47,13 +47,13 @@ namespace Carnival {
 				}
 		#endif
 	private:
-		float m_Xoffset, m_Yoffset;
+		double m_Xoffset, m_Yoffset;
 	};
 
 	class CL_API MouseButtonEvent : public Event
 	{
 	public:
-		inline uint8_t GetMouseButton() { return m_Button; }
+		inline uint8_t GetMouseButton() const { return m_Button; }
 		EVENT_CLASS_CATEGORY(Input | Mouse | MouseButton)
 	protected:
 		MouseButtonEvent(uint8_t button) : m_Button(button) {}
