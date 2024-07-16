@@ -6,6 +6,4 @@ bin-int/
 **.sln
 **.vcxproj
 **.vcxproj.filters
-**.vcproj.user
-
-vendor/VulkanSDK
+**.vcxproj.user

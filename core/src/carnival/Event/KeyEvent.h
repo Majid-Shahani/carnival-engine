@@ -7,19 +7,19 @@ namespace Carnival {
 	class CL_API KeyEvent : public Event
 	{
 	public:
-		inline uint8_t GetKeyCode() const { return m_KeyCode; }
+		inline uint16_t GetKeyCode() const { return m_KeyCode; }
 	
 		EVENT_CLASS_CATEGORY(Keyboard | Input)
 
 	protected:
-		KeyEvent(uint8_t keycode) : m_KeyCode(keycode){}
-		uint8_t m_KeyCode;
+		KeyEvent(uint16_t keycode) : m_KeyCode(keycode){}
+		uint16_t m_KeyCode;
 	};
 
 	class CL_API KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(uint8_t keycode, uint16_t repeatCount)
+		KeyPressedEvent(uint16_t keycode, uint16_t repeatCount)
 			: KeyEvent(keycode), m_RepeatCount(repeatCount){}
 
 		inline uint16_t GetRepeatCount() const { return m_RepeatCount; }
@@ -41,7 +41,7 @@ namespace Carnival {
 	class CL_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(uint8_t keycode) : KeyEvent(keycode) {}
+		KeyReleasedEvent(uint16_t keycode) : KeyEvent(keycode) {}
 		EVENT_CLASS_TYPE(KeyReleased)
 
 		#ifdef CL_DEBUG

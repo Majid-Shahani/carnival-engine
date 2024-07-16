@@ -16,14 +16,19 @@ workspace "Carnival"
 
 outputdir = "%{cfg.system}%{cfg.architecture}-%{cfg.buildcfg}"
 
-group "Dependencies"
-	include "vendor/GLFW"
-group ""
-
+newoption
+{
+	trigger = "using-vulkan",
+	description = "Build using vulkan renderer"
+}
 group "Core"
 	include "Core"
 group ""
 
 group "Misc"
 	include "Sandbox"
+group ""
+
+group "Dependencies"
+	include "vendor/GLFW"
 group ""

@@ -4,8 +4,8 @@ project "Sandbox"
 	cppdialect "C++latest"
 	staticruntime "Off"
 	
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 	
 	files
 	{
@@ -16,9 +16,8 @@ project "Sandbox"
 	includedirs
 	{
 		"%{wks.location}/Core/src",
-		"%{wks.location}/vendor",
-		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.glm}"
+		"%{wks.location}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
 	}
 	
 		links
@@ -28,13 +27,15 @@ project "Sandbox"
 	
 	filter "system:windows"
 		systemversion "latest"
-		defines
-		{
-			"CL_PLATFORM_WINDOWS"
-		}
 		postbuildcommands
 		{
-			("{COPYFILE} ../bin/" .. outputdir .. "/Core/Core.dll %{cfg.buildtarget.directory}")
+			("{COPYFILE} %{wks.location}/bin/" .. outputdir .. "/Core/Core.dll %{cfg.buildtarget.directory}")
+		}
+
+	filter { "options:using-vulkan" }
+		includedirs
+		{
+			"%{IncludeDir.VulkanSDK}"
 		}
 
 	filter "configurations:Debug"

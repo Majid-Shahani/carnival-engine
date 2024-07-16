@@ -1,7 +1,10 @@
 #include "clpch.h"
 
+#ifdef CL_VK
+	#define GLFW_INCLUDE_VULKAN
+#endif
+
 #include "WindowsWindow.h"
-#include "carnival/Log.h"
 
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"

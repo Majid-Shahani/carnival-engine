@@ -1,8 +1,6 @@
 #include "clpch.h"
 #include "Application.h"
 
-#include "Log.h"
-
 namespace Carnival {
 
 	Application::Application() 

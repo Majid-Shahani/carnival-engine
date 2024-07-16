@@ -13,9 +13,7 @@ project "Core"
 	files
 	{
 		"src/**.h",
-		"src/**.cpp",
-		"%{IncludeDir.glm}/**.hpp",
-		"%{IncludeDir.glm}/**.inl"
+		"src/**.cpp"
 	}
 	
 	includedirs
@@ -23,16 +21,17 @@ project "Core"
 		"src",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.VulkanSDK}"
+		"%{IncludeDir.glm}"
 	}
 	
 	links
 	{
 		"GLFW",
-		"opengl32.lib"
+		"opengl32.lib",
+		"%{Library.Vulkan}"
 	}
 	
+
 	filter "system:windows"
 		systemversion "latest"
 		defines
@@ -41,6 +40,20 @@ project "Core"
 			"CL_BUILD_DLL"
 		}
 		
+	filter { "options:using-vulkan" }
+		includedirs
+		{
+			"%{IncludeDir.VulkanSDK}"
+		}
+		links
+		{
+			"%{Library.Vulkan}"
+		}
+		defines
+		{
+			"CL_VK"
+		}
+
 	filter "configurations:Debug"
 		defines 
 		{
