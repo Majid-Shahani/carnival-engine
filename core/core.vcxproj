@@ -80,17 +80,19 @@
       <PrecompiledHeaderFile>clpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CL_PLATFORM_WINDOWS;CL_BUILD_DLL;CL_DEBUG;CL_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\vendor\spdlog\include;..\vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\vendor\spdlog\include;..\vendor\GLFW\include;C:\VulkanSDK\1.3.283.0\Include\glm;C:\VulkanSDK\1.3.283.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;C:\VulkanSDK\1.3.283.0\Lib\shaderc_sharedd.lib;C:\VulkanSDK\1.3.283.0\Lib\spirv-cross-cored.lib;C:\VulkanSDK\1.3.283.0\Lib\spirv-cross-glsld.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\windowsx86_64-Debug\Core\Core.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -100,7 +102,7 @@
       <PrecompiledHeaderFile>clpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CL_PLATFORM_WINDOWS;CL_BUILD_DLL;CL_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\vendor\spdlog\include;..\vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\vendor\spdlog\include;..\vendor\GLFW\include;C:\VulkanSDK\1.3.283.0\Include\glm;C:\VulkanSDK\1.3.283.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -108,6 +110,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -116,7 +119,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;C:\VulkanSDK\1.3.283.0\Lib\shaderc_shared.lib;C:\VulkanSDK\1.3.283.0\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.3.283.0\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\windowsx86_64-Release\Core\Core.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -126,7 +129,7 @@
       <PrecompiledHeaderFile>clpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CL_PLATFORM_WINDOWS;CL_BUILD_DLL;CL_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\vendor\spdlog\include;..\vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\vendor\spdlog\include;..\vendor\GLFW\include;C:\VulkanSDK\1.3.283.0\Include\glm;C:\VulkanSDK\1.3.283.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -134,6 +137,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -142,14 +146,428 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;C:\VulkanSDK\1.3.283.0\Lib\shaderc_shared.lib;C:\VulkanSDK\1.3.283.0\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.3.283.0\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\windowsx86_64-Dist\Core\Core.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\common.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\_features.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\_fixes.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\_noise.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\_swizzle.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\_swizzle_func.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\_vectorize.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\compute_common.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\compute_vector_decl.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\compute_vector_relational.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_common.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_common_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_exponential.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_exponential_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_geometric.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_geometric_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_integer.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_integer_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_matrix.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_matrix_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_packing.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_packing_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_trigonometric.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_trigonometric_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_vector_relational.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\func_vector_relational_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\qualifier.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\setup.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_float.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_half.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_half.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat2x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat2x2.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat2x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat2x3.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat2x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat2x4.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat3x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat3x2.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat3x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat3x3.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat3x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat3x4.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat4x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat4x2.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat4x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat4x3.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat4x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat4x4.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_mat4x4_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_quat.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_quat.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_quat_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec1.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec1.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec2.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec3.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec4.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\detail\type_vec4_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\exponential.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\_matrix_vectorize.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_clip_space.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_clip_space.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_common.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_common.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double2x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double2x2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double2x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double2x3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double2x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double2x4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double3x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double3x2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double3x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double3x3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double3x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double3x4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double4x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double4x2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double4x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double4x3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double4x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_double4x4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float2x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float2x2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float2x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float2x3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float2x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float2x4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float3x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float3x2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float3x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float3x3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float3x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float3x4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float4x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float4x2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float4x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float4x3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float4x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_float4x4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int2x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int2x2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int2x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int2x3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int2x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int2x4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int3x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int3x2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int3x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int3x3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int3x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int3x4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int4x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int4x2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int4x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int4x3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int4x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_int4x4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_integer.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_integer.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_projection.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_projection.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_relational.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_relational.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_transform.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_transform.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint2x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint2x2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint2x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint2x3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint2x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint2x4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint3x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint3x2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint3x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint3x3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint3x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint3x4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint4x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint4x2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint4x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint4x3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint4x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\matrix_uint4x4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_common.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_common.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_common_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_double.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_double_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_exponential.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_exponential.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_float.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_float_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_geometric.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_geometric.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_relational.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_relational.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_transform.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_transform.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_trigonometric.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\quaternion_trigonometric.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_common.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_common.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_constants.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_constants.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_int_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_integer.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_integer.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_packing.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_packing.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_reciprocal.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_reciprocal.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_relational.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_relational.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_uint_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_ulp.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\scalar_ulp.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool1.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool1_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_bool4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_common.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_common.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double1.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double1_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_double4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float1.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float1_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float2_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float3_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_float4_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int1.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int1_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_int4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_integer.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_integer.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_packing.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_packing.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_reciprocal.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_reciprocal.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_relational.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_relational.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint1.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint1_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint2_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint3_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_uint4_sized.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_ulp.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\ext\vector_ulp.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\fwd.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\geometric.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\glm.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\bitfield.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\bitfield.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\color_space.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\color_space.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\constants.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\constants.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\epsilon.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\epsilon.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\integer.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\integer.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\matrix_access.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\matrix_access.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\matrix_integer.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\matrix_inverse.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\matrix_inverse.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\matrix_transform.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\matrix_transform.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\noise.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\noise.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\packing.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\packing.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\quaternion.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\quaternion.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\quaternion_simd.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\random.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\random.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\reciprocal.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\round.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\round.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\type_aligned.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\type_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\type_precision.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\type_ptr.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\type_ptr.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\ulp.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\ulp.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtc\vec1.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\associated_min_max.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\associated_min_max.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\bit.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\bit.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\closest_point.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\closest_point.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\color_encoding.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\color_encoding.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\color_space.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\color_space.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\color_space_YCoCg.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\color_space_YCoCg.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\common.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\common.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\compatibility.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\compatibility.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\component_wise.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\component_wise.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\dual_quaternion.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\dual_quaternion.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\easing.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\easing.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\euler_angles.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\euler_angles.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\extend.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\extend.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\extended_min_max.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\extended_min_max.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\exterior_product.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\exterior_product.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\fast_exponential.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\fast_exponential.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\fast_square_root.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\fast_square_root.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\fast_trigonometry.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\fast_trigonometry.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\float_notmalize.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\functions.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\functions.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\gradient_paint.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\gradient_paint.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\handed_coordinate_space.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\handed_coordinate_space.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\hash.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\hash.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\integer.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\integer.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\intersect.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\intersect.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\io.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\io.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\log_base.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\log_base.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_cross_product.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_cross_product.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_decompose.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_decompose.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_factorisation.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_factorisation.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_interpolation.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_interpolation.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_major_storage.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_major_storage.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_operation.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_operation.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_query.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_query.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_transform_2d.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\matrix_transform_2d.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\mixed_product.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\mixed_product.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\norm.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\norm.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\normal.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\normal.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\normalize_dot.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\normalize_dot.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\number_precision.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\optimum_pow.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\optimum_pow.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\orthonormalize.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\orthonormalize.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\pca.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\pca.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\perpendicular.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\perpendicular.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\polar_coordinates.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\polar_coordinates.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\projection.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\projection.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\quaternion.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\quaternion.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\range.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\raw_data.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\raw_data.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\rotate_normalized_axis.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\rotate_normalized_axis.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\rotate_vector.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\rotate_vector.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\scalar_multiplication.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\scalar_relational.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\scalar_relational.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\spline.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\spline.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\std_based_type.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\std_based_type.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\string_cast.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\string_cast.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\texture.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\texture.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\transform.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\transform.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\transform2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\transform2.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\type_aligned.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\type_aligned.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\type_trait.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\type_trait.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\vec_swizzle.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\vector_angle.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\vector_angle.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\vector_query.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\vector_query.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\wrap.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\gtx\wrap.inl" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\integer.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat2x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat2x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat2x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat3x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat3x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat3x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat4x2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat4x3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\mat4x4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\matrix.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\packing.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\trigonometric.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\vec2.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\vec3.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\vec4.hpp" />
+    <ClInclude Include="C:\VulkanSDK\1.3.283.0\Include\glm\vector_relational.hpp" />
     <ClInclude Include="src\Carnival.h" />
-    <ClInclude Include="src\carnival\Layer.h" />
-    <ClInclude Include="src\carnival\LayerStack.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\carnival\Application.h" />
     <ClInclude Include="src\carnival\EntryPoint.h" />
@@ -157,15 +575,17 @@
     <ClInclude Include="src\carnival\Event\Event.h" />
     <ClInclude Include="src\carnival\Event\KeyEvent.h" />
     <ClInclude Include="src\carnival\Event\MouseEvent.h" />
+    <ClInclude Include="src\carnival\Layer.h" />
+    <ClInclude Include="src\carnival\LayerStack.h" />
     <ClInclude Include="src\carnival\Log.h" />
     <ClInclude Include="src\carnival\Window.h" />
     <ClInclude Include="src\carnival\macros.h" />
     <ClInclude Include="src\clpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\carnival\LayerStack.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\carnival\Application.cpp" />
+    <ClCompile Include="src\carnival\LayerStack.cpp" />
     <ClCompile Include="src\carnival\Log.cpp" />
     <ClCompile Include="src\clpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

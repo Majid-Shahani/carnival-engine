@@ -1,6 +1,11 @@
-.vs
-bin-int
-bin
+**/bin/
+bin-int/
 
-*.user
 
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcproj.user
+
+vendor/VulkanSDK
