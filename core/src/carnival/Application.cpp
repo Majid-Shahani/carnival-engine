@@ -46,11 +46,10 @@ namespace Carnival {
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
-		CL_CORE_TRACE(e.ToString());
 
-		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend();)
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); it++)
 		{
-			if (e.Handled())
+			if (e.m_Handled)
 				break;
 			(*it)->OnEvent(e);
 		}

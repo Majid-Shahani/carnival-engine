@@ -27,6 +27,10 @@ project "Sandbox"
 	
 	filter "system:windows"
 		systemversion "latest"
+		defines
+		{
+			"CL_PLATFORM_WINDOWS"
+		}
 		postbuildcommands
 		{
 			("{COPYFILE} %{wks.location}/bin/" .. outputdir .. "/Core/Core.dll %{cfg.buildtarget.directory}")

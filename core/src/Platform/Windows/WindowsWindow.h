@@ -2,6 +2,10 @@
 
 #include "carnival/Window.h"
 
+
+#ifdef CL_VK
+	#define GLFW_INCLUDE_VULKAN
+#endif
 #include <GLFW/glfw3.h>
 
 namespace Carnival {
@@ -11,6 +15,9 @@ namespace Carnival {
 	public:
 		WindowsWindow(const WindowProperties& props);
 		virtual ~WindowsWindow();
+
+		WindowsWindow(const WindowsWindow&) = delete;
+		WindowsWindow& operator=(const WindowsWindow&) = delete;
 
 		void OnUpdate() override;
 
@@ -27,9 +34,10 @@ namespace Carnival {
 	private:
 		// Member Functions 
 
-		// virtual void Init(const WindowProperties& props); 
-		virtual void Shutdown();
+		virtual void InitGLFW();
+		virtual void InitVK();
 		virtual void SetCallbacks();
+		// virtual void Shutdown();
 
 		// Member Variables
 		struct WindowData
