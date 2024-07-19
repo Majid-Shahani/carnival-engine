@@ -21,12 +21,14 @@ project "Core"
 		"src",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.glad}",
 		"%{IncludeDir.glm}"
 	}
 	
 	links
 	{
 		"GLFW",
+		"glad",
 		"opengl32.lib",
 		"%{Library.Vulkan}"
 	}
@@ -37,7 +39,8 @@ project "Core"
 		defines
 		{
 			"CL_PLATFORM_WINDOWS",
-			"CL_BUILD_DLL"
+			"CL_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 		
 	filter { "options:using-vulkan" }

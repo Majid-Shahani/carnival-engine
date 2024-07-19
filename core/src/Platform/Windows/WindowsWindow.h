@@ -6,6 +6,7 @@
 #ifdef CL_VK
 	#define GLFW_INCLUDE_VULKAN
 #endif
+
 #include <GLFW/glfw3.h>
 
 namespace Carnival {
@@ -35,7 +36,6 @@ namespace Carnival {
 		// Member Functions 
 
 		virtual void InitGLFW();
-		virtual void InitVK();
 		virtual void SetCallbacks();
 		// virtual void Shutdown();
 
@@ -55,6 +55,10 @@ namespace Carnival {
 		WindowData m_Data;
 
 		GLFWwindow* m_Window;
+#ifdef CL_VK
+	public:
+		virtual void InitVK();
+#endif
 	};
 }
 

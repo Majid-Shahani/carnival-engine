@@ -16,8 +16,9 @@ project "Sandbox"
 	includedirs
 	{
 		"%{wks.location}/Core/src",
-		"%{wks.location}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.glad}"
 	}
 	
 		links

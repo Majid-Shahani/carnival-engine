@@ -31,4 +31,5 @@ group ""
 
 group "Dependencies"
 	include "vendor/GLFW"
+	include "vendor/glad"
 group ""

@@ -1,11 +1,13 @@
 #include "clpch.h"
 
 #include "WindowsWindow.h"
-#include <vulkan/vulkan.h>
+
 
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"
 #include "carnival/Event/MouseEvent.h"
+
+#include <glad/glad.h>
 
 namespace Carnival 
 {
@@ -36,6 +38,10 @@ namespace Carnival
 		{
 			s_WindowCount++;
 			glfwMakeContextCurrent(m_Window);
+
+			int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+			CL_CORE_ASSERT(status, "Failed to initialize glad!");
+
 			glfwSetWindowUserPointer(m_Window, &m_Data);
 			SetVSync(true);
 			SetCallbacks();
@@ -72,6 +78,14 @@ namespace Carnival
 		}
 	}
 
+	void WindowsWindow::InitGLFW()
+	{
+		CL_CORE_INFO("Initializing GLFW");
+		int success = glfwInit();
+		CL_CORE_ASSERT(success, "Could not Initialize GLFW");
+		if (success) s_GLFWInitialized = true;
+		glfwSetErrorCallback(WindowErrorCallback);
+	}
 #endif
 	// -------------------------------------------------- VULKAN Specific ----------------------------------------------------------//
 #ifdef CL_VK
@@ -110,10 +124,19 @@ namespace Carnival
 		}
 	}
 
-	void WindowsWindow::InitVK() // This gets Called After GLFWinit but before creating the window
+	void WindowsWindow::InitGLFW()
 	{
+		CL_CORE_INFO("Initializing GLFW");
+		int success = glfwInit();
+		CL_CORE_ASSERT(success, "Could not Initialize GLFW");
+		if (success) s_GLFWInitialized = true;
+		glfwSetErrorCallback(WindowErrorCallback);
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	}
+
+	void WindowsWindow::InitVK() // This gets Called After GLFWinit but before creating the window
+	{
 		CL_CORE_INFO("Initializing Vulkan");
 
 	}
@@ -128,14 +151,6 @@ namespace Carnival
 #endif
 	// ======================================================= SHARED =============================================================//
 
-	void WindowsWindow::InitGLFW()
-	{
-		CL_CORE_INFO("Initializing GLFW");
-		int success = glfwInit();
-		CL_CORE_ASSERT(success, "Could not Initialize GLFW");
-		if (success) s_GLFWInitialized = true;
-		glfwSetErrorCallback(WindowErrorCallback);
-	}
 
 	bool WindowsWindow::IsVSync() const { return m_Data.VSync; }
 
