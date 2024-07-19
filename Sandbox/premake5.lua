@@ -17,8 +17,6 @@ project "Sandbox"
 	{
 		"%{wks.location}/Core/src",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.glad}"
 	}
 	
 		links

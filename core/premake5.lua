@@ -22,13 +22,15 @@ project "Core"
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.glad}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.ImGui}"
 	}
 	
 	links
 	{
 		"GLFW",
 		"glad",
+		"ImGui",
 		"opengl32.lib",
 		"%{Library.Vulkan}"
 	}
