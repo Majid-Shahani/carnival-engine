@@ -21,7 +21,6 @@ project "Core"
 		"src",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}"
 	}
@@ -29,10 +28,8 @@ project "Core"
 	links
 	{
 		"GLFW",
-		"glad",
 		"ImGui",
-		"opengl32.lib",
-		"%{Library.Vulkan}"
+		"opengl32.lib"
 	}
 	
 
@@ -41,11 +38,15 @@ project "Core"
 		defines
 		{
 			"CL_PLATFORM_WINDOWS",
-			"CL_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
+			"CL_BUILD_DLL"
 		}
-		
-	filter { "options:using-vulkan" }
+		postbuildcommands
+		{	
+			("{MKDIR} ../bin/" .. outputdir .. "/Sandbox/"),
+			("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+		}
+-------------------------------- OPTIONS ---------------------------		
+	filter { "options:api=vulkan" }
 		includedirs
 		{
 			"%{IncludeDir.VulkanSDK}"
@@ -56,9 +57,25 @@ project "Core"
 		}
 		defines
 		{
-			"CL_VK"
+			"CL_VK",
+			"GLFW_INCLUDE_VULKAN"
 		}
-
+		
+	filter { "options:api=opengl" }
+		includedirs
+		{
+			"%{IncludeDir.glad}"
+		}
+		links
+		{
+			"glad"
+		}
+		defines
+		{
+			"CL_OGL",
+			"GLFW_INCLUDE_NONE"
+		}
+--------------------------------- CONFIGS -------------------------
 	filter "configurations:Debug"
 		defines 
 		{

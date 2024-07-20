@@ -1,14 +1,14 @@
 #pragma once
 
-#include "macros.h"
-#include "Event/Event.h"
+#include <carnival/macros.h>
+#include <carnival/Event/Event.h>
 
 namespace Carnival {
 
 	class CL_API Layer
 	{
 	public:
-		Layer(const std::string& name = "Layer") : m_Name(name), m_Enabled(false) {}
+		Layer(const std::string& name = "Layer") : m_Name(name){}
 		virtual ~Layer() {}
 
 		virtual void OnAttach() {}
@@ -16,10 +16,12 @@ namespace Carnival {
 		virtual void OnUpdate() {}
 		virtual void OnEvent(Event& event) {}
 
+
+		virtual void OnRender() {};
+
 		inline const std::string& GetName() const { return m_Name; }
 	protected:
 		std::string m_Name;
-		bool m_Enabled;
 	};
 
 }

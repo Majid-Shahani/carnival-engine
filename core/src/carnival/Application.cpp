@@ -1,18 +1,26 @@
 #include "clpch.h"
 #include "Application.h"
 
+
 namespace Carnival {
+
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application() 
 	{
+		CL_CORE_ASSERT(!s_Instance, "Application already exists.");
+		s_Instance = this;
+
 		Carnival::Log::Init();
 		CL_CORE_INFO("Initialized Log!");
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 
 		m_Running = true;
-
 	}
 
 	Application::~Application() 
@@ -36,7 +44,16 @@ namespace Carnival {
 		while (m_Running) 
 		{
 			for (Layer* layer : m_LayerStack)
+			{
 				layer->OnUpdate();
+			}
+
+			m_ImGuiLayer->Begin();
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnRender();
+			}
+			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
 		}
@@ -53,6 +70,7 @@ namespace Carnival {
 				break;
 			(*it)->OnEvent(e);
 		}
+		CL_CORE_TRACE("Event {0} : {1}", e.ToString(), (e.m_Handled? "Handled" : "Not Handled"));
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

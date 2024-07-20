@@ -3,8 +3,10 @@
 #include <clpch.h>
 
 #include "carnival/Application.h"
-#include "carnival/Layer.h"
+#include "carnival/Layer/Layer.h"
 #include "carnival/Log.h"
+
+#include <carnival/ImGui/ImGuiLayer.h>
 
 // ----------------------- ENTRY POINT ----------------------------
 

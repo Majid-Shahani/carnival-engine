@@ -2,6 +2,7 @@ include "Dependencies.lua"
 
 workspace "Carnival"
 	architecture "x64"
+	startproject "Sandbox"
 	
 	configurations{
 		"Debug",
@@ -18,8 +19,14 @@ outputdir = "%{cfg.system}%{cfg.architecture}-%{cfg.buildcfg}"
 
 newoption
 {
-	trigger = "using-vulkan",
-	description = "Build using vulkan renderer"
+	trigger = "api",
+	value = "API",
+	description = "Choose a rendering API",
+	allowed = {
+		{ "opengl", "OpenGL" },
+		{ "vulkan", "Vulkan" } 
+	},
+	default = "opengl"
 }
 group "Core"
 	include "Core"

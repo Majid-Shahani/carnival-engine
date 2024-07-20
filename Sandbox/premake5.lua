@@ -30,12 +30,8 @@ project "Sandbox"
 		{
 			"CL_PLATFORM_WINDOWS"
 		}
-		postbuildcommands
-		{
-			("{COPYFILE} %{wks.location}/bin/" .. outputdir .. "/Core/Core.dll %{cfg.buildtarget.directory}")
-		}
 
-	filter { "options:using-vulkan" }
+	filter { "options:api=vulkan" }
 		includedirs
 		{
 			"%{IncludeDir.VulkanSDK}"

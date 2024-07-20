@@ -1,7 +1,7 @@
 #pragma once
 
 #include "carnival/macros.h"
-
+#include <cstdint>
 
 namespace Carnival
 {

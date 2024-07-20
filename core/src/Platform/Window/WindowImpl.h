@@ -2,23 +2,19 @@
 
 #include "carnival/Window.h"
 
-
-#ifdef CL_VK
-	#define GLFW_INCLUDE_VULKAN
-#endif
-
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Carnival {
 
-	class WindowsWindow : public Window
+	class WindowImpl : public Window
 	{
 	public:
-		WindowsWindow(const WindowProperties& props);
-		virtual ~WindowsWindow();
+		WindowImpl(const WindowProperties& props);
+		virtual ~WindowImpl();
 
-		WindowsWindow(const WindowsWindow&) = delete;
-		WindowsWindow& operator=(const WindowsWindow&) = delete;
+		WindowImpl(const WindowImpl&) = delete;
+		WindowImpl& operator=(const WindowImpl&) = delete;
 
 		void OnUpdate() override;
 
@@ -29,13 +25,13 @@ namespace Carnival {
 		// Window attributes
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
-		bool IsVSync() const override;
+		bool IsVSync() const override { return m_Data.VSync; }
 
-		virtual void* GetNativeWindow() const { return m_Window; }
+		virtual void* GetNativeWindow() const override { return m_Window; } // OGL only?
 	private:
 		// Member Functions 
 
-		virtual void InitGLFW();
+		virtual void Init();
 		virtual void SetCallbacks();
 		// virtual void Shutdown();
 
@@ -55,10 +51,6 @@ namespace Carnival {
 		WindowData m_Data;
 
 		GLFWwindow* m_Window;
-#ifdef CL_VK
-	public:
-		virtual void InitVK();
-#endif
 	};
 }
 

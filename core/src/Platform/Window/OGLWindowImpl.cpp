@@ -1,20 +1,19 @@
 #include "clpch.h"
 
-#include "WindowsWindow.h"
+#ifdef CL_OGL
 
+#include "WindowImpl.h"
 
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"
 #include "carnival/Event/MouseEvent.h"
-
-#include <glad/glad.h>
 
 namespace Carnival 
 {
 	static bool s_GLFWInitialized = false;
 	static uint8_t s_WindowCount = 0; // Linking failed when this was tried as class static
 
-	// Used in InitGLFW() to SetErrorCallback
+	// Used in Init() to SetErrorCallback
 	static void WindowErrorCallback(int error, const char* description)
 	{
 		CL_CORE_ERROR("GLFW ERROR ({0}: {1}", error, description);
@@ -22,16 +21,14 @@ namespace Carnival
 
 	Window* Window::Create(const WindowProperties& props)
 	{
-		return new WindowsWindow(props);
+		return new WindowImpl(props);
 	}
 
-	// -------------------------------------------------- OPENGL Specific ---------------------------------------------------------- //
-#ifndef CL_VK
-	WindowsWindow::WindowsWindow(const WindowProperties& props) : m_Data(props.Title, props.Width, props.Height)
+	WindowImpl::WindowImpl(const WindowProperties& props) : m_Data(props.Title, props.Width, props.Height)
 	{
 		CL_CORE_INFO("Creating window {0} ({1} x {2})", props.Title, props.Width, props.Height);
 
-		if (!s_GLFWInitialized)	InitGLFW();
+		if (!s_GLFWInitialized)	Init();
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr); // Implicit conversion to int
 		if (m_Window)
@@ -49,13 +46,29 @@ namespace Carnival
 		else CL_CORE_ERROR("GLFW Window Creation Failed!");
 	}
 
-	void WindowsWindow::OnUpdate()
+	WindowImpl::~WindowImpl()
+	{
+		CL_CORE_INFO("Destroying Window {0}", m_Data.Title);
+
+		glfwDestroyWindow(m_Window);
+		s_WindowCount--;
+		if (!s_WindowCount)
+		{
+			CL_CORE_INFO("No Windows Remain, Calling GLFWTerminate");
+			glfwTerminate(); // glfw already checks for initialization
+			s_GLFWInitialized = false;
+		}
+	}
+
+	void WindowImpl::OnUpdate()
 	{
 		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.5, 0, 0.5,1);
 	}
 
-	void WindowsWindow::SetVSync(bool enabled)
+	void WindowImpl::SetVSync(bool enabled)
 	{
 		if (enabled)
 			glfwSwapInterval(1);
@@ -64,21 +77,8 @@ namespace Carnival
 		m_Data.VSync = enabled;
 	}
 
-	WindowsWindow::~WindowsWindow()
-	{
-		CL_CORE_INFO("Destroying Window {0}", m_Data.Title);
 
-		glfwDestroyWindow(m_Window);
-		s_WindowCount--;
-		if (!s_WindowCount)
-		{
-			CL_CORE_INFO("No Windows Remain, Calling GLFWTerminate");
-			glfwTerminate(); // glfw already checks for initialization
-			s_GLFWInitialized = false;
-		}
-	}
-
-	void WindowsWindow::InitGLFW()
+	void WindowImpl::Init()
 	{
 		CL_CORE_INFO("Initializing GLFW");
 		int success = glfwInit();
@@ -86,75 +86,8 @@ namespace Carnival
 		if (success) s_GLFWInitialized = true;
 		glfwSetErrorCallback(WindowErrorCallback);
 	}
-#endif
-	// -------------------------------------------------- VULKAN Specific ----------------------------------------------------------//
-#ifdef CL_VK
-	static bool s_VKInitialized = false;
 
-	WindowsWindow::WindowsWindow(const WindowProperties& props) : m_Data(props.Title, props.Width, props.Height)
-	{
-		CL_CORE_INFO("Creating Vulkan Window {0} ({1} x {2})", props.Title, props.Width, props.Height);
-
-		if (!s_GLFWInitialized)	InitGLFW();
-		if (!s_VKInitialized)	InitVK();
-
-		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr); // Implicit conversion to int for size
-		if (m_Window)
-		{
-			CL_CORE_TRACE("Vulkan Window {0} Creation Succeeded.", props.Title);
-			s_WindowCount++;
-			glfwSetWindowUserPointer(m_Window, &m_Data);
-			SetVSync(true);
-			SetCallbacks();
-		}
-		else CL_CORE_ERROR("GLFW/Vulkan Window Creation Failed!");
-	}
-
-	WindowsWindow::~WindowsWindow()
-	{
-		CL_CORE_INFO("Destroying Window {0}", m_Data.Title);
-
-		glfwDestroyWindow(m_Window);
-		s_WindowCount--;
-		if (!s_WindowCount)
-		{
-			CL_CORE_INFO("No Windows Remain, Calling GLFWTerminate");
-			glfwTerminate(); // glfw already checks for initialization
-			s_GLFWInitialized = false;
-		}
-	}
-
-	void WindowsWindow::InitGLFW()
-	{
-		CL_CORE_INFO("Initializing GLFW");
-		int success = glfwInit();
-		CL_CORE_ASSERT(success, "Could not Initialize GLFW");
-		if (success) s_GLFWInitialized = true;
-		glfwSetErrorCallback(WindowErrorCallback);
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	}
-
-	void WindowsWindow::InitVK() // This gets Called After GLFWinit but before creating the window
-	{
-		CL_CORE_INFO("Initializing Vulkan");
-
-	}
-
-	void WindowsWindow::OnUpdate()
-	{
-		glfwPollEvents();
-	}
-
-	void WindowsWindow::SetVSync(bool enabled)
-	{}
-#endif
-	// ======================================================= SHARED =============================================================//
-
-
-	bool WindowsWindow::IsVSync() const { return m_Data.VSync; }
-
-	void WindowsWindow::SetCallbacks()
+	void WindowImpl::SetCallbacks()
 	{
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
@@ -237,3 +170,5 @@ namespace Carnival
 			});
 	}
 }
+
+#endif
