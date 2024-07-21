@@ -18,20 +18,20 @@ namespace Carnival {
 
 		void OnUpdate() override;
 
-		inline std::string GetTitle() const override { return m_Data.Title;}
-		inline uint16_t GetWidth() const override { return m_Data.Width; }
-		inline uint16_t GetHeight() const override { return m_Data.Height; }
+		virtual std::string GetTitle() const override { return m_Data.Title;}
+		virtual uint16_t GetWidth() const override { return m_Data.Width; }
+		virtual uint16_t GetHeight() const override { return m_Data.Height; }
 
 		// Window attributes
-		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
-		void SetVSync(bool enabled) override;
-		bool IsVSync() const override { return m_Data.VSync; }
+		virtual void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+		virtual void SetVSync(bool enabled) override;
+		virtual bool IsVSync() const override { return m_Data.VSync; }
 
-		virtual void* GetNativeWindow() const override { return m_Window; } // OGL only?
+		virtual void* GetNativeWindow() const override { return m_Window; }
 	private:
 		// Member Functions 
-		virtual void Init();
-		virtual void SetCallbacks();
+		void Init();
+		void SetCallbacks();
 
 		// Member Variables
 		struct WindowData

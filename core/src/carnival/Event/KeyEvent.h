@@ -9,7 +9,7 @@ namespace Carnival {
 	public:
 		inline uint16_t GetKeyCode() const { return m_KeyCode; }
 	
-		EVENT_CLASS_CATEGORY(Keyboard | Input)
+		EVENT_CLASS_CATEGORY(KeyboardEC | InputEC)
 
 	protected:
 		KeyEvent(uint16_t keycode) : m_KeyCode(keycode){}

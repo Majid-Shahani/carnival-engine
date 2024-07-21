@@ -129,8 +129,8 @@ namespace Carnival {
 	void ImGuiLayer::OnEvent(Event& e)
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		e.m_Handled |= e.IsInCategory(Mouse) & io.WantCaptureMouse;
-		e.m_Handled |= e.IsInCategory(Keyboard) & io.WantCaptureKeyboard;
+		e.m_Handled |= e.IsInCategory(MouseEC) & io.WantCaptureMouse;
+		e.m_Handled |= e.IsInCategory(KeyboardEC) & io.WantCaptureKeyboard;
 	}
 }
 #endif

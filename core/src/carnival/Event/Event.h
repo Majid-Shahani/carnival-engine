@@ -20,10 +20,10 @@ namespace Carnival
 	{
 		None = 0,
 		ApplicationEC = BIT(0),
-		Input = BIT(1),
-		Keyboard = BIT(2),
-		Mouse = BIT(3),
-		MouseButton = BIT(4)
+		InputEC = BIT(1),
+		KeyboardEC = BIT(2),
+		MouseEC = BIT(3),
+		MouseButtonEC = BIT(4)
 	};
 
 	class CL_API Event

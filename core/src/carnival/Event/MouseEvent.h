@@ -10,7 +10,7 @@ namespace Carnival {
 		MouseMovedEvent(double xPos, double yPos) : m_MouseX(xPos), m_MouseY(yPos)
 		{}
 		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CLASS_CATEGORY(Input | Mouse)
+		EVENT_CLASS_CATEGORY(InputEC | MouseEC)
 		
 		double GetX() const { return m_MouseX; }
 		double GetY() const { return m_MouseY; }
@@ -33,7 +33,7 @@ namespace Carnival {
 		MouseScrolledEvent(double XOffset, double YOffset) : m_Xoffset(XOffset), m_Yoffset(YOffset)
 		{}
 		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CLASS_CATEGORY(Input | Mouse)
+		EVENT_CLASS_CATEGORY(InputEC | MouseEC)
 
 		double GetXoffset() const { return m_Xoffset; }
 		double GetYoffset() const { return m_Yoffset; }
@@ -54,7 +54,7 @@ namespace Carnival {
 	{
 	public:
 		inline uint8_t GetMouseButton() const { return m_Button; }
-		EVENT_CLASS_CATEGORY(Input | Mouse | MouseButton)
+		EVENT_CLASS_CATEGORY(InputEC | MouseEC | MouseButtonEC)
 	protected:
 		MouseButtonEvent(uint8_t button) : m_Button(button) {}
 		uint8_t m_Button;
