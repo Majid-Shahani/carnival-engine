@@ -3,15 +3,12 @@
 #include <carnival/Application.h>
 
 #include "ImGuiLayer.h"
-#include <imgui.h>
-#include <imgui_internal.h>
 
+#include <GLFW/glfw3.h>
 #include <glad/glad.h>
-#define IMGUI_IMPL_OPENGL_LOADER_GLAD
+
 #include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_glfw.cpp>
 #include <backends/imgui_impl_opengl3.h>
-#include <backends/imgui_impl_opengl3.cpp>
 
 
 namespace Carnival {
@@ -54,7 +51,7 @@ namespace Carnival {
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		ImGui_ImplOpenGL3_Init("#version 430");
 	}
 
 	void ImGuiLayer::OnDetach()

@@ -30,10 +30,8 @@ namespace Carnival {
 		virtual void* GetNativeWindow() const override { return m_Window; } // OGL only?
 	private:
 		// Member Functions 
-
 		virtual void Init();
 		virtual void SetCallbacks();
-		// virtual void Shutdown();
 
 		// Member Variables
 		struct WindowData
@@ -51,6 +49,9 @@ namespace Carnival {
 		WindowData m_Data;
 
 		GLFWwindow* m_Window;
+
+		// Static Variables
+		inline static uint16_t s_WindowCount{};
 	};
 }
 

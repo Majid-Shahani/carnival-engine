@@ -11,7 +11,6 @@
 namespace Carnival 
 {
 	static bool s_GLFWInitialized = false;
-	static uint8_t s_WindowCount = 0; // Linking failed when this was tried as class static
 
 	// Used in Init() to SetErrorCallback
 	static void WindowErrorCallback(int error, const char* description)

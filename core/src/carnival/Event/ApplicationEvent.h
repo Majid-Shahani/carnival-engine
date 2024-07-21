@@ -1,5 +1,4 @@
 #pragma once
-#include "clpch.h"
 #include "Event.h"
 
 namespace Carnival 
