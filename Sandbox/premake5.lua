@@ -2,7 +2,7 @@ project "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++latest"
-	staticruntime "Off"
+	staticruntime "on"
 	
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -17,6 +17,7 @@ project "Sandbox"
 	{
 		"%{wks.location}/Core/src",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.glm}"
 	}
 	
 		links

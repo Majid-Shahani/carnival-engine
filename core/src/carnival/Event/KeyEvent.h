@@ -4,7 +4,7 @@
 
 namespace Carnival {
 	
-	class CL_API KeyEvent : public Event
+	class KeyEvent : public Event
 	{
 	public:
 		inline uint16_t GetKeyCode() const { return m_KeyCode; }
@@ -16,7 +16,7 @@ namespace Carnival {
 		uint16_t m_KeyCode;
 	};
 
-	class CL_API KeyPressedEvent : public KeyEvent
+	class KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(uint16_t keycode, uint16_t repeatCount)
@@ -38,7 +38,7 @@ namespace Carnival {
 		uint16_t m_RepeatCount;
 	};
 
-	class CL_API KeyReleasedEvent : public KeyEvent
+	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(uint16_t keycode) : KeyEvent(keycode) {}

@@ -4,7 +4,7 @@
 
 namespace Carnival {
 	
-	class CL_API MouseMovedEvent : public Event
+	class MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(double xPos, double yPos) : m_MouseX(xPos), m_MouseY(yPos)
@@ -27,7 +27,7 @@ namespace Carnival {
 		double m_MouseX, m_MouseY;
 	};
 
-	class CL_API MouseScrolledEvent : public Event
+	class MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(double XOffset, double YOffset) : m_Xoffset(XOffset), m_Yoffset(YOffset)
@@ -50,7 +50,7 @@ namespace Carnival {
 		double m_Xoffset, m_Yoffset;
 	};
 
-	class CL_API MouseButtonEvent : public Event
+	class MouseButtonEvent : public Event
 	{
 	public:
 		inline uint8_t GetMouseButton() const { return m_Button; }
@@ -60,7 +60,7 @@ namespace Carnival {
 		uint8_t m_Button;
 	};
 
-	class CL_API MouseButtonPressedEvent : public MouseButtonEvent
+	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(uint8_t button) : MouseButtonEvent(button)
@@ -76,7 +76,7 @@ namespace Carnival {
 		#endif
 	};
 
-	class CL_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(uint8_t button) : MouseButtonEvent(button)

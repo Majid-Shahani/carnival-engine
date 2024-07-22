@@ -15,7 +15,7 @@ namespace Carnival {
 					: Title(title), Width(width), Height(height) {}
 	};
 
-	class CL_API Window {
+	class Window {
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 

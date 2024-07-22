@@ -5,7 +5,7 @@
 #include "spdlog/spdlog.h"
 
 namespace Carnival {
-	class CL_API Log {
+	class Log {
 	public:
 		static void Init();
 

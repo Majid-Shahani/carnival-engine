@@ -5,7 +5,7 @@
 
 namespace Carnival {
 
-	class CL_API Input
+	class Input
 	{
 	public:
 		static bool IsKeyPressed(uint16_t keycode) { return s_Instance->IsKeyPressedImpl(keycode); }

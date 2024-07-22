@@ -1,8 +1,8 @@
 project "Core"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++latest"
-	staticruntime "Off"
+	staticruntime "on"
 	
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -37,13 +37,12 @@ project "Core"
 		systemversion "latest"
 		defines
 		{
-			"CL_PLATFORM_WINDOWS",
-			"CL_BUILD_DLL"
+			"CL_PLATFORM_WINDOWS"
 		}
 		postbuildcommands
 		{	
-			("{MKDIR} ../bin/" .. outputdir .. "/Sandbox/"),
-			("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+			--("{MKDIR} ../bin/" .. outputdir .. "/Sandbox/"),
+			--("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 -------------------------------- OPTIONS ---------------------------		
 	filter { "options:api=vulkan" }

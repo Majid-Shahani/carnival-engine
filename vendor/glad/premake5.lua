@@ -2,7 +2,6 @@ project "glad"
 	kind "StaticLib"
 	language "C"
 	staticruntime "on"
-	warnings "off"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -16,7 +15,7 @@ project "glad"
 	
 	includedirs
 	{
-		"include"
+		"%{IncludeDir.glad}"
 	}
 
 	filter "system:windows"
@@ -28,9 +27,9 @@ project "glad"
 		
 	filter "configurations:Release"
 		runtime "Release"
-		optimize "speed"
+		optimize "Full"
 
     filter "configurations:Dist"
 		runtime "Release"
 		optimize "speed"
-        symbols "off"
+        symbols "Full"

@@ -26,7 +26,7 @@ namespace Carnival
 		MouseButtonEC = BIT(4)
 	};
 
-	class CL_API Event
+	class Event
 	{
 		friend class EventDispatcher;
 	public:

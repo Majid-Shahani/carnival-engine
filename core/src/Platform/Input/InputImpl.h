@@ -1,5 +1,5 @@
 #pragma once
-#include <carnival/Input.h>
+#include <carnival/Input/Input.h>
 
 namespace Carnival {
 

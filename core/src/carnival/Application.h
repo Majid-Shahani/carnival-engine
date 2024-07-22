@@ -10,7 +10,7 @@
 
 namespace Carnival {
 
-	class CL_API Application { // Class is meant to be singleton
+	class Application { // Class is meant to be singleton
 	public:
 		Application();
 		virtual ~Application();

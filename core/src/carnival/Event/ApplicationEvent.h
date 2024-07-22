@@ -3,7 +3,7 @@
 
 namespace Carnival 
 {
-	class CL_API WindowResizeEvent : public Event
+	class WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(uint32_t width, uint32_t height)
@@ -31,7 +31,7 @@ namespace Carnival
 		uint32_t m_Width, m_Height;
 	};
 
-	class CL_API WindowCloseEvent : public Event
+	class WindowCloseEvent : public Event
 	{
 	public:
 		EVENT_CLASS_TYPE(WindowClose)
@@ -47,7 +47,7 @@ namespace Carnival
 		#endif
 	};
 
-	class CL_API AppTickEvent : public Event
+	class AppTickEvent : public Event
 	{
 	public:
 		EVENT_CLASS_TYPE(AppTick)
@@ -62,7 +62,7 @@ namespace Carnival
 		#endif
 	};
 
-	class CL_API AppUpdateEvent : public Event
+	class AppUpdateEvent : public Event
 	{
 	public:
 		EVENT_CLASS_TYPE(AppUpdate)
@@ -77,7 +77,7 @@ namespace Carnival
 		#endif
 	};
 
-	class CL_API AppRenderEvent : public Event
+	class AppRenderEvent : public Event
 	{
 	public:
 		EVENT_CLASS_TYPE(AppRender)

@@ -5,7 +5,7 @@
 
 namespace Carnival {
 
-	class CL_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack() = default;
