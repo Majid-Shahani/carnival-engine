@@ -3,7 +3,6 @@
 #include "carnival/Window.h"
 #include <carnival/Renderer/GraphicsContext.h>
 
-#include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
 
 namespace Carnival {
@@ -32,9 +31,7 @@ namespace Carnival {
 	private:
 		// Member Functions 
 		void Init();
-		//void InitVk();
 		void SetCallbacks();
-		//void CreateVkInstance();
 		// Member Variables
 		struct WindowData
 		{
@@ -57,7 +54,6 @@ namespace Carnival {
 		GraphicsContext* m_Context;
 
 		GLFWwindow* m_Window;
-		//vk::Instance m_VkInstance;
 
 		// Static Variables
 		inline static uint16_t s_WindowCount{};

@@ -19,7 +19,7 @@ namespace Carnival {
 	{
 		glfwSwapBuffers(m_WindowHandle);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.5, 0, 0.5, 1);
+		glClearColor(0.2f, 0.2f, 0.2f, 1);
 	}
 
 	void OpenGLContext::SetSwapInterval(bool enabled)

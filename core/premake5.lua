@@ -54,10 +54,9 @@ project "Core"
 			"glad"
 		}
 		
-		postbuildcommands
-		{	
-			--("{MKDIR} ../bin/" .. outputdir .. "/Sandbox/"),
-			--("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+		prebuildcommands 
+		{
+			"call %{prj.location}src/shaders/compile_shaders.bat"
 		}
 --------------------------------- CONFIGS -------------------------
 	filter "configurations:Debug"

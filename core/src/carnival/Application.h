@@ -29,10 +29,14 @@ namespace Carnival {
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		// Variables
-		std::unique_ptr<Window> m_Window;
-		bool m_Running;
-		ImGuiLayer* m_ImGuiLayer;
+		std::unique_ptr<Window> m_Window = nullptr;
+		bool m_Running = false;
+		ImGuiLayer* m_ImGuiLayer = nullptr;
 		LayerStack m_LayerStack;
+
+		// temp
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		// temp
 
 		static Application* s_Instance;
 	};

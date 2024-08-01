@@ -2,7 +2,6 @@
 
 #include "WindowImpl.h"
 #include <Platform/OpenGL/OpenGLContext.h>
-#include <Platform/Vulkan/VulkanContext.h>
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"
 #include "carnival/Event/MouseEvent.h"
@@ -12,7 +11,6 @@
 namespace Carnival 
 {
 	static bool s_GLFWInitialized = false;
-	static bool s_VKInitialized = false;
 
 	// Used in Init() to SetErrorCallback
 	static void WindowErrorCallback(int error, const char* description)
@@ -26,7 +24,7 @@ namespace Carnival
 	}
 
 // ================================================ CONSTRUCTOR =================================================================
-	WindowImpl::WindowImpl(const WindowProperties& props) : m_Data(props), m_Context(nullptr)// , m_VkInstance(nullptr)
+	WindowImpl::WindowImpl(const WindowProperties& props) : m_Data(props), m_Context(nullptr)
 	{
 		CL_CORE_INFO("Creating window {0} ({1} x {2})", props.Title, props.Width, props.Height);
 
@@ -173,6 +171,4 @@ namespace Carnival
 				data.EventCallback(event);
 			});
 	}
-//=========================================== VULKAN STUFF =================================================
-
 }
