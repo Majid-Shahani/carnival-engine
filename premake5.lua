@@ -16,18 +16,7 @@ workspace "Carnival"
 	}
 
 outputdir = "%{cfg.system}%{cfg.architecture}-%{cfg.buildcfg}"
-
-newoption
-{
-	trigger = "api",
-	value = "API",
-	description = "Choose a rendering API",
-	allowed = {
-		{ "opengl", "OpenGL" },
-		{ "vulkan", "Vulkan" } 
-	},
-	default = "opengl"
-}
+ 
 group "Core"
 	include "Core"
 group ""

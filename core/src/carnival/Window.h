@@ -4,15 +4,23 @@
 #include "Event/Event.h"
 
 namespace Carnival {
+	enum class API : uint8_t
+	{ // 0 for OpenGL, 1 for Vulkan
+		OpenGL, Vulkan
+	};
 
 	struct WindowProperties
 	{
 		std::string Title;
 		uint16_t Width, Height;
 
+		API Api;
+
 		WindowProperties(const std::string& title = "Carnival Engine",
-					uint16_t width = 1280, uint16_t height = 720)
-					: Title(title), Width(width), Height(height) {}
+						uint16_t width = 1280, uint16_t height = 720, 
+						Carnival::API api = API::OpenGL)
+						: Title(title), Width(width), Height(height), Api(api)
+		{}
 	};
 
 	class Window {

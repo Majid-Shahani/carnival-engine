@@ -1,16 +1,18 @@
 #include "clpch.h"
 
-#ifdef CL_OGL
-
 #include "WindowImpl.h"
-
+#include <Platform/OpenGL/OpenGLContext.h>
+#include <Platform/Vulkan/VulkanContext.h>
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"
 #include "carnival/Event/MouseEvent.h"
+// Temporary
+#include <vulkan/vulkan.hpp>
 
 namespace Carnival 
 {
 	static bool s_GLFWInitialized = false;
+	static bool s_VKInitialized = false;
 
 	// Used in Init() to SetErrorCallback
 	static void WindowErrorCallback(int error, const char* description)
@@ -23,27 +25,34 @@ namespace Carnival
 		return new WindowImpl(props);
 	}
 
-	WindowImpl::WindowImpl(const WindowProperties& props) : m_Data(props.Title, props.Width, props.Height)
+// ================================================ CONSTRUCTOR =================================================================
+	WindowImpl::WindowImpl(const WindowProperties& props) : m_Data(props), m_Context(nullptr)// , m_VkInstance(nullptr)
 	{
 		CL_CORE_INFO("Creating window {0} ({1} x {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)	Init();
 
+		if (props.Api == API::OpenGL) {
+			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+			glfwWindowHint(GLFW_RESIZABLE, true);
+		}
+
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr); // Implicit conversion to int
-		if (m_Window)
-		{
+		if (m_Window) {
 			s_WindowCount++;
-			glfwMakeContextCurrent(m_Window);
 
-			int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-			CL_CORE_ASSERT(status, "Failed to initialize glad!");
+			if (props.Api == API::OpenGL)
+				m_Context = new OpenGLContext(m_Window);
 
+			m_Context->Init();
 			glfwSetWindowUserPointer(m_Window, &m_Data);
 			SetVSync(true);
 			SetCallbacks();
 		}
 		else CL_CORE_ERROR("GLFW Window Creation Failed!");
 	}
+
+//================================================ DESTRUCTOR ================================================================
 
 	WindowImpl::~WindowImpl()
 	{
@@ -54,6 +63,7 @@ namespace Carnival
 		if (!s_WindowCount)
 		{
 			CL_CORE_INFO("No Windows Remain, Calling GLFWTerminate");
+
 			glfwTerminate(); // glfw already checks for initialization
 			s_GLFWInitialized = false;
 		}
@@ -62,17 +72,12 @@ namespace Carnival
 	void WindowImpl::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.5, 0, 0.5,1);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowImpl::SetVSync(bool enabled)
 	{
-		if (enabled)
-			glfwSwapInterval(1);
-		else
-			glfwSwapInterval(0);
+		m_Context->SetSwapInterval(enabled);
 		m_Data.VSync = enabled;
 	}
 
@@ -168,6 +173,6 @@ namespace Carnival
 				data.EventCallback(event);
 			});
 	}
-}
+//=========================================== VULKAN STUFF =================================================
 
-#endif
+}

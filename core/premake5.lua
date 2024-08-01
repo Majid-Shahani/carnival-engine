@@ -37,42 +37,27 @@ project "Core"
 		systemversion "latest"
 		defines
 		{
-			"CL_PLATFORM_WINDOWS"
-		}
-		postbuildcommands
-		{	
-			--("{MKDIR} ../bin/" .. outputdir .. "/Sandbox/"),
-			--("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
--------------------------------- OPTIONS ---------------------------		
-	filter { "options:api=vulkan" }
-		includedirs
-		{
-			"%{IncludeDir.VulkanSDK}"
-		}
-		links
-		{
-			"%{Library.Vulkan}"
-		}
-		defines
-		{
+			"CL_PLATFORM_WINDOWS",
+			"CL_GLFW",
 			"CL_VK",
-			"GLFW_INCLUDE_VULKAN"
+			"CL_OGL",
+			"GLFW_INCLUDE_NONE"
 		}
-		
-	filter { "options:api=opengl" }
 		includedirs
 		{
+			"%{IncludeDir.VulkanSDK}",
 			"%{IncludeDir.glad}"
 		}
 		links
 		{
+			"%{Library.Vulkan}",
 			"glad"
 		}
-		defines
-		{
-			"CL_OGL",
-			"GLFW_INCLUDE_NONE"
+		
+		postbuildcommands
+		{	
+			--("{MKDIR} ../bin/" .. outputdir .. "/Sandbox/"),
+			--("{COPYFILE} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 --------------------------------- CONFIGS -------------------------
 	filter "configurations:Debug"

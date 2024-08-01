@@ -31,8 +31,6 @@ project "Sandbox"
 		{
 			"CL_PLATFORM_WINDOWS"
 		}
-
-	filter { "options:api=vulkan" }
 		includedirs
 		{
 			"%{IncludeDir.VulkanSDK}"

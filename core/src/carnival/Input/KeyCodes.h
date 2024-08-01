@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef CL_OGL
+#ifdef CL_GLFW
 
 	/* Printable keys | Lines up with ASCII Codes */
 	#define CLK_SPACE              32

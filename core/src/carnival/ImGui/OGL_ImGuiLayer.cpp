@@ -1,8 +1,8 @@
 #include "clpch.h"
-#ifdef CL_OGL
-#include <carnival/Application.h>
 
+#ifdef CL_OGL
 #include "ImGuiLayer.h"
+#include <carnival/Application.h>
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>

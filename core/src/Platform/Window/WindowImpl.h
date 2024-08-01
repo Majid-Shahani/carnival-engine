@@ -1,8 +1,9 @@
 #pragma once
 
 #include "carnival/Window.h"
+#include <carnival/Renderer/GraphicsContext.h>
 
-#include <glad/glad.h>
+#include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
 
 namespace Carnival {
@@ -31,24 +32,32 @@ namespace Carnival {
 	private:
 		// Member Functions 
 		void Init();
+		//void InitVk();
 		void SetCallbacks();
-
+		//void CreateVkInstance();
 		// Member Variables
 		struct WindowData
 		{
-			WindowData(std::string title, uint16_t width, uint16_t height, bool Vsync = true) 
-				: Title(title), Width(width), Height(height), VSync(Vsync)
+			WindowData(std::string title, uint16_t width, uint16_t height, API api, bool Vsync = true) 
+				: Title(title), Width(width), Height(height), Api(api),VSync(Vsync)
+			{}
+			WindowData(const WindowProperties& props, bool vsync = true)
+				: Title(props.Title), Width(props.Width), Height(props.Height), Api(props.Api), VSync(vsync)
 			{}
 
 			std::string Title;
 			uint16_t Width, Height;
 			bool VSync;
+			API Api;
 
 			EventCallbackFn EventCallback;
 		};
 		WindowData m_Data;
 
+		GraphicsContext* m_Context;
+
 		GLFWwindow* m_Window;
+		//vk::Instance m_VkInstance;
 
 		// Static Variables
 		inline static uint16_t s_WindowCount{};

@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef CL_OGL
+#ifdef CL_GLFW
 	#define CLM_BUTTON_1         0
 	#define CLM_BUTTON_2         1
 	#define CLM_BUTTON_3         2
