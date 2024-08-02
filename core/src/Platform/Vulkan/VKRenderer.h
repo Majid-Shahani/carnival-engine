@@ -1,11 +1,17 @@
 #pragma once
+#include <carnival/Renderer/Renderer.h>
+
 #include <vulkan/vulkan.hpp>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 namespace Carnival {
-	class Vulkan {
+	class Vulkan : public Renderer {
 	public:
 		Vulkan() = default;
-		void Run();
+        Vulkan(GLFWwindow* window) : m_Window{ window }
+        {}
+        ~Vulkan();
 
         static bool InstanceExists();
 
@@ -105,7 +111,7 @@ namespace Carnival {
         void Cleanup();
 
         void DrawFrame();
-        static void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
+        virtual void FramebufferResizeCallback() override;
 
         // Instance // should instance be static?
         static void CreateInstance();
@@ -143,7 +149,7 @@ namespace Carnival {
         void CreateRenderPass();
         
         void CreateGraphicsPipeline();
-        VkShaderModule CreateShaderModule(const std::vector<char>& code);
+        VkShaderModule CreateShaderModule(const std::vector<char>& code) const;
 
         void CreateFramebuffers();
         void CreateVertexBuffer();
@@ -159,5 +165,10 @@ namespace Carnival {
         void RecordCommandBuffer(VkCommandBuffer commandbuffer, uint32_t imageindex);
 
         void CreateSyncObjects();
-	};
+
+        // Inherited via Renderer
+        void Init() override;
+        void SwapBuffers() override;
+        void SetSwapInterval(bool VSync) override;
+};
 }

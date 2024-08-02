@@ -39,8 +39,6 @@ project "Core"
 		{
 			"CL_PLATFORM_WINDOWS",
 			"CL_GLFW",
-			"CL_VK",
-			"CL_OGL",
 			"GLFW_INCLUDE_NONE"
 		}
 		includedirs

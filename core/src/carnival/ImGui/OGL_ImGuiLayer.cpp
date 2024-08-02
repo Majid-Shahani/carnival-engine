@@ -1,6 +1,4 @@
 #include "clpch.h"
-
-#ifdef CL_OGL
 #include "ImGuiLayer.h"
 #include <carnival/Application.h>
 
@@ -133,4 +131,3 @@ namespace Carnival {
 		e.m_Handled |= e.IsInCategory(KeyboardEC) & io.WantCaptureKeyboard;
 	}
 }
-#endif

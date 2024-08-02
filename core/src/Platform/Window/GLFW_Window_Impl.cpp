@@ -1,15 +1,17 @@
 #include "clpch.h"
-
+#include <carnival/Window.h>
 #include "WindowImpl.h"
-#include <Platform/OpenGL/OpenGLContext.h>
+#include <Platform/OpenGL/OGLRenderer.h>
+#include <Platform/Vulkan/VKRenderer.h>
+
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"
 #include "carnival/Event/MouseEvent.h"
-// Temporary
-#include <vulkan/vulkan.hpp>
 
 namespace Carnival 
 {
+	static constexpr Carnival::RenderAPI r_API = RenderAPI::OGL;
+
 	static bool s_GLFWInitialized = false;
 
 	// Used in Init() to SetErrorCallback
@@ -24,26 +26,33 @@ namespace Carnival
 	}
 
 // ================================================ CONSTRUCTOR =================================================================
-	WindowImpl::WindowImpl(const WindowProperties& props) : m_Data(props), m_Context(nullptr)
+	WindowImpl::WindowImpl(const WindowProperties& props) 
+		: m_Title{ props.Title }, m_Width{ props.Width }, m_Height{ props.Height }, m_Renderer{ nullptr }, m_VSync{ true }
 	{
 		CL_CORE_INFO("Creating window {0} ({1} x {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)	Init();
 
-		if (props.Api == API::OpenGL) {
+		if constexpr (r_API == RenderAPI::OGL)	
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-			glfwWindowHint(GLFW_RESIZABLE, true);
-		}
+
+		if constexpr (r_API == RenderAPI::VULK)	
+			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr); // Implicit conversion to int
 		if (m_Window) {
 			s_WindowCount++;
 
-			if (props.Api == API::OpenGL)
-				m_Context = new OpenGLContext(m_Window);
+			if constexpr (r_API == RenderAPI::OGL)
+				m_Renderer = new OpenGLRenderer(m_Window);
 
-			m_Context->Init();
-			glfwSetWindowUserPointer(m_Window, &m_Data);
+			if constexpr (r_API == RenderAPI::VULK) {
+				m_Renderer = new Vulkan(m_Window);
+			}
+
+			m_Renderer->Init();
+			glfwSetWindowUserPointer(m_Window, this);
 			SetVSync(true);
 			SetCallbacks();
 		}
@@ -54,8 +63,8 @@ namespace Carnival
 
 	WindowImpl::~WindowImpl()
 	{
-		CL_CORE_INFO("Destroying Window {0}", m_Data.Title);
-
+		CL_CORE_INFO("Destroying Window {0}", m_Title);
+		m_Renderer->~Renderer(); // TODO : Unique Pointer?
 		glfwDestroyWindow(m_Window);
 		s_WindowCount--;
 		if (!s_WindowCount)
@@ -70,13 +79,13 @@ namespace Carnival
 	void WindowImpl::OnUpdate()
 	{
 		glfwPollEvents();
-		m_Context->SwapBuffers();
+		m_Renderer->SwapBuffers();
 	}
 
 	void WindowImpl::SetVSync(bool enabled)
 	{
-		m_Context->SetSwapInterval(enabled);
-		m_Data.VSync = enabled;
+		m_Renderer->SetSwapInterval(enabled);
+		m_VSync = enabled;
 	}
 
 
@@ -92,83 +101,89 @@ namespace Carnival
 	void WindowImpl::SetCallbacks()
 	{
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				data.Width = width;
-				data.Height = height;
+		{
+			WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
+			data.m_Width = width;
+			data.m_Height = height;
 
-				WindowResizeEvent ev(width, height);
-				data.EventCallback(ev);
+			WindowResizeEvent ev(width, height);
+			data.m_EventCallback(ev);
+		});
+
+		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+			{
+				WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
+				data.m_Renderer->FramebufferResizeCallback();
 			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				WindowCloseEvent event;
-				data.EventCallback(event);
-			});
+		{
+			WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
+			WindowCloseEvent event;
+			data.m_EventCallback(event);
+		});
 
 		// Convert Keycodes to engine specific rather than platform specific
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		{
+			WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
 
-				switch (action)
+			switch (action)
+			{
+				case GLFW_PRESS:
 				{
-					case GLFW_PRESS:
-					{
-						KeyPressedEvent event(key, 0);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						KeyReleasedEvent event(key);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_REPEAT:
-					{
-						KeyPressedEvent event(key, 1);
-						data.EventCallback(event);
-						break;
-					}
+					KeyPressedEvent event(key, 0);
+					data.m_EventCallback(event);
+					break;
 				}
-			});
+				case GLFW_RELEASE:
+				{
+					KeyReleasedEvent event(key);
+					data.m_EventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					KeyPressedEvent event(key, 1);
+					data.m_EventCallback(event);
+					break;
+				}
+			}
+		});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		{
+			WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
 
-				switch (action)
+			switch (action)
+			{
+				case GLFW_PRESS:
 				{
-					case GLFW_PRESS:
-					{
-						MouseButtonPressedEvent event(button);
-						data.EventCallback(event);
-						break;
-					}
-					case GLFW_RELEASE:
-					{
-						MouseButtonReleasedEvent event(button);
-						data.EventCallback(event);
-						break;
-					}
+					MouseButtonPressedEvent event(button);
+					data.m_EventCallback(event);
+					break;
 				}
-			});
+				case GLFW_RELEASE:
+				{
+					MouseButtonReleasedEvent event(button);
+					data.m_EventCallback(event);
+					break;
+				}
+			}
+		});
 
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				MouseScrolledEvent event(xOffset, yOffset);
-				data.EventCallback(event);
-			});
+		{
+			WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
+			MouseScrolledEvent event(xOffset, yOffset);
+			data.m_EventCallback(event);
+		});
 
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
-			{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				MouseMovedEvent event(xPos, yPos);
-				data.EventCallback(event);
-			});
+		{
+			WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
+			MouseMovedEvent event(xPos, yPos);
+			data.m_EventCallback(event);
+		});
 	}
 }

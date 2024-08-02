@@ -1,19 +1,20 @@
 #pragma once
-#include <carnival/Renderer/GraphicsContext.h>
-
+#include <carnival/Renderer/Renderer.h>
 struct GLFWwindow;
 
 namespace Carnival {
 
-	class OpenGLContext : public GraphicsContext
+	class OpenGLRenderer : public Renderer
 	{
 	public:
-		OpenGLContext(GLFWwindow* window);
+		OpenGLRenderer(GLFWwindow* window);
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
 		virtual void SetSwapInterval(bool enabled) override;
 	private:
 		GLFWwindow* m_WindowHandle;
+
+		void FramebufferResizeCallback() override;
 	};
 }

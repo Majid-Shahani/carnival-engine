@@ -3,6 +3,7 @@
 #include "macros.h"
 
 #include "Window.h"
+#include <carnival/Renderer/Renderer.h>
 #include <carnival/Event/ApplicationEvent.h>
 #include "Layer/LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
@@ -33,10 +34,6 @@ namespace Carnival {
 		bool m_Running = false;
 		ImGuiLayer* m_ImGuiLayer = nullptr;
 		LayerStack m_LayerStack;
-
-		// temp
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
-		// temp
 
 		static Application* s_Instance;
 	};
