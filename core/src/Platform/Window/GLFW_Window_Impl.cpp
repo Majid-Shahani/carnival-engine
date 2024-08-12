@@ -10,7 +10,7 @@
 
 namespace Carnival 
 {
-	static constexpr Carnival::RenderAPI r_API = RenderAPI::OGL;
+	static constexpr Carnival::RenderAPI r_API = RenderAPI::VULK; // TODO : Different builds with #ifdef
 
 	static bool s_GLFWInitialized = false;
 
@@ -35,8 +35,7 @@ namespace Carnival
 
 		if constexpr (r_API == RenderAPI::OGL)	
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-
-		if constexpr (r_API == RenderAPI::VULK)	
+		else if constexpr (r_API == RenderAPI::VULK)	
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 
@@ -48,7 +47,7 @@ namespace Carnival
 				m_Renderer = new OpenGLRenderer(m_Window);
 
 			if constexpr (r_API == RenderAPI::VULK) {
-				m_Renderer = new Vulkan(m_Window);
+				m_Renderer = new VulkanRenderer(m_Window);
 			}
 
 			m_Renderer->Init();
@@ -64,7 +63,7 @@ namespace Carnival
 	WindowImpl::~WindowImpl()
 	{
 		CL_CORE_INFO("Destroying Window {0}", m_Title);
-		m_Renderer->~Renderer(); // TODO : Unique Pointer?
+		delete m_Renderer; // TODO : Unique Pointer?
 		glfwDestroyWindow(m_Window);
 		s_WindowCount--;
 		if (!s_WindowCount)
@@ -79,7 +78,7 @@ namespace Carnival
 	void WindowImpl::OnUpdate()
 	{
 		glfwPollEvents();
-		m_Renderer->SwapBuffers();
+		m_Renderer->DrawFrame();
 	}
 
 	void WindowImpl::SetVSync(bool enabled)

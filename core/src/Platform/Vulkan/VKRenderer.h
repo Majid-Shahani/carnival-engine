@@ -6,17 +6,17 @@
 #include <glm/glm.hpp>
 
 namespace Carnival {
-	class Vulkan : public Renderer {
+	class VulkanRenderer : public Renderer {
 	public:
-		Vulkan() = default;
-        Vulkan(GLFWwindow* window) : m_Window{ window }
+        VulkanRenderer(GLFWwindow* window, bool VSync = true) : m_Window{ window }, m_VSync(VSync)
         {}
-        ~Vulkan();
+        ~VulkanRenderer();
 
         static bool InstanceExists();
 
 	private:
         static bool s_InstanceExists;
+        static uint32_t s_RendererCount;
 //===================================================== STRUCTS =========================================================//
         struct QueueFamilyIndices {
             std::optional<uint32_t> graphicsFamily;
@@ -56,6 +56,8 @@ namespace Carnival {
             }
         };
 //===================================================== VARIABLES =======================================================//
+        bool m_VSync;
+
         const std::vector<Vertex> m_Vertices = {
             {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
             {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
@@ -105,13 +107,9 @@ namespace Carnival {
         VkDeviceMemory m_VertexBufferMemory = VK_NULL_HANDLE;
         VkDeviceMemory m_IndexBufferMemory = VK_NULL_HANDLE;
 //======================================== Functions ================================================================//
-        void InitWindow(); // Should be Get Window!
-        void InitVulkan();
-        void MainLoop();
         void Cleanup();
 
         void DrawFrame();
-        virtual void FramebufferResizeCallback() override;
 
         // Instance // should instance be static?
         static void CreateInstance();
@@ -137,7 +135,7 @@ namespace Carnival {
 
         SwapChainSupportDetails QuerySwapChainSupport(const VkPhysicalDevice device) const;
         static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-        static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& modes);
+        VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& modes) const;
         VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 
         void RecreateSwapChain();
@@ -167,8 +165,8 @@ namespace Carnival {
         void CreateSyncObjects();
 
         // Inherited via Renderer
-        void Init() override;
-        void SwapBuffers() override;
-        void SetSwapInterval(bool VSync) override;
+        virtual void Init() override;
+        virtual void SetSwapInterval(bool VSync) override;
+        virtual void FramebufferResizeCallback() override;
 };
 }

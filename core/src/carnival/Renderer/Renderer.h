@@ -11,10 +11,10 @@ namespace Carnival {
 
 	class Renderer {
 	public:
-		virtual ~Renderer() = 0;
+		virtual ~Renderer() {}
 
 		virtual void Init() = 0;
-		virtual void SwapBuffers() = 0;
+		virtual void DrawFrame() = 0;
 		virtual void SetSwapInterval(bool VSync) = 0;
 		virtual void FramebufferResizeCallback() = 0;
 	};

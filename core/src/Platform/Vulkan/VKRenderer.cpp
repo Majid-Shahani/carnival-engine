@@ -1,4 +1,5 @@
 #include <clpch.h>
+#include <carnival/macros.h>
 
 #include <Platform/Vulkan/VKRenderer.h>
 #include <carnival/Files/Files.h>
@@ -9,16 +10,15 @@
 
 namespace Carnival {
 	//======================================== CONSTANTS ========================================//
-	static const std::vector<const char*> validationLayers = {
+    static const int MAX_FRAMES_IN_FLIGHT = 2;
+	
+
+    static const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation"
 	};
 	static const std::vector<const char*> deviceExtensions = {
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
 	};
-
-    static constexpr uint32_t WIDTH = 1280;
-    static constexpr uint32_t HEIGHT = 720;
-    static const int MAX_FRAMES_IN_FLIGHT = 2;
 
 #ifdef CL_DEBUG
 	static constexpr bool enableValidationLayers = true;
@@ -48,31 +48,31 @@ namespace Carnival {
 	}
 
 // CLASS
-    bool Vulkan::s_InstanceExists = false;
+    bool VulkanRenderer::s_InstanceExists = false;
+    uint32_t VulkanRenderer::s_RendererCount = 0;
+    VkInstance VulkanRenderer::s_Instance = VK_NULL_HANDLE;
 
-    Vulkan::~Vulkan()
+    VulkanRenderer::~VulkanRenderer()
     {
+        vkDeviceWaitIdle(m_LogicalDevice);
         Cleanup();
 
-        // TODO : ADD CHECK TO ONLY DESTROY INSTANCE ONCE NO CLASS INSTANCES REMAIN
+        // TODO : When Multiple Windows Use Renderer, Only Destroy Instance When No Windows Remain
         vkDestroyInstance(s_Instance, nullptr);
         s_Instance = VK_NULL_HANDLE;
     }
-    /* WORKING ORDER
-        InitVulkan();
-        MainLoop();
-        Cleanup();
-    */
 
-    bool Vulkan::InstanceExists()
+    bool VulkanRenderer::InstanceExists()
     {
         return s_InstanceExists;
     }
     //======================================== RUN LOOP =================================================================//
 
-    void Vulkan::InitVulkan()
+    void VulkanRenderer::Init()
     {
-        CreateInstance();
+        if (!s_InstanceExists) {
+            CreateInstance();
+        }
         SetupDebugMessenger();
         CreateSurface();
         PickPhysicalDevice();
@@ -88,15 +88,8 @@ namespace Carnival {
         CreateCommandBuffers();
         CreateSyncObjects();
     }
-    void Vulkan::MainLoop() 
-    {
-        while (!glfwWindowShouldClose(m_Window)) {
-            glfwPollEvents();
-            DrawFrame();
-        }
-        vkDeviceWaitIdle(m_LogicalDevice);
-    }
-    void Vulkan::Cleanup()
+
+    void VulkanRenderer::Cleanup()
     {
         CleanupSwapChain();
 
@@ -118,14 +111,14 @@ namespace Carnival {
 
         vkDestroyDevice(m_LogicalDevice, nullptr);
 
-        if (enableValidationLayers) {
+        if constexpr (enableValidationLayers) {
             DestroyDebugUtilsMessengerEXT(s_Instance, m_DebugMessenger, nullptr);
         }
 
         vkDestroySurfaceKHR(s_Instance, m_Surface, nullptr);
     }
     //====================================================================================================================//
-    void Vulkan::DrawFrame()
+    void VulkanRenderer::DrawFrame()
     {
         // Timeout in Nano Seconds, Practically Disabled
         vkWaitForFences(m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
@@ -144,7 +137,6 @@ namespace Carnival {
         vkResetFences(m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame]);
 
         vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
-
         RecordCommandBuffer(m_CommandBuffers[m_CurrentFrame], imageIndex);
 
         VkSubmitInfo submitInfo{};
@@ -187,55 +179,53 @@ namespace Carnival {
         m_CurrentFrame = (m_CurrentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
-    void Vulkan::FramebufferResizeCallback()
+    void VulkanRenderer::FramebufferResizeCallback()
     {
         m_FramebufferResized = true;
     }
     //===================================================================================================================//
-    void Vulkan::CreateInstance() {
-        if (!s_InstanceExists) {
-            if (enableValidationLayers && !CheckValidationLayerSupport())
-                throw std::runtime_error("Validation Layers Requested but not Available!");
-            // =========== APP INFO =====================
-            VkApplicationInfo appInfo{};
-            appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-            appInfo.pApplicationName = "Carnival Engine";
-            appInfo.applicationVersion = vk::makeApiVersion(1, 1, 0, 0);
-            appInfo.pEngineName = "No Engine";
-            appInfo.engineVersion = vk::makeApiVersion(1, 1, 0, 0);
-            appInfo.apiVersion = vk::ApiVersion13;
-            // ============ CREATE INFO ================
-            VkInstanceCreateInfo createInfo{};
+    void VulkanRenderer::CreateInstance() {
+        if (enableValidationLayers && !CheckValidationLayerSupport())
+            throw std::runtime_error("Validation Layers Requested but not Available!");
+        // =========== APP INFO =====================
+        VkApplicationInfo appInfo{};
+        appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+        appInfo.pApplicationName = "Carnival Engine";
+        appInfo.applicationVersion = vk::makeApiVersion(1, 1, 0, 0);
+        appInfo.pEngineName = "No Engine";
+        appInfo.engineVersion = vk::makeApiVersion(1, 1, 0, 0);
+        appInfo.apiVersion = vk::ApiVersion13;
+        // ============ CREATE INFO ================
+        VkInstanceCreateInfo createInfo{};
 
-            createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-            createInfo.pApplicationInfo = &appInfo;
+        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        createInfo.pApplicationInfo = &appInfo;
 
-            auto extensions = GetRequiredExtensions();
-            createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-            createInfo.ppEnabledExtensionNames = extensions.data();
+        auto extensions = GetRequiredExtensions();
+        createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+        createInfo.ppEnabledExtensionNames = extensions.data();
 
-            VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+        VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
 
-            if (enableValidationLayers) {
-                createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-                createInfo.ppEnabledLayerNames = validationLayers.data();
+        if (enableValidationLayers) {
+            createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+            createInfo.ppEnabledLayerNames = validationLayers.data();
 
-                PopulateDebugMessengerCreateInfo(debugCreateInfo);
-                createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
-            }
-            else {
-                createInfo.enabledLayerCount = 0;
-                createInfo.pNext = nullptr;
-            }
-
-            if (vkCreateInstance(&createInfo, nullptr, &s_Instance) != VK_SUCCESS) {
-                throw std::runtime_error("failed to create instance!");
-            }
-            s_InstanceExists = true;
+            PopulateDebugMessengerCreateInfo(debugCreateInfo);
+            createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
         }
+        else {
+            createInfo.enabledLayerCount = 0;
+            createInfo.pNext = nullptr;
+        }
+
+        if (vkCreateInstance(&createInfo, nullptr, &s_Instance) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create instance!");
+        }
+        s_InstanceExists = true;
     }
 
-    bool Vulkan::CheckValidationLayerSupport() {
+    bool VulkanRenderer::CheckValidationLayerSupport() {
         uint32_t layerCount;
         vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
@@ -258,7 +248,7 @@ namespace Carnival {
         }
         return true;
     }
-    std::vector<const char*> Vulkan::GetRequiredExtensions() {
+    std::vector<const char*> VulkanRenderer::GetRequiredExtensions() {
         uint32_t glfwExtensionCount = 0;
         const char** glfwExtensions;
         glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
@@ -271,11 +261,11 @@ namespace Carnival {
 
         return extensions;
     }
-    void Vulkan::PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+    void VulkanRenderer::PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
         createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
 
         createInfo.messageSeverity =
-            //VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+            //VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT
             //| VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT
             VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT
             | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
@@ -285,12 +275,11 @@ namespace Carnival {
             | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT
             | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 
-
         createInfo.pfnUserCallback = debugCallback;
         createInfo.pUserData = nullptr; // Optional
     }
 
-    VKAPI_ATTR VkBool32 VKAPI_CALL Vulkan::debugCallback(
+    VKAPI_ATTR VkBool32 VKAPI_CALL VulkanRenderer::debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageType,
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
@@ -299,22 +288,22 @@ namespace Carnival {
         switch (messageSeverity)
         {
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
-            std::cout << "VERBOSE : " << ToString(messageType) << ":\t" << pCallbackData->pMessage << "\n";
+            CL_CORE_TRACE("VERBOSE: {0}:\t{1}\n", ToString(messageType), pCallbackData->pMessage);
             break;
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
-            std::cout << "INFO : " << ToString(messageType) << ":\t" << pCallbackData->pMessage << "\n";
+            CL_CORE_TRACE("INFO: {0}:\t{1}\n", ToString(messageType), pCallbackData->pMessage);
             break;
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
-            std::cout << "WARNING : " << ToString(messageType) << ":\t" << pCallbackData->pMessage << "\n";
+            CL_CORE_TRACE("WARNING: {0}:\t{1}\n", ToString(messageType), pCallbackData->pMessage);
             break;
         case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-            std::cout << "ERROR : " << ToString(messageType) << ":\t" << pCallbackData->pMessage << "\n";
+            CL_CORE_TRACE("ERROR: {0}:\t{1}\n", ToString(messageType), pCallbackData->pMessage);
             break;
         }
         return VK_FALSE;
     }
 
-    std::string Vulkan::ToString(VkDebugUtilsMessageTypeFlagsEXT type) {
+    std::string VulkanRenderer::ToString(VkDebugUtilsMessageTypeFlagsEXT type) {
             switch (type) {
             case VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT:
                 return "General";
@@ -332,8 +321,8 @@ namespace Carnival {
             return "";
         }
     //==================================================================================================================//
-    void Vulkan::SetupDebugMessenger() {
-        if (!enableValidationLayers) return;
+    void VulkanRenderer::SetupDebugMessenger() {
+        if constexpr (!enableValidationLayers) return;
 
         VkDebugUtilsMessengerCreateInfoEXT createInfo{};
         PopulateDebugMessengerCreateInfo(createInfo);
@@ -343,14 +332,13 @@ namespace Carnival {
         }
     }
     //==================================================================================================================//
-    void Vulkan::CreateSurface()
+    void VulkanRenderer::CreateSurface()
     {
-        // Window Class wouldn't be too bad for this, change to get surface then
         if (glfwCreateWindowSurface(s_Instance, m_Window, nullptr, &m_Surface) != VK_SUCCESS)
             throw std::runtime_error("Surface Creation Failed!");
     }
     //==================================================================================================================//
-    void Vulkan::PickPhysicalDevice()
+    void VulkanRenderer::PickPhysicalDevice()
     {
         uint32_t deviceCount{};
         vkEnumeratePhysicalDevices(s_Instance, &deviceCount, nullptr);
@@ -369,10 +357,9 @@ namespace Carnival {
         }
         if (m_PhysicalDevice == VK_NULL_HANDLE)
             throw std::runtime_error("Failed To Find A Suitable Device.");
-
     }
 
-    bool Vulkan::IsDeviceSuitable(VkPhysicalDevice device) const
+    bool VulkanRenderer::IsDeviceSuitable(VkPhysicalDevice device) const
     {
         // Devices that Draw and Present in the same queue
         // Should be prefered for better performance.
@@ -390,7 +377,7 @@ namespace Carnival {
             && extensionsSupported
             && swapChainAdequate;
     }
-    Vulkan::QueueFamilyIndices Vulkan::FindQueueFamilies(VkPhysicalDevice device) const {
+    VulkanRenderer::QueueFamilyIndices VulkanRenderer::FindQueueFamilies(VkPhysicalDevice device) const {
         QueueFamilyIndices indices;
 
         uint32_t queueFamilyCount{};
@@ -414,7 +401,7 @@ namespace Carnival {
 
         return indices;
     }
-    bool Vulkan::CheckDeviceExtensionSupport(VkPhysicalDevice device)
+    bool VulkanRenderer::CheckDeviceExtensionSupport(VkPhysicalDevice device)
     {
         uint32_t extensionCount;
         vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -429,7 +416,7 @@ namespace Carnival {
     }
     //======================================== SWAP CHAIN ==============================================================//
 
-    Vulkan::SwapChainSupportDetails Vulkan::QuerySwapChainSupport(VkPhysicalDevice device) const
+    VulkanRenderer::SwapChainSupportDetails VulkanRenderer::QuerySwapChainSupport(VkPhysicalDevice device) const
     {
         SwapChainSupportDetails details;
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_Surface, &details.capabilities);
@@ -450,7 +437,7 @@ namespace Carnival {
 
         return details;
     }
-    VkSurfaceFormatKHR Vulkan::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
+    VkSurfaceFormatKHR VulkanRenderer::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
         for (const auto& availableFormat : availableFormats) {
             if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
                 availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
@@ -458,18 +445,25 @@ namespace Carnival {
         }
         return availableFormats[0];
     }
-    VkPresentModeKHR Vulkan::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& modes) // Automatic Selection
-    {
-        if (std::find(modes.begin(), modes.end(), VK_PRESENT_MODE_MAILBOX_KHR) != modes.end())
-            return VK_PRESENT_MODE_MAILBOX_KHR; // Triple-Buffering, Low Latency, No Tearing
-        if (std::find(modes.begin(), modes.end(), VK_PRESENT_MODE_IMMEDIATE_KHR) != modes.end())
-            return VK_PRESENT_MODE_IMMEDIATE_KHR; // Present ASAP, No Latency, Tearing
-        if (std::find(modes.begin(), modes.end(), VK_PRESENT_MODE_FIFO_RELAXED_KHR) != modes.end())
-            return VK_PRESENT_MODE_FIFO_RELAXED_KHR; // FIFO but if buffer busy, Present as is
+    VkPresentModeKHR VulkanRenderer::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& modes) const
+    {   // Automatic Selection
+        if (m_VSync == true) {
+            if (std::find(modes.begin(), modes.end(), VK_PRESENT_MODE_MAILBOX_KHR) != modes.end())
+                return VK_PRESENT_MODE_MAILBOX_KHR; // Triple-Buffering, Low Latency, No Tearing
+            if (std::find(modes.begin(), modes.end(), VK_PRESENT_MODE_FIFO_RELAXED_KHR) != modes.end())
+                return VK_PRESENT_MODE_FIFO_RELAXED_KHR; // FIFO but if buffer busy, Present as is
 
-        return VK_PRESENT_MODE_FIFO_KHR; // Power Efficient
+            return VK_PRESENT_MODE_FIFO_KHR; // Power Efficient
+        }
+        else {
+            if (std::find(modes.begin(), modes.end(), VK_PRESENT_MODE_IMMEDIATE_KHR) != modes.end())
+                return VK_PRESENT_MODE_IMMEDIATE_KHR; // Present ASAP, No Latency, Tearing
+            else throw std::runtime_error("Device Does Not Support Immediate Present Mode! ( VSYNC = ON )");
+
+            return VK_PRESENT_MODE_FIFO_KHR;
+        }
     }
-    VkExtent2D Vulkan::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const
+    VkExtent2D VulkanRenderer::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const
     {
         if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
             return capabilities.currentExtent;
@@ -484,7 +478,7 @@ namespace Carnival {
         }
     }
 
-    void Vulkan::RecreateSwapChain()
+    void VulkanRenderer::RecreateSwapChain()
     {
         int width{}, height{};
         glfwGetFramebufferSize(m_Window, &width, &height);
@@ -500,7 +494,7 @@ namespace Carnival {
         CreateImageViews();
         CreateFramebuffers();
     }
-    void Vulkan::CleanupSwapChain()
+    void VulkanRenderer::CleanupSwapChain()
     {
         for (auto framebuffer : m_SwapChainFramebuffers)
             vkDestroyFramebuffer(m_LogicalDevice, framebuffer, nullptr);
@@ -510,7 +504,7 @@ namespace Carnival {
         vkDestroySwapchainKHR(m_LogicalDevice, m_SwapChain, nullptr);
     }
     //==================================================================================================================//
-    void Vulkan::CreateLogicalDevice() {
+    void VulkanRenderer::CreateLogicalDevice() {
         QueueFamilyIndices indices = FindQueueFamilies(m_PhysicalDevice);
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
@@ -544,7 +538,7 @@ namespace Carnival {
         vkGetDeviceQueue(m_LogicalDevice, indices.presentFamily.value(), 0, &m_PresentQueue);
     }
     //=================================================================================================================//
-    void Vulkan::CreateSwapChain()
+    void VulkanRenderer::CreateSwapChain()
     {
         SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(m_PhysicalDevice);
         VkSurfaceFormatKHR surfaceFormat = ChooseSwapSurfaceFormat(swapChainSupport.formats);
@@ -596,7 +590,7 @@ namespace Carnival {
         m_SwapChainExtent = swapExtent;
     }
     //=================================================================================================================//
-    void Vulkan::CreateImageViews()
+    void VulkanRenderer::CreateImageViews()
     {
         m_SwapChainImageViews.resize(m_SwapChainImages.size());
         for (size_t i = 0; i < m_SwapChainImages.size(); i++)
@@ -623,7 +617,7 @@ namespace Carnival {
         }
     }
     //=================================================================================================================//
-    void Vulkan::CreateRenderPass()
+    void VulkanRenderer::CreateRenderPass()
     {
         // Attachments
         VkAttachmentDescription colorAttachment{};
@@ -671,10 +665,10 @@ namespace Carnival {
             throw std::runtime_error("Failed To Create Render Pass!");
     }
     //=================================================================================================================//
-    void Vulkan::CreateGraphicsPipeline()
+    void VulkanRenderer::CreateGraphicsPipeline()
     {
-        auto vertShaderCode = readFile("src/shaders/shader.vert.spv");
-        auto fragShaderCode = readFile("src/shaders/shader.frag.spv");
+        auto vertShaderCode = readFile("../Core/src/shaders/shader.vert.spv");
+        auto fragShaderCode = readFile("../Core/src/shaders/shader.frag.spv");
 
         VkShaderModule vertShaderModule = CreateShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = CreateShaderModule(fragShaderCode);
@@ -845,7 +839,7 @@ namespace Carnival {
         vkDestroyShaderModule(m_LogicalDevice, vertShaderModule, nullptr);
     }
 
-    VkShaderModule Vulkan::CreateShaderModule(const std::vector<char>& code) const
+    VkShaderModule VulkanRenderer::CreateShaderModule(const std::vector<char>& code) const
     {
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -858,7 +852,7 @@ namespace Carnival {
         return shadeModule;
     }
     //=================================================================================================================//
-    void Vulkan::CreateFramebuffers()
+    void VulkanRenderer::CreateFramebuffers()
     {
         m_SwapChainFramebuffers.resize(m_SwapChainImageViews.size());
         for (size_t i = 0; i < m_SwapChainImageViews.size(); i++) {
@@ -877,7 +871,7 @@ namespace Carnival {
         }
     }
     //=================================================================================================================//
-    void Vulkan::CreateVertexBuffer()
+    void VulkanRenderer::CreateVertexBuffer()
     {
         VkDeviceSize bufferSize = sizeof(m_Vertices[0]) * m_Vertices.size();
 
@@ -900,7 +894,7 @@ namespace Carnival {
         vkDestroyBuffer(m_LogicalDevice, stagingBuffer, nullptr);
         vkFreeMemory(m_LogicalDevice, stagingBufferMemory, nullptr);
     }
-    void Vulkan::CreateIndexBuffer()
+    void VulkanRenderer::CreateIndexBuffer()
     {
         VkDeviceSize bufferSize = sizeof(m_Indices[0]) * m_Indices.size();
 
@@ -922,7 +916,7 @@ namespace Carnival {
         vkFreeMemory(m_LogicalDevice, stagingBufferMemory, nullptr);
     }
 
-    uint32_t Vulkan::FindMemoryType(uint32_t typefilter, VkMemoryPropertyFlags properties) const
+    uint32_t VulkanRenderer::FindMemoryType(uint32_t typefilter, VkMemoryPropertyFlags properties) const
     {
         VkPhysicalDeviceMemoryProperties props{};
         vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice, &props);
@@ -933,7 +927,7 @@ namespace Carnival {
 
         throw std::runtime_error("Unable to find suitable memory type!");
     }
-    void Vulkan::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties,
+    void VulkanRenderer::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties,
         VkBuffer& buffer, VkDeviceMemory& buffermemory, VkSharingMode sharingmode)
     {
         VkBufferCreateInfo bufferInfo{};
@@ -957,7 +951,7 @@ namespace Carnival {
             throw std::runtime_error("Failed to allocate buffer memory!");
         vkBindBufferMemory(m_LogicalDevice, buffer, buffermemory, 0);
     }
-    void Vulkan::CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
+    void VulkanRenderer::CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
     {
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -991,7 +985,7 @@ namespace Carnival {
         vkFreeCommandBuffers(m_LogicalDevice, m_CommandPool, 1, &commandBuffer);
     }
     //=================================================================================================================//
-    void Vulkan::CreateCommandPool()
+    void VulkanRenderer::CreateCommandPool()
     {
         QueueFamilyIndices qfi = FindQueueFamilies(m_PhysicalDevice);
 
@@ -1002,7 +996,7 @@ namespace Carnival {
         if (vkCreateCommandPool(m_LogicalDevice, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
             throw std::runtime_error("Failed To Create Graphics Command Pool");
     }
-    void Vulkan::CreateCommandBuffers()
+    void VulkanRenderer::CreateCommandBuffers()
     {
         m_CommandBuffers.resize(MAX_FRAMES_IN_FLIGHT);
 
@@ -1015,7 +1009,7 @@ namespace Carnival {
         if (vkAllocateCommandBuffers(m_LogicalDevice, &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS)
             throw std::runtime_error("Failed To Allocate Command Buffers!");
     }
-    void Vulkan::RecordCommandBuffer(VkCommandBuffer commandbuffer, uint32_t imageindex)
+    void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandbuffer, uint32_t imageindex)
     {
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -1063,7 +1057,7 @@ namespace Carnival {
             throw std::runtime_error("Failed to record command buffer!");
     }
     //=================================================================================================================//
-    void Vulkan::CreateSyncObjects()
+    void VulkanRenderer::CreateSyncObjects()
     {
         m_ImageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
         m_RenderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
@@ -1083,16 +1077,10 @@ namespace Carnival {
         }
     }
 
-    void Vulkan::Init()
+    void VulkanRenderer::SetSwapInterval(bool VSync)
     {
-    }
-
-    void Vulkan::SwapBuffers()
-    {
-    }
-
-    void Vulkan::SetSwapInterval(bool VSync)
-    {
+        m_VSync = VSync;
+        RecreateSwapChain();
     }
 
 }

@@ -4,17 +4,20 @@
 #include <glad/glad.h>
 
 namespace Carnival {
-	OpenGLRenderer::OpenGLRenderer(GLFWwindow* window) : m_WindowHandle{ window }
-	{ CL_CORE_ASSERT(window, "Window Is Null, Context Initialization Failed.") }
+	OpenGLRenderer::OpenGLRenderer(GLFWwindow* window, bool VSync) : m_WindowHandle{ window }, m_VSync(VSync)
+	{
+		CL_CORE_ASSERT(window, "Window Is Null, Context Initialization Failed.");
+	}
 	
 	void OpenGLRenderer::Init()
 	{
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		CL_CORE_ASSERT(status, "Failed to initialize glad!")
+		CL_CORE_ASSERT(status, "Failed to initialize glad!");
+		SetSwapInterval(m_VSync);
 	}
 
-	void OpenGLRenderer::SwapBuffers()
+	void OpenGLRenderer::DrawFrame()
 	{
 		glfwSwapBuffers(m_WindowHandle);
 		glClear(GL_COLOR_BUFFER_BIT);
