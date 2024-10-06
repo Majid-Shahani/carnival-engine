@@ -1,5 +1,5 @@
 #pragma once
-#include <clpch.h>
+#include <glm.hpp>
 
 namespace Carnival {
 	enum class RenderAPI : uint8_t
@@ -9,13 +9,27 @@ namespace Carnival {
 		VULK = 2 // Vulkan
 	};
 
+	// Check vulkan Alignment requirements, for mat4s they should be alignas(16)
+	// https://registry.khronos.org/vulkan/specs/1.3-extensions/html/chap15.html#interfaces-resources-layout
+	struct UniformBufferObject {
+		glm::mat4 model;
+		glm::mat4 view;
+		glm::mat4 proj;
+	};
+
+	// Remember To change and update GetBindingDescription and GetAttributeDescription in VK impl in case Vertex is Changed
+	// TODO: add functions for step and alignment
+	struct Vertex {
+		glm::vec2 pos;
+		glm::vec3 color;
+	};
+
 	class Renderer {
 	public:
-		virtual ~Renderer() {}
+		virtual ~Renderer() = default;
 
-		virtual void Init() = 0;
-		virtual void DrawFrame() = 0;
-		virtual void SetSwapInterval(bool VSync) = 0;
-		virtual void FramebufferResizeCallback() = 0;
+		virtual void drawFrame() = 0;
+		virtual void setSwapInterval(bool VSync) = 0;
+		virtual void framebufferResizeCallback() = 0;
 	};
 }

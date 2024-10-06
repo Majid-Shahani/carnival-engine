@@ -14,7 +14,7 @@ namespace Carnival {
 	class Application { // Class is meant to be singleton
 	public:
 		Application();
-		virtual ~Application();
+		virtual ~Application() {}
 		void Run();
 
 		void OnEvent(Event& e);

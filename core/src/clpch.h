@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <fstream>
@@ -19,6 +20,7 @@
 #include <unordered_set>
 
 #include "carnival/Log.h"
+#include "carnival/Files/Files.h"
 
 #ifdef CL_PLATFORM_WINDOWS
 	#include <Windows.h>

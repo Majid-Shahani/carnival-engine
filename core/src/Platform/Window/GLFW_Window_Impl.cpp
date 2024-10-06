@@ -1,8 +1,10 @@
 #include "clpch.h"
-#include <carnival/Window.h>
+
 #include "WindowImpl.h"
+
+#include <GLFW/glfw3.h>
 #include <Platform/OpenGL/OGLRenderer.h>
-#include <Platform/Vulkan/VKRenderer.h>
+#include <Platform/Vulkan/CL_VKRenderer.h>
 
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"
@@ -10,7 +12,7 @@
 
 namespace Carnival 
 {
-	static constexpr Carnival::RenderAPI r_API = RenderAPI::VULK; // TODO : Different builds with #ifdef
+	static constexpr Carnival::RenderAPI r_API = RenderAPI::VULK; // TODO : Runtime
 
 	static bool s_GLFWInitialized = false;
 
@@ -35,7 +37,7 @@ namespace Carnival
 
 		if constexpr (r_API == RenderAPI::OGL)	
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-		else if constexpr (r_API == RenderAPI::VULK)	
+		if constexpr (r_API == RenderAPI::VULK)	
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 
@@ -44,15 +46,12 @@ namespace Carnival
 			s_WindowCount++;
 
 			if constexpr (r_API == RenderAPI::OGL)
-				m_Renderer = new OpenGLRenderer(m_Window);
+				m_Renderer = std::make_unique<OpenGLRenderer>(m_Window, m_VSync);
 
-			if constexpr (r_API == RenderAPI::VULK) {
-				m_Renderer = new VulkanRenderer(m_Window);
-			}
-
-			m_Renderer->Init();
+			if constexpr (r_API == RenderAPI::VULK)
+				m_Renderer = std::make_unique<CL_VKRenderer>(m_Window, m_VSync);
+			
 			glfwSetWindowUserPointer(m_Window, this);
-			SetVSync(true);
 			SetCallbacks();
 		}
 		else CL_CORE_ERROR("GLFW Window Creation Failed!");
@@ -63,7 +62,7 @@ namespace Carnival
 	WindowImpl::~WindowImpl()
 	{
 		CL_CORE_INFO("Destroying Window {0}", m_Title);
-		delete m_Renderer; // TODO : Unique Pointer?
+		//delete m_Renderer; // TODO : Unique Pointer?
 		glfwDestroyWindow(m_Window);
 		s_WindowCount--;
 		if (!s_WindowCount)
@@ -78,12 +77,12 @@ namespace Carnival
 	void WindowImpl::OnUpdate()
 	{
 		glfwPollEvents();
-		m_Renderer->DrawFrame();
+		m_Renderer->drawFrame();
 	}
 
 	void WindowImpl::SetVSync(bool enabled)
 	{
-		m_Renderer->SetSwapInterval(enabled);
+		m_Renderer->setSwapInterval(enabled);
 		m_VSync = enabled;
 	}
 
@@ -112,7 +111,9 @@ namespace Carnival
 		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 			{
 				WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
-				data.m_Renderer->FramebufferResizeCallback();
+				data.m_Width = width;
+				data.m_Height = height;
+				data.m_Renderer->framebufferResizeCallback();
 			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)

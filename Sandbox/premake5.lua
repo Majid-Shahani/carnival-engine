@@ -35,6 +35,11 @@ project "Sandbox"
 		{
 			"%{IncludeDir.VulkanSDK}"
 		}
+				
+		prebuildcommands 
+		{
+			"call %{prj.location}src/shaders/compile_shaders.bat"
+		}
 
 	filter "configurations:Debug"
 		defines "CL_DEBUG"

@@ -15,6 +15,8 @@ IncludeDir["glm"] = "%{VULKAN_SDK}/Include/glm"
 IncludeDir["shaderc"] = "%{VULKAN_SDK}/Include/shaderc"
 IncludeDir["SPIRV_Cross"] = "%{VULKAN_SDK}/Include/spirv_cross"
 
+IncludeDir["SDL2"] = "%{VULKAN_SDK}/Include/SDL2"
+
 LibraryDir = {}
 
 LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"

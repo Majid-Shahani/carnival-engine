@@ -51,11 +51,7 @@ project "Core"
 			"%{Library.Vulkan}",
 			"glad"
 		}
-		
-		prebuildcommands 
-		{
-			"call %{prj.location}src/shaders/compile_shaders.bat"
-		}
+
 --------------------------------- CONFIGS -------------------------
 	filter "configurations:Debug"
 		defines 

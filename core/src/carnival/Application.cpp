@@ -19,24 +19,7 @@ namespace Carnival {
 		//m_ImGuiLayer = new ImGuiLayer();
 		//PushOverlay(m_ImGuiLayer);
 
-
 		m_Running = true;
-	}
-
-	Application::~Application() 
-	{
-	}
-
-	void Application::PushLayer(Layer* layer)
-	{
-		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
-	}
-
-	void Application::PushOverlay(Layer* layer)
-	{
-		m_LayerStack.PushOverlay(layer);
-		layer->OnAttach();
 	}
 
 	void Application::Run() 
@@ -47,7 +30,6 @@ namespace Carnival {
 			{
 				layer->OnUpdate();
 			}
-
 			/*
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
@@ -56,7 +38,6 @@ namespace Carnival {
 			}
 			m_ImGuiLayer->End();
 			*/
-
 			m_Window->OnUpdate();
 		}
 	}
@@ -75,10 +56,20 @@ namespace Carnival {
 		//CL_CORE_TRACE("Event {0} : {1}", e.ToString(), (e.m_Handled? "Handled" : "Not Handled"));
 	}
 
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
+	}
+
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
-		// TODO: Add renderer wait idle
 		return true;
 	}
 }

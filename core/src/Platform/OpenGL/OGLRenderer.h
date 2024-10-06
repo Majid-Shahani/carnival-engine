@@ -8,15 +8,15 @@ namespace Carnival {
 	{
 	public:
 		OpenGLRenderer(GLFWwindow* window, bool VSync = true);
-		virtual ~OpenGLRenderer() {}
+		virtual ~OpenGLRenderer();
 
-		virtual void Init() override;
-		virtual void DrawFrame() override;
-		virtual void SetSwapInterval(bool enabled) override;
+		virtual void drawFrame() override;
+		virtual void setSwapInterval(bool enabled) override;
 	private:
 		GLFWwindow* m_WindowHandle;
 		bool m_VSync;
+		uint32_t m_VertexArray{ NULL }, m_VertexBuffer{ NULL }, m_IndexBuffer{ NULL };
 
-		void FramebufferResizeCallback() override;
+		void framebufferResizeCallback() override;
 	};
 }

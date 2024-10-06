@@ -12,6 +12,7 @@ namespace Carnival {
 		WindowImpl(const WindowProperties& props);
 		virtual ~WindowImpl();
 
+		// TODO: Can have them create a new window / renderer instance with the same properties
 		WindowImpl(const WindowImpl&) = delete;
 		WindowImpl& operator=(const WindowImpl&) = delete;
 
@@ -37,7 +38,7 @@ namespace Carnival {
 		uint16_t m_Width, m_Height;
 		bool m_VSync;
 		EventCallbackFn m_EventCallback;
-		Renderer* m_Renderer;
+		std::unique_ptr<Renderer> m_Renderer;
 		GLFWwindow* m_Window;
 
 		// Static Variables

@@ -32,7 +32,8 @@ project "ImGui"
 		includedirs 
 		{
 			"%{IncludeDir.GLFW}",
-			"%{IncludeDir.VulkanSDK}"
+			"%{IncludeDir.VulkanSDK}",
+			"%{IncludeDir.SDL2}"
 		}
 		defines { "IMGUI_IMPL_OPENGL_LOADER_GLAD" } -- Have to change this later?
 		files
@@ -43,7 +44,11 @@ project "ImGui"
 			"backends/imgui_impl_opengl3.cpp",
 			"backends/imgui_impl_opengl3.h",
 			"backends/imgui_impl_vulkan.cpp",
-			"backends/imgui_impl_vulkan.h"
+			"backends/imgui_impl_vulkan.h",
+			"backends/imgui_impl_sdl2.h",
+			"backends/imgui_impl_sdl2.cpp",
+			"backends/imgui_impl_sdlrenderer2.h",
+			"backends/imgui_impl_sdlrenderer2.cpp"
 		}
 		links
 		{

@@ -2,7 +2,7 @@
 #include <carnival/Files/Files.h>
 
 namespace Carnival{
-    std::vector<char> readFile(const std::string& filename)
+    std::vector<char> readFileCharVec(const std::string& filename)
     {
         std::ifstream file(filename, std::ios::ate | std::ios::binary);
         if (!file.is_open()) throw std::runtime_error("Failed To Open File");
