@@ -45,6 +45,8 @@ namespace Carnival
 		if (m_Window) {
 			s_WindowCount++;
 
+			// Perhaps Renderer Init and storage should not be done in window
+			// Remove these and Rethink a way to pass along Window Resize Callback
 			if constexpr (r_API == RenderAPI::OGL)
 				m_Renderer = std::make_unique<OpenGLRenderer>(m_Window, m_VSync);
 

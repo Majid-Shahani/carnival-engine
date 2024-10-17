@@ -1,5 +1,4 @@
 #pragma once
-#include <clpch.h>
 #include "macros.h"
 #include "Event/Event.h"
 #include <carnival/Renderer/Renderer.h>

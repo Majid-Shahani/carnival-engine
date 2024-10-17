@@ -2,7 +2,7 @@
 #include <carnival/Input/Input.h>
 
 namespace Carnival {
-
+	/*
 	class InputImpl : public Input
 	{
 	protected:
@@ -14,4 +14,5 @@ namespace Carnival {
 		virtual double GetMouseXImpl() override;
 		virtual double GetMouseYImpl() override;
 	};
+	*/
 }

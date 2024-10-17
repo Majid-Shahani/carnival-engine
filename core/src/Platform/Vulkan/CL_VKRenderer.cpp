@@ -9,7 +9,7 @@
 
 namespace Carnival {
 
-	CL_VKRenderer::CL_VKRenderer(GLFWwindow* window, bool VSync) : m_Window{ window }, m_VSync{ VSync }, m_Device(window)
+	CL_VKRenderer::CL_VKRenderer(GLFWwindow* window, bool VSync) : m_Window{ window }, m_VSync{ VSync }, m_Device{window}
 	{
 		init(); // a stand-in, to be removed later
 
@@ -27,7 +27,7 @@ namespace Carnival {
         vkDestroyPipelineLayout(m_Device.device(), m_PipelineLayout, nullptr);
 	}
 
-	void CL_VKRenderer::init() {
+	void CL_VKRenderer::init() { // Mostly UBO and Descriptors
 		// Make uniform buffers
 		m_UniformBuffers.resize(CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < m_UniformBuffers.size(); i++) {
@@ -42,14 +42,18 @@ namespace Carnival {
 		}
 		
 		// Make Descriptor Pools and Descriptor Sets
-		m_GlobalPool = CL_VKDescriptorPool::Builder(m_Device)
-			.setMaxSets(CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT)
-			.addPoolSizes(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT)
-			.build();
+		m_GlobalSetLayout = std::make_unique<CL_VKDescriptorSetLayout>();
+		m_GlobalSetLayout->addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT);
+		m_GlobalSetLayout->build(m_Device.device());
 
-		m_GlobalSetLayout = CL_VKDescriptorSetLayout::Builder(m_Device)
-			.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
-			.build();
+		std::vector<VkDescriptorPoolSize> poolSize;
+		poolSize.emplace_back(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
+		m_GlobalPool = std::make_unique<CL_VKDescriptorPoolGrowable>(
+			m_Device,
+			CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT,
+			0,
+			poolSize);
+
 
 		m_GlobalDescriptorSets.resize(CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < m_GlobalDescriptorSets.size(); i++)
@@ -60,10 +64,14 @@ namespace Carnival {
 				.build(m_GlobalDescriptorSets[i]);
 		}
 
-		loadModels();
-		vkDeviceWaitIdle(m_Device.device());
+		loadModel();
+		//vkDeviceWaitIdle(m_Device.device()); // does this need to be here?
 	}
-	void CL_VKRenderer::loadModels()
+
+	// Vertex and index buffer are to come from the outside,
+	// Multiple Renderer instances for different models or
+	// One renderer with the ability to control multiple
+	void CL_VKRenderer::loadModel()
 	{
 		const std::vector<Carnival::Vertex> vertices{
 			{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
@@ -240,7 +248,8 @@ namespace Carnival {
 		vkCmdSetScissor(m_CommandBuffers[m_CurrentFrame], 0, 1, &scissor);
 
 		m_Pipeline->bind(m_CommandBuffers[m_CurrentFrame]);
-		// TODO: Descriptor Set Class Bind function
+
+		// TODO: Descriptor Set Bind function?
 		vkCmdBindDescriptorSets(
 			m_CommandBuffers[m_CurrentFrame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
@@ -248,6 +257,7 @@ namespace Carnival {
 			0, 1, // first descriptor set to be bound, and the number of sets to be bound
 			&m_GlobalDescriptorSets[m_CurrentFrame],
 			0, nullptr); // dynamic offsets
+
 		m_Model->bind(m_CommandBuffers[m_CurrentFrame]);
 		m_Model->draw(m_CommandBuffers[m_CurrentFrame]);
 

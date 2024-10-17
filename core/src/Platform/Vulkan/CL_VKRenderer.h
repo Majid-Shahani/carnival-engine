@@ -19,11 +19,12 @@ namespace Carnival {
 
 		// this is basically a stand-in for data that's supposed to be passed to the class from the outside
 		void init();
+
 		void drawFrame() override;
 		void setSwapInterval(bool VSync) override;
 		void framebufferResizeCallback() override;
+		void loadModel();
 	private:
-		void loadModels();
 
 		void createPipelineLayout(VkDescriptorSetLayout setLayout);
 		void createPipeline();
@@ -48,10 +49,10 @@ namespace Carnival {
 		// stuff to be passed in from outside
 		std::unique_ptr<CL_VKModel> m_Model;
 		std::vector<std::unique_ptr<CL_VKBuffer>> m_UniformBuffers;
-		std::unique_ptr<CL_VKDescriptorPool> m_GlobalPool{};
+		std::unique_ptr<CL_VKDescriptorPoolGrowable> m_GlobalPool{};
 		// any system with a temporary life-time that allocates descriptors using this pool object,
 		// should make sure to free those descriptors using its destructor
 		std::unique_ptr<CL_VKDescriptorSetLayout> m_GlobalSetLayout{};
-		std::vector<VkDescriptorSet> m_GlobalDescriptorSets;
+		std::vector<VkDescriptorSet> m_GlobalDescriptorSets{};
 	};
 }

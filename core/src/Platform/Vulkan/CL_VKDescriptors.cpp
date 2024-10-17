@@ -3,10 +3,10 @@
 
 namespace Carnival {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// 	   Descriptor Set Layout Builder
+// 	   Descriptor Set Layout
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	CL_VKDescriptorSetLayout::Builder& CL_VKDescriptorSetLayout::Builder::addBinding(
+	void CL_VKDescriptorSetLayout::addBinding(
 		uint32_t			binding,
 		VkDescriptorType	type,
 		VkShaderStageFlags	stageFlags,
@@ -22,135 +22,170 @@ namespace Carnival {
 		};
 
 		m_Bindings[binding] = layoutBinding;
-		return *this;
 	}
 
-	CL_VKDescriptorSetLayout::Builder& CL_VKDescriptorSetLayout::Builder::addBinding(VkDescriptorSetLayoutBinding layoutbinding)
+	void CL_VKDescriptorSetLayout::addBinding(VkDescriptorSetLayoutBinding layoutbinding)
 	{
 		CL_CORE_ASSERT(m_Bindings.count(layoutbinding.binding) == 0, "Binding Already In Use!");
 		m_Bindings[layoutbinding.binding] = layoutbinding;
-		return *this;
 	}
 
-	std::unique_ptr<CL_VKDescriptorSetLayout> CL_VKDescriptorSetLayout::Builder::build() const
+	void CL_VKDescriptorSetLayout::build(VkDevice device)
 	{
-		return std::make_unique<CL_VKDescriptorSetLayout>(m_Device, m_Bindings);
-	}
+		m_Device = device;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-// 	   Descriptor Set Layout
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+		CL_CORE_ASSERT(m_Device != nullptr, "You must pass in Proper Vulkan Device to VKDescriptor Build!");
+		CL_CORE_ASSERT(m_Bindings.size() > 0, "There must be bindings added to Vulkan Descriptor Set Layout before Build!");
 
-	CL_VKDescriptorSetLayout::CL_VKDescriptorSetLayout(
-		CL_VKDevice& device,
-		std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings)
-		: m_Device(device), m_Bindings {bindings}
-	{
 		std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings{};
-		for (const auto& pair : bindings) {
-			setLayoutBindings.push_back(pair.second);
+		for (const auto& pair : m_Bindings) {
+			setLayoutBindings.emplace_back(pair.second);
 		}
 
 		VkDescriptorSetLayoutCreateInfo info{
-			.sType =		VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-			.pNext =		nullptr,
-			.flags =		0,
-			.bindingCount =	static_cast<uint32_t>(setLayoutBindings.size()),
-			.pBindings =	setLayoutBindings.data()
+			.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+			.pNext = nullptr,
+			.flags = 0,
+			.bindingCount = static_cast<uint32_t>(setLayoutBindings.size()),
+			.pBindings = setLayoutBindings.data()
 		};
 		if (vkCreateDescriptorSetLayout(
-			m_Device.device(),
+			m_Device,
 			&info,
 			nullptr,
 			&m_DescriptorSetLayout) != VK_SUCCESS) {
-				CL_CORE_CRITICAL("Failed to create Descriptor Set Layouts");
-				throw std::runtime_error("Failed to create Descriptor Set Layouts");
+			CL_CORE_CRITICAL("Failed to create Descriptor Set Layouts");
+			throw std::runtime_error("Failed to create Descriptor Set Layouts");
 		}
 	}
 
 	CL_VKDescriptorSetLayout::~CL_VKDescriptorSetLayout()
 	{
-		vkDestroyDescriptorSetLayout(m_Device.device(), m_DescriptorSetLayout, nullptr);
+		if (m_Device) {
+			vkDestroyDescriptorSetLayout(m_Device, m_DescriptorSetLayout, nullptr);
+		}
+	}
+
+	std::vector<VkDescriptorPoolSize> CL_VKDescriptorSetLayout::getSizes() const
+	{
+		std::vector<VkDescriptorPoolSize> Sizes;
+
+		for (const auto& pair : m_Bindings)
+		{
+			Sizes.emplace_back(pair.second.descriptorType, pair.second.descriptorCount);
+		}
+
+		return Sizes;
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// 	   Descriptor Pool Builder
+// 	   Descriptor Pool
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	CL_VKDescriptorPool::Builder& CL_VKDescriptorPool::Builder::addPoolSizes(VkDescriptorType type, uint32_t count)
-	{
-		m_PoolSizes.push_back({type, count});
-		return *this;
-	}
-	CL_VKDescriptorPool::Builder& CL_VKDescriptorPool::Builder::setPoolFlags(VkDescriptorPoolCreateFlags flags)
-	{
-		m_PoolFlags = flags;
-		return *this;
-	}
-	CL_VKDescriptorPool::Builder& CL_VKDescriptorPool::Builder::setMaxSets(uint32_t count)
-	{
-		m_MaxSets = count;
-		return *this;
-	}
-	std::unique_ptr<CL_VKDescriptorPool> CL_VKDescriptorPool::Builder::build() const
-	{
-		return std::make_unique<CL_VKDescriptorPool>(m_Device, m_MaxSets, m_PoolFlags, m_PoolSizes);
-	}
-
-	CL_VKDescriptorPool::CL_VKDescriptorPool(
+	CL_VKDescriptorPoolGrowable::CL_VKDescriptorPoolGrowable(
 		CL_VKDevice&								device,
 		uint32_t									maxSets,
 		VkDescriptorPoolCreateFlags					poolFlags,
 		const std::vector<VkDescriptorPoolSize>&	poolSizes)
-		: m_Device{device}
+		: m_Device{ device }, m_MaxSets{ maxSets }, m_PoolFlags{ poolFlags }
+	{
+		for (const auto& size : poolSizes) m_PoolSizes.emplace_back(size);
+
+		m_AvailablePools.emplace_back(createPool());
+		m_MaxSets *= 1.5;
+	}
+
+	CL_VKDescriptorPoolGrowable::~CL_VKDescriptorPoolGrowable()
+	{
+		for (auto pool : m_FullPools)
+		{
+			vkDestroyDescriptorPool(m_Device.device(), pool, nullptr);
+		}
+		m_FullPools.clear();
+
+		for (auto pool : m_AvailablePools)
+		{
+			vkDestroyDescriptorPool(m_Device.device(), pool, nullptr);
+		}
+		m_AvailablePools.clear();
+	}
+
+	VkDescriptorPool CL_VKDescriptorPoolGrowable::createPool()
 	{
 		VkDescriptorPoolCreateInfo info{
-			.sType =			VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-			.pNext =			nullptr,
-			.flags =			poolFlags,
-			.maxSets =			maxSets,
-			.poolSizeCount =	static_cast<uint32_t>(poolSizes.size()),
-			.pPoolSizes =		poolSizes.data(),
+			.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+			.pNext = nullptr,
+			.flags = m_PoolFlags,
+			.maxSets = m_MaxSets,
+			.poolSizeCount = static_cast<uint32_t>(m_PoolSizes.size()),
+			.pPoolSizes = m_PoolSizes.data(),
 		};
-		if (vkCreateDescriptorPool(m_Device.device(), &info, nullptr, &m_DescriptorPool) != VK_SUCCESS) {
+		VkDescriptorPool pool{};
+		if (vkCreateDescriptorPool(m_Device.device(), &info, nullptr, &pool) != VK_SUCCESS) {
 			CL_CORE_CRITICAL("Failed To Create Descriptor Pool");
 			throw std::runtime_error("Failed To Create Descriptor Pool");
 		}
-		// TODO: Add to Available Pools Array
-	}
-	CL_VKDescriptorPool::~CL_VKDescriptorPool()
-	{
-		vkDestroyDescriptorPool(m_Device.device(), m_DescriptorPool, nullptr);
+		return pool;
 	}
 
-	bool CL_VKDescriptorPool::allocateDescriptorSet(
+	void CL_VKDescriptorPoolGrowable::allocateDescriptorSet(
 		const VkDescriptorSetLayout descriptorSetLayout,
-		VkDescriptorSet& descriptor) const
+		VkDescriptorSet& descriptorSet)
 	{
+		VkDescriptorPool pool = getPool();
 		VkDescriptorSetAllocateInfo info{
 			.sType =				VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
 			.pNext =				nullptr,
-			.descriptorPool =		m_DescriptorPool,
+			.descriptorPool =		pool,
 			.descriptorSetCount =	1,
 			.pSetLayouts =			&descriptorSetLayout
 		};
-		if (vkAllocateDescriptorSets(m_Device.device(), &info, &descriptor) != VK_SUCCESS) {
-			// TODO: Add pool to full pools
-			return false;
+		VkResult result = vkAllocateDescriptorSets(m_Device.device(), &info, &descriptorSet);
+
+		if (result == VK_ERROR_OUT_OF_POOL_MEMORY || result == VK_ERROR_FRAGMENTED_POOL) {
+			m_FullPools.emplace_back(pool);
+			
+			pool = getPool();
+			info.descriptorPool = pool;
+			if (vkAllocateDescriptorSets(m_Device.device(), &info, &descriptorSet) != VK_SUCCESS) {
+				CL_CORE_CRITICAL("Failed to allocate vulkan descriptor set twice!");
+				throw std::runtime_error("Failed to allocate vulkan descriptor set twice!");
+			}
 		}
-		return true;
+		m_AvailablePools.emplace_back(pool);
 	}
-	void CL_VKDescriptorPool::freeDescriptors(std::vector<VkDescriptorSet>& descriptors) const
+
+	// In the following loops Pool is a type-def'd pointer, so no need for auto&
+	void CL_VKDescriptorPoolGrowable::resetPools()
 	{
-		vkFreeDescriptorSets(
-			m_Device.device(),
-			m_DescriptorPool,
-			static_cast<uint32_t>(descriptors.size()),
-			descriptors.data());
+		for (auto pool : m_AvailablePools) 
+		{
+			vkResetDescriptorPool(m_Device.device(), pool, 0);
+		}
+		for (auto pool : m_FullPools)
+		{
+			vkResetDescriptorPool(m_Device.device(), pool, 0);
+			m_AvailablePools.emplace_back(pool);
+		}
+		m_FullPools.clear();
 	}
-	void CL_VKDescriptorPool::resetPool()
+
+	VkDescriptorPool CL_VKDescriptorPoolGrowable::getPool()
 	{
-		vkResetDescriptorPool(m_Device.device(), m_DescriptorPool, 0);
+		VkDescriptorPool newPool{};
+		if (m_AvailablePools.size() != 0)
+		{
+			newPool = m_AvailablePools.back();
+			m_AvailablePools.pop_back();
+		}
+		else
+		{
+			newPool = createPool();
+
+			m_MaxSets *= 1.5;
+			if (m_MaxSets > 1024)	m_MaxSets = 1024;
+		}
+		return newPool;
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +194,7 @@ namespace Carnival {
 
 	CL_VKDescriptorWriter::CL_VKDescriptorWriter(
 		CL_VKDescriptorSetLayout&	setLayout,
-		CL_VKDescriptorPool&		pool)
+		CL_VKDescriptorPoolGrowable&		pool)
 		: m_SetLayout{ setLayout }, m_Pool{pool}
 	{}
 
@@ -170,14 +205,17 @@ namespace Carnival {
 		auto& bindingDescription = m_SetLayout.m_Bindings[binding];
 		CL_CORE_ASSERT(bindingDescription.descriptorCount == 1, "Binding Single Descripter Info but binding Expects Multiple!");
 
-		VkWriteDescriptorSet write{};
-		write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		write.descriptorCount = 1;
-		write.descriptorType = bindingDescription.descriptorType;
-		write.dstBinding = binding;
-		write.pBufferInfo = bufferInfo;
-
-		m_Writes.push_back(write);
+		m_Writes.emplace_back(
+			VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET, // sType
+			nullptr, // pNext
+			nullptr, // dstSet
+			binding, // dstBinding
+			0, // dstArrayElement
+			1, // descriptorCount
+			bindingDescription.descriptorType, // descriptorType
+			nullptr, // pImageInfo
+			bufferInfo, // pBufferInfo
+			nullptr); // pTexelBufferView
 		return *this;
 	}
 
@@ -188,23 +226,25 @@ namespace Carnival {
 		auto& bindingDescription = m_SetLayout.m_Bindings[binding];
 		CL_CORE_ASSERT(bindingDescription.descriptorCount == 1, "Binding Single Descripter Info but binding Expects Multiple!");
 
-		VkWriteDescriptorSet write{};
-		write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		write.descriptorCount = 1;
-		write.descriptorType = bindingDescription.descriptorType;
-		write.dstBinding = binding;
-		write.pImageInfo = imageInfo;
+		m_Writes.emplace_back(
+			VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET, // sType
+			nullptr, // pNext
+			nullptr, // dstSet
+			binding, // dstBinding
+			0, // dstArrayElement
+			1, // descriptorCount
+			bindingDescription.descriptorType, // descriptorType
+			imageInfo, // pImageInfo
+			nullptr, // pBufferInfo
+			nullptr); // pTexelBufferView
 
-		m_Writes.push_back(write);
 		return *this;
 	}
 
-	bool CL_VKDescriptorWriter::build(VkDescriptorSet& set)
+	void CL_VKDescriptorWriter::build(VkDescriptorSet& set)
 	{
-		bool success = m_Pool.allocateDescriptorSet(m_SetLayout.getLayout(), set);
-		if (!success)	return false;
+		m_Pool.allocateDescriptorSet(m_SetLayout.getLayout(), set);
 		overwrite(set);
-		return true;
 	}
 
 	void CL_VKDescriptorWriter::overwrite(VkDescriptorSet& set)
