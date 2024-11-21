@@ -133,10 +133,13 @@ namespace Carnival {
 		configInfo.renderPass = m_SwapChain->getRenderPass();
 		configInfo.pipelineLayout = m_PipelineLayout;
 		
+		std::filesystem::path vertPath("./src/shaders/shader.vert.spv");
+		std::filesystem::path fragPath("./src/shaders/shader.frag.spv");
+
 		m_Pipeline = std::make_unique<CL_VKPipeline>(
 			m_Device,
-			"./src/shaders/shader.vert.spv",
-			"./src/shaders/shader.frag.spv",
+			vertPath,
+			fragPath,
 			configInfo);
 	}
 	void CL_VKRenderer::createCommandBuffers()

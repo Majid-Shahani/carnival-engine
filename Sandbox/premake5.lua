@@ -38,7 +38,7 @@ project "Sandbox"
 				
 		prebuildcommands 
 		{
-			"call %{prj.location}src/shaders/compile_shaders.bat"
+			"call %{prj.location}src\\shaders\\compile_shaders.bat"
 		}
 
 	filter "configurations:Debug"

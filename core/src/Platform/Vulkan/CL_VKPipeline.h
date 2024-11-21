@@ -14,7 +14,6 @@ namespace Carnival {
                 .topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
                 .primitiveRestartEnable = VK_FALSE,
             };
-
             // Viewports And Scissors
             viewport = {
                 .x = 0.0f,
@@ -28,7 +27,6 @@ namespace Carnival {
                 .offset = { 0,0 },
                 .extent = {width, height}
             };
-
             // Rasterizer
             rasterizer = {
                 .sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
@@ -45,7 +43,6 @@ namespace Carnival {
                 .depthBiasSlopeFactor = 0.0f,
                 .lineWidth = 1.0f
             };
-
             // Multi Sampling
             multisampling = {
                 .sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
@@ -58,7 +55,6 @@ namespace Carnival {
                 .alphaToCoverageEnable = VK_FALSE, // Optional
                 .alphaToOneEnable = VK_FALSE, // Optional
             };
-
             // Depth Stencil
             depthStencil = {
                 .sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
@@ -73,7 +69,6 @@ namespace Carnival {
                 .minDepthBounds = 0.0f,
                 .maxDepthBounds = 1.0f
             };
-
             // Color Blending
             colorBlendAttachment = {
                 .blendEnable = VK_FALSE,
@@ -118,7 +113,8 @@ namespace Carnival {
 	public:
 		CL_VKPipeline(
 			CL_VKDevice& device,
-			const std::string& vertShaderPath, const std::string& fragShaderPath,
+			const std::filesystem::path& vertShaderPath,
+            const std::filesystem::path& fragShaderPath,
 			const PipelineConfigInfo& configInfo);
         ~CL_VKPipeline();
 
@@ -132,10 +128,6 @@ namespace Carnival {
 	private:
 		CL_VKDevice& m_CLVKDevice;
 		VkPipeline m_GraphicsPipeline = VK_NULL_HANDLE;
-
-		void createGraphicsPipeline(
-			const std::string& vertShaderPath, const std::string& fragShaderPath,
-			const PipelineConfigInfo& configInfo);
 
 		void createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 	};

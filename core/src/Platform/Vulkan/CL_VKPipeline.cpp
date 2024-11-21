@@ -5,32 +5,12 @@
 namespace Carnival {
 
 	CL_VKPipeline::CL_VKPipeline(
-		  CL_VKDevice& device,
-		  const std::string& vertShaderPath, const std::string& fragShaderPath,
+		CL_VKDevice& device,
+		const std::filesystem::path& vertShaderPath,
+		const std::filesystem::path& fragShaderPath,
 		const PipelineConfigInfo& configInfo) : m_CLVKDevice{ device }
 	{
-		createGraphicsPipeline(vertShaderPath, fragShaderPath, configInfo);
-	}
-	CL_VKPipeline::~CL_VKPipeline()
-	{
-		// They are both Destroyed right after Pipeline Creation for now,
-		// as such they do not need to be member variables
-		//vkDestroyShaderModule(m_CLVKDevice.device(), m_FragShaderModule, nullptr);
-		//vkDestroyShaderModule(m_CLVKDevice.device(), m_VertShaderModule, nullptr);
-		vkDestroyPipeline(m_CLVKDevice.device(), m_GraphicsPipeline, nullptr);
-	}
-
-	void CL_VKPipeline::bind(VkCommandBuffer commandbuffer) const
-	{
-		vkCmdBindPipeline(commandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
-	}
-
-
-	void CL_VKPipeline::createGraphicsPipeline(
-		  const std::string& vertShaderPath,
-		  const std::string& fragShaderPath,
-		  const PipelineConfigInfo& configInfo)
-	{
+		//createGraphicsPipeline(vertShaderPath, fragShaderPath, configInfo);
 
 		CL_CORE_ASSERT(configInfo.pipelineLayout, "Must Provide PipelineLayout in configInfo to createGraphicsPipeline");
 		CL_CORE_ASSERT(configInfo.renderPass, "Must Provide RenderPass in Config Info to createGraphicsPipeline");
@@ -124,8 +104,21 @@ namespace Carnival {
 			throw std::runtime_error("Failed to create graphics pipeline");
 		}
 
-		vkDestroyShaderModule(m_CLVKDevice.device(), m_FragShaderModule, nullptr); 
+		vkDestroyShaderModule(m_CLVKDevice.device(), m_FragShaderModule, nullptr);
 		vkDestroyShaderModule(m_CLVKDevice.device(), m_VertShaderModule, nullptr);
+	}
+	CL_VKPipeline::~CL_VKPipeline()
+	{
+		// They are both Destroyed right after Pipeline Creation for now,
+		// as such they do not need to be member variables
+		//vkDestroyShaderModule(m_CLVKDevice.device(), m_FragShaderModule, nullptr);
+		//vkDestroyShaderModule(m_CLVKDevice.device(), m_VertShaderModule, nullptr);
+		vkDestroyPipeline(m_CLVKDevice.device(), m_GraphicsPipeline, nullptr);
+	}
+
+	void CL_VKPipeline::bind(VkCommandBuffer commandbuffer) const
+	{
+		vkCmdBindPipeline(commandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
 	}
 
 	void CL_VKPipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule)
