@@ -93,14 +93,19 @@ namespace Carnival {
 		clean();
 	}
 
-	void OpenGLRenderer::drawFrame()
+
+	void OpenGLRenderer::clear()
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.12f, 0.12f, 0.12f, 1.0f);
-
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
-
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	}
+	void OpenGLRenderer::swapBuffers()
+	{
 		glfwSwapBuffers(m_WindowHandle);
+	}
+	void OpenGLRenderer::drawFrame()
+	{
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, nullptr);
 	}
 
 	void OpenGLRenderer::setSwapInterval(bool enabled)
@@ -113,5 +118,6 @@ namespace Carnival {
 	void OpenGLRenderer::framebufferResizeCallback()
 	{
 	}
+
 
 }

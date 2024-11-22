@@ -20,18 +20,21 @@ namespace Carnival {
 		using EventCallbackFn = std::function<void(Event&)>;
 
 		virtual ~Window() {}
-		
-		virtual void OnUpdate() = 0;
-		
-		virtual std::string GetTitle() const = 0;
-		virtual uint16_t GetWidth() const = 0;
-		virtual uint16_t GetHeight() const = 0;
 
-		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
-		virtual bool IsVSync() const = 0;
-		virtual void SetVSync(bool enabled) = 0;
+		// temporary
+		virtual void clear() = 0;
+		virtual void onUpdate() = 0;
+		virtual void swapFrame() = 0;
 
-		virtual void* GetNativeWindow() const = 0;
+		virtual std::string getTitle() const = 0;
+		virtual uint16_t getWidth() const = 0;
+		virtual uint16_t getHeight() const = 0;
+
+		virtual void setEventCallback(const EventCallbackFn& callback) = 0;
+		virtual bool isVSync() const = 0;
+		virtual void setVSync(bool enabled) = 0;
+
+		virtual void* getNativeWindow() const = 0;
 
 		static Window* Create(const WindowProperties& props = WindowProperties());
 	};

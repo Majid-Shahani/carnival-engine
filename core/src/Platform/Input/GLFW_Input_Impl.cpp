@@ -1,10 +1,7 @@
 #include <clpch.h>
-#ifdef CL_OGL
 #include "InputImpl.h"
 #include <carnival/Window.h>
 #include <carnival/Application.h>
-
-#include <GLFW/glfw3.h>
 
 namespace Carnival {
 
@@ -12,21 +9,21 @@ namespace Carnival {
 
 	bool InputImpl::IsKeyPressedImpl(uint16_t keycode)
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
 		auto state = glfwGetKey(window, keycode);
 		return (state == GLFW_PRESS || state == GLFW_REPEAT);
 	}
 
 	bool InputImpl::IsMouseButtonPressedImpl(uint8_t button)
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
 		auto state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 	}
 
 	std::pair<double, double> InputImpl::GetMousePositionImpl()
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().getNativeWindow());
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 		return { xPos, yPos };
@@ -43,5 +40,3 @@ namespace Carnival {
 		return y;
 	}
 }
-
-#endif

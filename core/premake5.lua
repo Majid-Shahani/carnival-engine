@@ -38,7 +38,6 @@ project "Core"
 		defines
 		{
 			"CL_PLATFORM_WINDOWS",
-			"CL_GLFW",
 			"GLFW_INCLUDE_NONE"
 		}
 		includedirs

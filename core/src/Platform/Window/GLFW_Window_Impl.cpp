@@ -32,7 +32,7 @@ namespace Carnival
 	{
 		CL_CORE_INFO("Creating window {0} ({1} x {2})", props.Title, props.Width, props.Height);
 
-		if (!s_GLFWInitialized)	Init();
+		if (!s_GLFWInitialized)	init();
 
 		if constexpr (r_API == RenderAPI::OGL)	
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
@@ -53,7 +53,7 @@ namespace Carnival
 				m_Renderer = std::make_unique<CL_VKRenderer>(m_Window, m_VSync);
 			
 			glfwSetWindowUserPointer(m_Window, this);
-			SetCallbacks();
+			setCallbacks();
 		}
 		else CL_CORE_ERROR("GLFW Window Creation Failed!");
 	}
@@ -75,20 +75,28 @@ namespace Carnival
 		}
 	}
 
-	void WindowImpl::OnUpdate()
+	void WindowImpl::clear()
+	{
+		m_Renderer->clear();
+	}
+	void WindowImpl::onUpdate()
 	{
 		glfwPollEvents();
 		m_Renderer->drawFrame();
 	}
+	void WindowImpl::swapFrame()
+	{
+		m_Renderer->swapBuffers();
+	}
 
-	void WindowImpl::SetVSync(bool enabled)
+	void WindowImpl::setVSync(bool enabled)
 	{
 		m_Renderer->setSwapInterval(enabled);
 		m_VSync = enabled;
 	}
 
 
-	void WindowImpl::Init()
+	void WindowImpl::init()
 	{
 		CL_CORE_INFO("Initializing GLFW");
 		int success = glfwInit();
@@ -97,7 +105,7 @@ namespace Carnival
 		glfwSetErrorCallback(WindowErrorCallback);
 	}
 
-	void WindowImpl::SetCallbacks()
+	void WindowImpl::setCallbacks()
 	{
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
@@ -187,4 +195,5 @@ namespace Carnival
 			data.m_EventCallback(event);
 		});
 	}
+
 }

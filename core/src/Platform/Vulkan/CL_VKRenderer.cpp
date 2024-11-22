@@ -25,7 +25,8 @@ namespace Carnival {
         vkDestroyPipelineLayout(m_Device.device(), m_PipelineLayout, nullptr);
 	}
 
-	void CL_VKRenderer::init() { // Mostly UBO and Descriptors
+	void CL_VKRenderer::init() { 
+		// Mostly UBO and Descriptors
 		// Make uniform buffers
 		m_UniformBuffers.resize(CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < m_UniformBuffers.size(); i++) {
@@ -153,33 +154,37 @@ namespace Carnival {
 			throw std::runtime_error("Failed To Allocate Command Buffers!");
 		}
 	}
-
 	void CL_VKRenderer::freeCommandBuffers()
 	{
 		vkFreeCommandBuffers(m_Device.device(), m_Device.getCommandPool(), static_cast<uint32_t>(m_CommandBuffers.size()), m_CommandBuffers.data());
 		m_CommandBuffers.clear();
 	}
 
-	void CL_VKRenderer::drawFrame()
+	void CL_VKRenderer::clear()
 	{
-		// Acquire Image from the Swap Chain
-		uint32_t imageIndex{};
-		auto result = m_SwapChain->acquireNextImage(&imageIndex, m_CurrentFrame);
+		m_ImageIndex = 0;
+		auto result = m_SwapChain->acquireNextImage(&m_ImageIndex, m_CurrentFrame);
 		if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 			recreateSwapChain();
-			return;
+			return; 
+			// Wonder what happens on window resize, if this returns what will happen to drawFrame
+			// perhaps if Framebuffer is resized we should skip a frame and start from clear again somehow
+			// Window Resizing behavior in general needs improving
 		}
 		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
 			throw std::runtime_error("Failed to acquire swapchain image!");
 		}
-
-		// Do Stuff
+	}
+	void CL_VKRenderer::drawFrame()
+	{
 		vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
-		recordCommandBuffer(imageIndex);
+		recordCommandBuffer(m_ImageIndex);
 		updateUniformBuffer(m_CurrentFrame);
-
+	}
+	void CL_VKRenderer::swapBuffers()
+	{
 		// Submit Command buffer
-		result = m_SwapChain->submitCommandBuffers(&m_CommandBuffers[m_CurrentFrame], &imageIndex, m_CurrentFrame);
+		auto result = m_SwapChain->submitCommandBuffers(&m_CommandBuffers[m_CurrentFrame], &m_ImageIndex, m_CurrentFrame);
 		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || m_FramebufferResized) {
 			m_FramebufferResized = false;
 			recreateSwapChain();
@@ -208,7 +213,6 @@ namespace Carnival {
 		m_UniformBuffers[currentFrame]->writeToBuffer(&ubo);
 		m_UniformBuffers[currentFrame]->flush();
 	}
-
 	void CL_VKRenderer::recordCommandBuffer(uint32_t imageindex)
 	{
 		VkCommandBufferBeginInfo beginInfo{};
@@ -264,6 +268,7 @@ namespace Carnival {
 		if (vkEndCommandBuffer(m_CommandBuffers[m_CurrentFrame]) != VK_SUCCESS)
 			throw std::runtime_error("Failed to record command buffer!");
 	}
+
 	void CL_VKRenderer::setSwapInterval(bool VSync)
 	{
 		m_VSync = VSync;

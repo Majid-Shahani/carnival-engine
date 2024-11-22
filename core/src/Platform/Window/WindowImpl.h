@@ -16,22 +16,24 @@ namespace Carnival {
 		WindowImpl(const WindowImpl&) = delete;
 		WindowImpl& operator=(const WindowImpl&) = delete;
 
-		void OnUpdate() override;
+		void clear() override;
+		void onUpdate() override;
+		void swapFrame() override;
 
-		virtual std::string GetTitle() const override { return m_Title;}
-		virtual uint16_t GetWidth() const override { return m_Width; }
-		virtual uint16_t GetHeight() const override { return m_Height; }
+		virtual std::string getTitle() const override { return m_Title;}
+		virtual uint16_t getWidth() const override { return m_Width; }
+		virtual uint16_t getHeight() const override { return m_Height; }
 
 		// Window attributes
-		virtual void SetEventCallback(const EventCallbackFn& callback) override { m_EventCallback = callback; }
-		virtual void SetVSync(bool enabled) override;
-		virtual bool IsVSync() const override { return m_VSync; }
+		virtual void setEventCallback(const EventCallbackFn& callback) override { m_EventCallback = callback; }
+		virtual void setVSync(bool enabled) override;
+		virtual bool isVSync() const override { return m_VSync; }
 
-		virtual void* GetNativeWindow() const override { return m_Window; }
+		virtual void* getNativeWindow() const override { return m_Window; }
 	private:
 		// Member Functions 
-		void Init();
-		void SetCallbacks();
+		void init();
+		void setCallbacks();
 		// Member Variables
 
 		std::string m_Title;

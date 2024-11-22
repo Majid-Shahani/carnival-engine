@@ -2,9 +2,6 @@
 #include "ImGuiLayer.h"
 #include <carnival/Application.h>
 
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
-
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
@@ -45,7 +42,7 @@ namespace Carnival {
 		SetDarkThemeColors();
 
 		Application& app = Application::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().getNativeWindow());
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -75,7 +72,7 @@ namespace Carnival {
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
-		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+		io.DisplaySize = ImVec2(app.GetWindow().getWidth(), app.GetWindow().getHeight());
 
 		// Rendering
 		ImGui::Render();

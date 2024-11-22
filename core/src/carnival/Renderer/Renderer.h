@@ -28,7 +28,10 @@ namespace Carnival {
 	public:
 		virtual ~Renderer() = default;
 
+		virtual void clear() = 0;
 		virtual void drawFrame() = 0;
+		virtual void swapBuffers() = 0;
+
 		virtual void setSwapInterval(bool VSync) = 0;
 		virtual void framebufferResizeCallback() = 0;
 	};

@@ -11,7 +11,7 @@ namespace Carnival
 		{}
 		
 		inline uint32_t GetWidth() const { return m_Width; }
-		inline uint32_t GetHeight() const{ return m_Height; }
+		inline uint32_t getHeight() const{ return m_Height; }
 
 		EVENT_CLASS_CATEGORY(ApplicationEC)
 		EVENT_CLASS_TYPE(WindowResize)

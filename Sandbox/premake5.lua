@@ -29,7 +29,8 @@ project "Sandbox"
 		systemversion "latest"
 		defines
 		{
-			"CL_PLATFORM_WINDOWS"
+			"CL_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
 		}
 		includedirs
 		{

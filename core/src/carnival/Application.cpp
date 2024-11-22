@@ -14,7 +14,7 @@ namespace Carnival {
 		CL_CORE_INFO("Initialized Log!");
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		m_Window->setEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
 		//m_ImGuiLayer = new ImGuiLayer();
 		//PushOverlay(m_ImGuiLayer);
@@ -26,19 +26,21 @@ namespace Carnival {
 	{
 		while (m_Running) 
 		{
+			m_Window->clear();
+			m_Window->onUpdate();
+
+			/*
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
-			}
-			/*
-			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-			{
 				layer->OnRender();
 			}
+			m_ImGuiLayer->Begin();
+			m_ImGuiLayer->OnRender();
 			m_ImGuiLayer->End();
 			*/
-			m_Window->OnUpdate();
+
+			m_Window->swapFrame();
 		}
 	}
 
@@ -53,7 +55,7 @@ namespace Carnival {
 				break;
 			(*it)->OnEvent(e);
 		}
-		//CL_CORE_TRACE("Event {0} : {1}", e.ToString(), (e.m_Handled? "Handled" : "Not Handled"));
+		CL_CORE_TRACE("Event {0} : {1}", e.ToString(), (e.m_Handled? "Handled" : "Not Handled"));
 	}
 
 	void Application::PushLayer(Layer* layer)

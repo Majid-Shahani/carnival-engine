@@ -20,7 +20,10 @@ namespace Carnival {
 		// this is basically a stand-in for data that's supposed to be passed to the class from the outside
 		void init();
 
+		void clear() override;
 		void drawFrame() override;
+		void swapBuffers() override;
+
 		void setSwapInterval(bool VSync) override;
 		void framebufferResizeCallback() override;
 	private:
@@ -35,6 +38,7 @@ namespace Carnival {
 		void recordCommandBuffer(uint32_t imageindex);
 
 		uint32_t m_CurrentFrame{};
+		uint32_t m_ImageIndex{};
 		bool m_VSync = true;
 		bool m_FramebufferResized = false;
 		GLFWwindow* m_Window{ nullptr };
@@ -49,9 +53,11 @@ namespace Carnival {
 		std::unique_ptr<CL_VKModel> m_Model;
 		std::vector<std::unique_ptr<CL_VKBuffer>> m_UniformBuffers;
 		std::unique_ptr<CL_VKDescriptorPoolGrowable> m_GlobalPool{};
-		// any system with a temporary life-time that allocates descriptors using this pool object,
+
+		// any system with a temporary life-time that allocates descriptors using this global pool object,
 		// should make sure to free those descriptors using its destructor
 		std::unique_ptr<CL_VKDescriptorSetLayout> m_GlobalSetLayout{};
 		std::vector<VkDescriptorSet> m_GlobalDescriptorSets{};
+
 	};
 }
