@@ -2,7 +2,6 @@
 
 #include "WindowImpl.h"
 
-#include <GLFW/glfw3.h>
 #include <Platform/OpenGL/OGLRenderer.h>
 #include <Platform/Vulkan/CL_VKRenderer.h>
 

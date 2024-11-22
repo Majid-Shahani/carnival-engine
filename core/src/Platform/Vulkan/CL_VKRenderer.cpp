@@ -3,8 +3,6 @@
 #include "CL_VKBuffer.h"
 
 #include <GLFW/glfw3.h>
-
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Carnival {
@@ -54,7 +52,6 @@ namespace Carnival {
 			0,
 			poolSize);
 
-
 		m_GlobalDescriptorSets.resize(CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
 		for (int i = 0; i < m_GlobalDescriptorSets.size(); i++)
 		{
@@ -68,9 +65,8 @@ namespace Carnival {
 		//vkDeviceWaitIdle(m_Device.device()); // does this need to be here?
 	}
 
-	// Vertex and index buffer are to come from the outside,
-	// Multiple Renderer instances for different models or
-	// One renderer with the ability to control multiple
+	// Vertex and index buffer are to come from the outside
+	// how? an array of models passed?
 	void CL_VKRenderer::loadModel()
 	{
 		const std::vector<Carnival::Vertex> vertices{

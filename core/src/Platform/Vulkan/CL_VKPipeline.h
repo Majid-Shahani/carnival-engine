@@ -2,7 +2,6 @@
 #include <carnival/Renderer/Renderer.h>
 
 #include "CL_VKDevice.h"
-#include <string>
 
 namespace Carnival {
 

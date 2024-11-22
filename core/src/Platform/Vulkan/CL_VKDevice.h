@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Platform/Window/WindowImpl.h>
-#include <vulkan/vulkan.hpp>
+//#include <vulkan/vulkan.hpp>
 
 namespace Carnival {
 
@@ -60,18 +60,19 @@ namespace Carnival {
             VkMemoryPropertyFlags properties,
             VkBuffer& buffer,
             VkDeviceMemory& buffermemory,
-            VkSharingMode sharingmode = VK_SHARING_MODE_EXCLUSIVE);
+            VkSharingMode sharingmode = VK_SHARING_MODE_EXCLUSIVE) const;
         void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
         VkCommandBuffer beginSingleTimeCommands();
         void endSingleTimeCommands(VkCommandBuffer commandBuffer);
         void copyBufferToImage(
             VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
+
         void createImageWithInfo(
             const VkImageCreateInfo& imageInfo,
             VkMemoryPropertyFlags properties,
             VkImage& image,
-            VkDeviceMemory& imageMemory);
+            VkDeviceMemory& imageMemory) const;
 
         VkPhysicalDeviceProperties m_PhysicalDeviceProperties;
 

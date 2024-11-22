@@ -17,12 +17,12 @@ project "Sandbox"
 	{
 		"%{wks.location}/Core/src",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
 	}
 	
 		links
 	{
-		"Core"
+		"Core",
 	}
 	
 	filter "system:windows"
@@ -33,9 +33,10 @@ project "Sandbox"
 		}
 		includedirs
 		{
-			"%{IncludeDir.VulkanSDK}"
+			"%{IncludeDir.VulkanSDK}",
+			"%{IncludeDir.glad}",
+			"%{IncludeDir.GLFW}"
 		}
-				
 		prebuildcommands 
 		{
 			"call %{prj.location}src\\shaders\\compile_shaders.bat"

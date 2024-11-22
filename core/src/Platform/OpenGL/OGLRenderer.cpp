@@ -1,7 +1,5 @@
 #include "clpch.h"
 #include "OGLRenderer.h"
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
 
 namespace Carnival {
 	static uint32_t rendererID{};

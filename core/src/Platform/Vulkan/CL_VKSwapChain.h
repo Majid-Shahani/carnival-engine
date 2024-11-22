@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CL_VKDevice.h"
-#include <vulkan/vulkan.hpp>
 
 namespace Carnival {
 

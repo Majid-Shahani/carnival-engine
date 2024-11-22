@@ -1,6 +1,5 @@
 #include <clpch.h>
 #include <carnival/Files/Files.h>
-#include <filesystem>
 
 namespace Carnival{
     std::vector<char> readFileCharVec(const std::string& filename)

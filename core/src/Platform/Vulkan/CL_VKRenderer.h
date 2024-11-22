@@ -23,9 +23,8 @@ namespace Carnival {
 		void drawFrame() override;
 		void setSwapInterval(bool VSync) override;
 		void framebufferResizeCallback() override;
-		void loadModel();
 	private:
-
+		void loadModel();
 		void createPipelineLayout(VkDescriptorSetLayout setLayout);
 		void createPipeline();
 		void createCommandBuffers();

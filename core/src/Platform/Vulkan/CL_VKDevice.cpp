@@ -1,6 +1,5 @@
 #include <clpch.h>
 #include "CL_VKDevice.h"
-#include <GLFW/glfw3.h>
 
 namespace Carnival {
     
@@ -75,7 +74,7 @@ namespace Carnival {
         const VkImageCreateInfo&    imageInfo,
         VkMemoryPropertyFlags       properties,
         VkImage&                    image,
-        VkDeviceMemory&             imageMemory)
+        VkDeviceMemory&             imageMemory) const
     {
         if (vkCreateImage(m_LogicalDevice, &imageInfo, nullptr, &image) != VK_SUCCESS)
         {
@@ -444,7 +443,7 @@ namespace Carnival {
         VkMemoryPropertyFlags properties,
         VkBuffer& buffer,
         VkDeviceMemory& buffermemory,
-        VkSharingMode sharingmode)
+        VkSharingMode sharingmode) const
     {
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
