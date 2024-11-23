@@ -1,6 +1,5 @@
 #pragma once
 #include <carnival/Renderer/Renderer.h>
-#include <carnival/Window.h>
 
 #include "CL_VKDevice.h"
 #include "CL_VKSwapChain.h"
@@ -8,7 +7,7 @@
 #include "CL_VKModel.h"
 #include "CL_VKDescriptors.h"
 
-struct GLFWwindow {};
+struct GLFWwindow;
 
 namespace Carnival {
 	class CL_VKRenderer : public Renderer {

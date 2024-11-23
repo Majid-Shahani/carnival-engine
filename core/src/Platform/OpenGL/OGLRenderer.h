@@ -15,12 +15,10 @@ namespace Carnival {
 		virtual void swapBuffers() override;
 
 		virtual void setSwapInterval(bool enabled) override;
+		virtual void framebufferResizeCallback() override;
 	private:
 		GLFWwindow* m_WindowHandle;
 		bool m_VSync;
 		uint32_t m_VertexArray{ NULL }, m_VertexBuffer{ NULL }, m_IndexBuffer{ NULL };
-
-		void framebufferResizeCallback() override;
-
 	};
 }

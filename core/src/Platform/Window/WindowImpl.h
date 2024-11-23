@@ -1,8 +1,6 @@
 #pragma once
 
 #include "carnival/Window.h"
-#include <carnival/Renderer/Renderer.h>
-struct GLFWwindow;
 
 namespace Carnival {
 
@@ -16,9 +14,7 @@ namespace Carnival {
 		WindowImpl(const WindowImpl&) = delete;
 		WindowImpl& operator=(const WindowImpl&) = delete;
 
-		void clear() override;
 		void onUpdate() override;
-		void swapFrame() override;
 
 		virtual std::string getTitle() const override { return m_Title;}
 		virtual uint16_t getWidth() const override { return m_Width; }
@@ -26,8 +22,6 @@ namespace Carnival {
 
 		// Window attributes
 		virtual void setEventCallback(const EventCallbackFn& callback) override { m_EventCallback = callback; }
-		virtual void setVSync(bool enabled) override;
-		virtual bool isVSync() const override { return m_VSync; }
 
 		virtual void* getNativeWindow() const override { return m_Window; }
 	private:
@@ -38,9 +32,7 @@ namespace Carnival {
 
 		std::string m_Title;
 		uint16_t m_Width, m_Height;
-		bool m_VSync;
 		EventCallbackFn m_EventCallback;
-		std::unique_ptr<Renderer> m_Renderer;
 		GLFWwindow* m_Window;
 
 		// Static Variables

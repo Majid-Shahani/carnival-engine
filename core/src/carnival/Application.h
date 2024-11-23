@@ -14,7 +14,7 @@ namespace Carnival {
 	class Application { // Class is meant to be singleton
 	public:
 		Application();
-		virtual ~Application() {}
+		virtual ~Application();
 		void Run();
 
 		void OnEvent(Event& e);
@@ -23,14 +23,14 @@ namespace Carnival {
 		void PushOverlay(Layer* layer);
 
 		inline Window& GetWindow() { return *m_Window; }
-
 		inline static Application& Get() { return *s_Instance; }
 	private:
 		// Functions
 		bool OnWindowClose(WindowCloseEvent& e);
-
+		bool OnFramebufferResize(FrameBufferResizeEvent& e);
 		// Variables
-		std::unique_ptr<Window> m_Window = nullptr;
+		Window* m_Window = nullptr;
+		std::unique_ptr<Renderer> m_Renderer = nullptr; // could be a map or array of renderers
 		bool m_Running = false;
 		ImGuiLayer* m_ImGuiLayer = nullptr;
 		LayerStack m_LayerStack;

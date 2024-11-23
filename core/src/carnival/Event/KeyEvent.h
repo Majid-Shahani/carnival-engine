@@ -23,7 +23,7 @@ namespace Carnival {
 			: KeyEvent(keycode), m_RepeatCount(repeatCount){}
 
 		inline uint16_t GetRepeatCount() const { return m_RepeatCount; }
-		EVENT_CLASS_TYPE(KeyPressed)
+		EVENT_CLASS_TYPE(KeyPress)
 
 		#ifdef CL_DEBUG
 				std::string ToString() const override
@@ -42,7 +42,7 @@ namespace Carnival {
 	{
 	public:
 		KeyReleasedEvent(uint16_t keycode) : KeyEvent(keycode) {}
-		EVENT_CLASS_TYPE(KeyReleased)
+		EVENT_CLASS_TYPE(KeyRelease)
 
 		#ifdef CL_DEBUG
 				std::string ToString() const override

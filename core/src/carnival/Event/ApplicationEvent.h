@@ -16,7 +16,6 @@ namespace Carnival
 		EVENT_CLASS_CATEGORY(ApplicationEC)
 		EVENT_CLASS_TYPE(WindowResize)
 
-
 		#ifdef CL_DEBUG
 			std::string ToString() const override
 			{
@@ -26,7 +25,31 @@ namespace Carnival
 			}
 		#endif
 
+	private:
+		uint32_t m_Width, m_Height;
+	};
 
+	class FrameBufferResizeEvent : public Event
+	{
+	public:
+		FrameBufferResizeEvent(uint32_t width, uint32_t height)
+			: m_Width(width), m_Height(height)
+		{}
+
+		inline uint32_t getWidth() const { return m_Width; }
+		inline uint32_t getHeight() const { return m_Height; }
+
+		EVENT_CLASS_CATEGORY(RendererEC)
+		EVENT_CLASS_TYPE(FramebufferResize)
+
+		#ifdef CL_DEBUG
+			std::string ToString() const override
+			{
+				std::stringstream ss;
+				ss << "FramebufferResizeEvent: " << m_Width << ", " << m_Height;
+				return ss.str();
+			}
+		#endif
 	private:
 		uint32_t m_Width, m_Height;
 	};
@@ -46,7 +69,6 @@ namespace Carnival
 			}
 		#endif
 	};
-
 	class AppTickEvent : public Event
 	{
 	public:
@@ -61,7 +83,6 @@ namespace Carnival
 				}
 		#endif
 	};
-
 	class AppUpdateEvent : public Event
 	{
 	public:
@@ -76,7 +97,6 @@ namespace Carnival
 				}
 		#endif
 	};
-
 	class AppRenderEvent : public Event
 	{
 	public:

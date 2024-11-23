@@ -11,8 +11,6 @@
 
 namespace Carnival 
 {
-	static constexpr Carnival::RenderAPI r_API = RenderAPI::VULK; // TODO : Runtime
-
 	static bool s_GLFWInitialized = false;
 
 	// Used in Init() to SetErrorCallback
@@ -28,29 +26,19 @@ namespace Carnival
 
 // ================================================ CONSTRUCTOR =================================================================
 	WindowImpl::WindowImpl(const WindowProperties& props) 
-		: m_Title{ props.Title }, m_Width{ props.Width }, m_Height{ props.Height }, m_Renderer{ nullptr }, m_VSync{ true }
+		: m_Title{ props.Title }, m_Width{ props.Width }, m_Height{ props.Height }
 	{
 		CL_CORE_INFO("Creating window {0} ({1} x {2})", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)	init();
-
-		if constexpr (r_API == RenderAPI::OGL)	
-			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-		if constexpr (r_API == RenderAPI::VULK)	
-			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
+		
+		if (props.API == RenderAPI::OGL)	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+		if (props.API == RenderAPI::VULK)	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr); // Implicit conversion to int
 		if (m_Window) {
 			s_WindowCount++;
-
-			// Perhaps Renderer Init and storage should not be done in window
-			// Remove these and Rethink a way to pass along Window Resize Callback
-			if constexpr (r_API == RenderAPI::OGL)
-				m_Renderer = std::make_unique<OpenGLRenderer>(m_Window, m_VSync);
-
-			if constexpr (r_API == RenderAPI::VULK)
-				m_Renderer = std::make_unique<CL_VKRenderer>(m_Window, m_VSync);
 			
 			glfwSetWindowUserPointer(m_Window, this);
 			setCallbacks();
@@ -75,26 +63,10 @@ namespace Carnival
 		}
 	}
 
-	void WindowImpl::clear()
-	{
-		m_Renderer->clear();
-	}
 	void WindowImpl::onUpdate()
 	{
 		glfwPollEvents();
-		m_Renderer->drawFrame();
 	}
-	void WindowImpl::swapFrame()
-	{
-		m_Renderer->swapBuffers();
-	}
-
-	void WindowImpl::setVSync(bool enabled)
-	{
-		m_Renderer->setSwapInterval(enabled);
-		m_VSync = enabled;
-	}
-
 
 	void WindowImpl::init()
 	{
@@ -118,12 +90,14 @@ namespace Carnival
 		});
 
 		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-			{
-				WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
-				data.m_Width = width;
-				data.m_Height = height;
-				data.m_Renderer->framebufferResizeCallback();
-			});
+		{
+			WindowImpl& data = *(WindowImpl*)glfwGetWindowUserPointer(window);
+			data.m_Width = width;
+			data.m_Height = height;
+
+			FrameBufferResizeEvent ev(width, height);
+			data.m_EventCallback(ev);
+		});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 		{

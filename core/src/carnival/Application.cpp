@@ -1,9 +1,11 @@
 #include "clpch.h"
 #include "Application.h"
+#include "Platform/Vulkan/CL_VKRenderer.h"
 
 namespace Carnival {
 
 	Application* Application::s_Instance = nullptr;
+	static RenderAPI r_API = RenderAPI::VULK;
 
 	Application::Application() 
 	{
@@ -13,8 +15,16 @@ namespace Carnival {
 		Carnival::Log::Init();
 		CL_CORE_INFO("Initialized Log!");
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		WindowProperties carnival{
+			.Title = "Carnival Engine",
+			.Width = 1280,
+			.Height = 720,
+			.API = r_API
+		};
+		m_Window = Window::Create(carnival);
 		m_Window->setEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+		
+		m_Renderer = Renderer::get(r_API, m_Window, true);
 
 		//m_ImGuiLayer = new ImGuiLayer();
 		//PushOverlay(m_ImGuiLayer);
@@ -22,12 +32,18 @@ namespace Carnival {
 		m_Running = true;
 	}
 
+	Application::~Application() 
+	{
+		delete m_Window;
+	}
+
 	void Application::Run() 
 	{
 		while (m_Running) 
 		{
-			m_Window->clear();
+			m_Renderer->clear();
 			m_Window->onUpdate();
+			m_Renderer->drawFrame();
 
 			/*
 			for (Layer* layer : m_LayerStack)
@@ -40,14 +56,16 @@ namespace Carnival {
 			m_ImGuiLayer->End();
 			*/
 
-			m_Window->swapFrame();
+			m_Renderer->swapBuffers();
 		}
 	}
 
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<FrameBufferResizeEvent>(std::bind(&Application::OnFramebufferResize, this, std::placeholders::_1));
 		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
+
 
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); it++)
 		{
@@ -72,6 +90,11 @@ namespace Carnival {
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
+		return true;
+	}
+	bool Application::OnFramebufferResize(FrameBufferResizeEvent& e)
+	{
+		m_Renderer->framebufferResizeCallback();
 		return true;
 	}
 }

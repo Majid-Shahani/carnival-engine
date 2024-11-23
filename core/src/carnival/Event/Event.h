@@ -12,8 +12,9 @@ namespace Carnival
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+		KeyPress, KeyRelease,
+		MouseButtonPress, MouseButtonRelease, MouseMove, MouseScroll,
+		FramebufferResize
 	};
 
 	enum EventCategory : uint8_t
@@ -23,7 +24,8 @@ namespace Carnival
 		InputEC = BIT(1),
 		KeyboardEC = BIT(2),
 		MouseEC = BIT(3),
-		MouseButtonEC = BIT(4)
+		MouseButtonEC = BIT(4),
+		RendererEC = BIT(5)
 	};
 
 	class Event

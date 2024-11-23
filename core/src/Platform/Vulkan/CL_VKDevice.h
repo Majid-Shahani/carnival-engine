@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Platform/Window/WindowImpl.h>
-//#include <vulkan/vulkan.hpp>
 
 namespace Carnival {
 

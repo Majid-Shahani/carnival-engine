@@ -1,5 +1,4 @@
 #pragma once
-#include <glm.hpp>
 
 namespace Carnival {
 	enum class RenderAPI : uint8_t
@@ -27,6 +26,8 @@ namespace Carnival {
 	class Renderer {
 	public:
 		virtual ~Renderer() = default;
+
+		static std::unique_ptr<Renderer> get(RenderAPI api, void* pWindow, bool vSync);
 
 		virtual void clear() = 0;
 		virtual void drawFrame() = 0;
