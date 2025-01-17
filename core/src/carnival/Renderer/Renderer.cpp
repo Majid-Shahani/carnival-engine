@@ -4,7 +4,7 @@
 #include <Platform/OpenGL/OGLRenderer.h>
 namespace Carnival {
 
-	std::unique_ptr<Renderer> Renderer::get(RenderAPI api, void* pWindow, bool vSync) 
+	std::unique_ptr<Renderer> Renderer::Create(RenderAPI api, void* pWindow, bool vSync) 
 	{
 		if (api == RenderAPI::VULK) {
 			return std::make_unique<CL_VKRenderer>(static_cast<GLFWwindow*>(((Window*)pWindow)->getNativeWindow()), vSync);

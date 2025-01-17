@@ -2,7 +2,6 @@
 #include "CL_VKRenderer.h"
 #include "CL_VKBuffer.h"
 
-#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Carnival {
@@ -174,10 +173,10 @@ namespace Carnival {
 		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
 			throw std::runtime_error("Failed to acquire swapchain image!");
 		}
+		vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
 	}
 	void CL_VKRenderer::drawFrame()
 	{
-		vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
 		recordCommandBuffer(m_ImageIndex);
 		updateUniformBuffer(m_CurrentFrame);
 	}

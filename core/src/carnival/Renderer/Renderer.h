@@ -27,7 +27,7 @@ namespace Carnival {
 	public:
 		virtual ~Renderer() = default;
 
-		static std::unique_ptr<Renderer> get(RenderAPI api, void* pWindow, bool vSync);
+		static std::unique_ptr<Renderer> Create(RenderAPI api, void* pWindow, bool vSync);
 
 		virtual void clear() = 0;
 		virtual void drawFrame() = 0;

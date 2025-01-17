@@ -51,10 +51,10 @@ namespace Carnival {
 		// stuff to be passed in from outside
 		std::unique_ptr<CL_VKModel> m_Model;
 		std::vector<std::unique_ptr<CL_VKBuffer>> m_UniformBuffers;
-		std::unique_ptr<CL_VKDescriptorPoolGrowable> m_GlobalPool{};
 
 		// any system with a temporary life-time that allocates descriptors using this global pool object,
 		// should make sure to free those descriptors using its destructor
+		std::unique_ptr<CL_VKDescriptorPoolGrowable> m_GlobalPool{};
 		std::unique_ptr<CL_VKDescriptorSetLayout> m_GlobalSetLayout{};
 		std::vector<VkDescriptorSet> m_GlobalDescriptorSets{};
 

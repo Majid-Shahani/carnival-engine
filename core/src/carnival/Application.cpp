@@ -5,7 +5,7 @@
 namespace Carnival {
 
 	Application* Application::s_Instance = nullptr;
-	static RenderAPI r_API = RenderAPI::VULK;
+	static RenderAPI s_API = RenderAPI::VULK;
 
 	Application::Application() 
 	{
@@ -19,12 +19,12 @@ namespace Carnival {
 			.Title = "Carnival Engine",
 			.Width = 1280,
 			.Height = 720,
-			.API = r_API
+			.API = s_API
 		};
 		m_Window = Window::Create(carnival);
 		m_Window->setEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 		
-		m_Renderer = Renderer::get(r_API, m_Window, true);
+		m_Renderer = Renderer::Create(s_API, m_Window, true);
 
 		//m_ImGuiLayer = new ImGuiLayer();
 		//PushOverlay(m_ImGuiLayer);
