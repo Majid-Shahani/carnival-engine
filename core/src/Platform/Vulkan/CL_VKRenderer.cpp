@@ -15,7 +15,6 @@ namespace Carnival {
 		createPipeline();
 		createCommandBuffers();
 	}
-
 	CL_VKRenderer::~CL_VKRenderer()
 	{
 		vkDeviceWaitIdle(m_Device.device());
@@ -133,9 +132,10 @@ namespace Carnival {
 			fragPath,
 			configInfo);
 	}
+
 	void CL_VKRenderer::createCommandBuffers()
 	{
-		m_CommandBuffers.resize(m_SwapChain->getImageCount());
+		m_CommandBuffers.resize(m_SwapChain->MAX_FRAMES_IN_FLIGHT);
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -160,10 +160,7 @@ namespace Carnival {
 		auto result = m_SwapChain->acquireNextImage(&m_ImageIndex, m_CurrentFrame);
 		if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 			recreateSwapChain();
-			return; 
-			// Wonder what happens on window resize, if this returns what will happen to drawFrame
-			// perhaps if Framebuffer is resized we should skip a frame and start from clear again somehow
-			// Window Resizing behavior in general needs improving
+			return;
 		}
 		else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
 			throw std::runtime_error("Failed to acquire swapchain image!");
@@ -189,22 +186,6 @@ namespace Carnival {
 		m_CurrentFrame = (m_CurrentFrame + 1) % CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT;
 	}
 
-	void CL_VKRenderer::updateUniformBuffer()
-	{
-		static auto startTime = std::chrono::high_resolution_clock::now();
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
-		Carnival::UniformBufferObject ubo{
-			.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-			//+ glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
-			.view = glm::lookAt(glm::vec3(0.0f, -0.7f, 1.0f), glm::vec3{}, glm::vec3{0.0f, 1.0f, 0.0f}),
-			.proj = glm::perspective(glm::radians(75.0f), (float)m_SwapChain->getWidth() / (float)m_SwapChain->getHeight(), 0.1f, 10.0f)
-		};
-		ubo.proj[1][1] *= -1; // do this for vulkan, not for OGL
-		m_UniformBuffers[m_CurrentFrame]->writeToBuffer(&ubo);
-		m_UniformBuffers[m_CurrentFrame]->flush();
-	}
 	void CL_VKRenderer::recordCommandBuffer()
 	{
 		VkCommandBufferBeginInfo beginInfo{};
@@ -222,7 +203,7 @@ namespace Carnival {
 		renderPassInfo.renderArea.offset = { 0,0 };
 		renderPassInfo.renderArea.extent = m_SwapChain->getSwapChainExtent();
 
-		VkClearValue clearColor = { {{ 0.0f, 0.0f, 0.0f, 1.0f }} };
+		VkClearValue clearColor = { {{ 0.01f, 0.01f, 0.01f, 1.0f }} };
 		renderPassInfo.clearValueCount = 1;
 		renderPassInfo.pClearValues = &clearColor;
 
@@ -255,7 +236,7 @@ namespace Carnival {
 			0, nullptr); // dynamic offsets
 
 
-		for (int j = 0; j < 4; j++) {
+		for (int j = 0; j < 1; j++) {
 			PushConstantData push{
 				.offset = {0.0f, j * 0.35f},
 				.color = {0.1f * j * j, 0.3f * j, 0.2f + 0.2f * j}
@@ -270,7 +251,7 @@ namespace Carnival {
 				&push
 			);
 
-		m_Model->draw(m_CommandBuffers[m_CurrentFrame]);
+			m_Model->draw(m_CommandBuffers[m_CurrentFrame]);
 		}
 
 
@@ -278,6 +259,23 @@ namespace Carnival {
 		if (vkEndCommandBuffer(m_CommandBuffers[m_CurrentFrame]) != VK_SUCCESS)
 			throw std::runtime_error("Failed to record command buffer!");
 	}
+	void CL_VKRenderer::updateUniformBuffer()
+	{
+		static auto startTime = std::chrono::high_resolution_clock::now();
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+		Carnival::UniformBufferObject ubo{
+			.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+			//+ glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
+			.view = glm::lookAt(glm::vec3(0.0f, -1.0f, 1.0f), glm::vec3{}, glm::vec3{0.0f, 1.0f, 0.0f}),
+			.proj = glm::perspective(glm::radians(75.0f), (float)m_SwapChain->getWidth() / (float)m_SwapChain->getHeight(), 0.1f, 10.0f)
+		};
+		ubo.proj[1][1] *= -1; // do this for vulkan, not for OGL
+		m_UniformBuffers[m_CurrentFrame]->writeToBuffer(&ubo);
+		m_UniformBuffers[m_CurrentFrame]->flush();
+	}
+
 
 	void CL_VKRenderer::setSwapInterval(bool VSync)
 	{

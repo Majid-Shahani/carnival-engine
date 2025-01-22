@@ -17,14 +17,14 @@ namespace Carnival {
 		CL_VKSwapChain(CL_VKSwapChain&&) = delete;
 		CL_VKSwapChain& operator=(CL_VKSwapChain&&) = delete;
 
-		VkFramebuffer getFrameBuffer(int index) const { return m_SwapChainFramebuffers[index]; }
-		VkRenderPass getRenderPass() const { return m_RenderPass; }
-		VkImageView getImageView(int index) const { return m_SwapChainImageViews[index]; }
-		size_t getImageCount() const { return m_SwapChainImages.size(); }
-		VkFormat getSwapChainImageFormat() const { return m_SwapChainImageFormat; }
-		VkExtent2D getSwapChainExtent() const { return m_SwapChainExtent; }
-		uint32_t getWidth() const { return m_SwapChainExtent.width; }
-		uint32_t getHeight() const { return m_SwapChainExtent.height; }
+		VkFramebuffer	getFrameBuffer(int index) const { return m_SwapChainFramebuffers[index]; }
+		VkRenderPass	getRenderPass() const			{ return m_RenderPass; }
+		VkImageView		getImageView(int index) const	{ return m_SwapChainImageViews[index]; }
+		size_t			getImageCount() const			{ return m_SwapChainImages.size(); }
+		VkFormat		getSwapChainImageFormat() const { return m_SwapChainImageFormat; }
+		VkExtent2D		getSwapChainExtent() const		{ return m_SwapChainExtent; }
+		uint32_t		getWidth() const				{ return m_SwapChainExtent.width; }
+		uint32_t		getHeight() const				{ return m_SwapChainExtent.height; }
 
 		float extentAspectRatio() const {
 			return static_cast<float>(m_SwapChainExtent.width) / static_cast<float>(m_SwapChainExtent.height);
@@ -40,23 +40,23 @@ namespace Carnival {
 		CL_VKDevice& m_Device;
 		VkExtent2D m_WindowExtent;
 
-		VkFormat m_SwapChainImageFormat = VK_FORMAT_UNDEFINED;
-		VkExtent2D m_SwapChainExtent{};
+		VkFormat	m_SwapChainImageFormat = VK_FORMAT_UNDEFINED;
+		VkExtent2D	m_SwapChainExtent{};
 
-		std::vector<VkImage> m_DepthImages;
+		std::vector<VkImage>		m_DepthImages;
 		std::vector<VkDeviceMemory> m_DepthImageMemorys;
-		std::vector<VkImageView> m_DepthImageViews;
+		std::vector<VkImageView>	m_DepthImageViews;
 
-		std::vector<VkImage> m_SwapChainImages; // Cleaned up on swap chain destruction
-		std::vector<VkImageView> m_SwapChainImageViews;
+		std::vector<VkImage>		m_SwapChainImages; // Cleaned up on swap chain destruction
+		std::vector<VkImageView>	m_SwapChainImageViews;
 
-		std::vector<VkFramebuffer> m_SwapChainFramebuffers;
-		VkRenderPass m_RenderPass = VK_NULL_HANDLE;
+		std::vector<VkFramebuffer>	m_SwapChainFramebuffers;
+		VkRenderPass				m_RenderPass = VK_NULL_HANDLE;
 		
-		std::vector<VkSemaphore> m_ImageAvailableSemaphores;
-		std::vector<VkSemaphore> m_RenderFinishedSemaphores;
-		std::vector<VkFence> m_InFlightFences;
-		std::vector<VkFence> imagesInFlight;
+		std::vector<VkSemaphore>	m_ImageAvailableSemaphores;
+		std::vector<VkSemaphore>	m_RenderFinishedSemaphores;
+		std::vector<VkFence>		m_InFlightFences;
+		std::vector<VkFence>		imagesInFlight;
 
 		bool m_VSync;
 		
@@ -68,8 +68,8 @@ namespace Carnival {
 		void createFramebuffers();
 		void createSyncObjects();
 		
-		static VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& modes) const;
-		VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
+		static VkSurfaceFormatKHR	chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+		VkPresentModeKHR			chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& modes) const;
+		VkExtent2D					chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 	};
 }

@@ -1,11 +1,6 @@
 #include <clpch.h>
 #include "CL_VKSwapChain.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////// BIG FUCKING ISSUE ///////////////////////////////////////////////////////////////////////////////
-////////////// INFLIGHT FENCES NOT INITIALIZED NOR DESTROYED, DEPTH IMAGES NOT CREATED /////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 namespace Carnival {
 	CL_VKSwapChain::CL_VKSwapChain(
         CL_VKDevice&    deviceRef,
@@ -31,7 +26,6 @@ namespace Carnival {
     {
         for (auto framebuffer : m_SwapChainFramebuffers)
             vkDestroyFramebuffer(m_Device.device(), framebuffer, nullptr);
-
 
         for (auto imageview : m_SwapChainImageViews)
             vkDestroyImageView(m_Device.device(), imageview, nullptr);
@@ -64,9 +58,9 @@ namespace Carnival {
     {
         CL_VKDevice::SwapChainSupportDetails swapChainSupport = m_Device.getSwapChainSupport();
 
-        VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
-        VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
-        VkExtent2D swapExtent = chooseSwapExtent(swapChainSupport.capabilities);
+        VkSurfaceFormatKHR  surfaceFormat   = chooseSwapSurfaceFormat(swapChainSupport.formats);
+        VkPresentModeKHR    presentMode     = chooseSwapPresentMode(swapChainSupport.presentModes);
+        VkExtent2D          swapExtent      = chooseSwapExtent(swapChainSupport.capabilities);
 
         uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
         if (swapChainSupport.capabilities.maxImageCount > 0
@@ -277,7 +271,7 @@ namespace Carnival {
         VkFenceCreateInfo fenceInfo{};
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-        for (rsize_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
             if (vkCreateSemaphore(m_Device.device(), &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS
                 || vkCreateSemaphore(m_Device.device(), &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS
                 || vkCreateFence(m_Device.device(), &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS) {
