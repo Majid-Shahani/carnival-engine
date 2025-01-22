@@ -73,8 +73,8 @@ namespace Carnival {
             VkImage& image,
             VkDeviceMemory& imageMemory) const;
 
+        void logDeviceProperties();
         VkPhysicalDeviceProperties m_PhysicalDeviceProperties;
-
     private:
         static void CreateInstance();
         static void SetupDebugMessenger();

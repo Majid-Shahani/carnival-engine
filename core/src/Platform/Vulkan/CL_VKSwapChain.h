@@ -6,7 +6,7 @@ namespace Carnival {
 
 	class CL_VKSwapChain {
     public:
-		static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
+		static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
 		CL_VKSwapChain(CL_VKDevice& deviceRef, VkExtent2D extent, bool VSync = true);
 		CL_VKSwapChain(CL_VKDevice& deviceRef, VkExtent2D extent, std::shared_ptr<CL_VKSwapChain> previous, bool VSync = true);

@@ -99,6 +99,10 @@ namespace Carnival {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	}
+	void OpenGLRenderer::loadModel(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+	{
+
+	}
 	void OpenGLRenderer::swapBuffers()
 	{
 		glfwSwapBuffers(m_WindowHandle);

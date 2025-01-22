@@ -1,11 +1,19 @@
 #pragma once
 
 namespace Carnival {
-	enum class RenderAPI : uint8_t
-	{
+	enum class RenderAPI : uint8_t {
 		NONE = 0,
 		OGL = 1, // Open GL
 		VULK = 2 // Vulkan
+	};
+
+	// STRUCTS
+
+	// Check Alignment requirements, also Vulkan guarantees minimum 128 Bytes for push constant data (256 for 1070Ti)
+	struct PushConstantData {
+		glm::mat2 transform{ 1.0f };
+		glm::vec2 offset;
+		alignas(16)	glm::vec3 color;
 	};
 
 	// Check vulkan Alignment requirements, for mat4s they should be alignas(16)
@@ -32,7 +40,7 @@ namespace Carnival {
 		virtual void clear() = 0;
 		virtual void drawFrame() = 0;
 		virtual void swapBuffers() = 0;
-
+		virtual void loadModel(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) = 0;
 		virtual void setSwapInterval(bool VSync) = 0;
 		virtual void framebufferResizeCallback() = 0;
 	};

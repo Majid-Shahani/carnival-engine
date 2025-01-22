@@ -26,6 +26,17 @@ namespace Carnival {
 		
 		m_Renderer = Renderer::Create(s_API, m_Window, true);
 
+		// MODELS
+		const std::vector<Carnival::Vertex> vertices{
+			{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+			{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+			{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+			{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}} };
+		const std::vector<uint32_t> indices = {
+			0, 1, 2, 2, 3, 0
+		};
+		m_Renderer->loadModel(vertices, indices);
+		// GUI
 		//m_ImGuiLayer = new ImGuiLayer();
 		//PushOverlay(m_ImGuiLayer);
 
@@ -73,7 +84,7 @@ namespace Carnival {
 				break;
 			(*it)->OnEvent(e);
 		}
-		CL_CORE_TRACE("Event {0} : {1}", e.ToString(), (e.m_Handled? "Handled" : "Not Handled"));
+		//CL_CORE_TRACE("Event {0} : {1}", e.ToString(), (e.m_Handled? "Handled" : "Not Handled"));
 	}
 
 	void Application::PushLayer(Layer* layer)

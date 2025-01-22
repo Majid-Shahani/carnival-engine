@@ -8,7 +8,7 @@ namespace Carnival {
 
 	CL_VKRenderer::CL_VKRenderer(GLFWwindow* window, bool VSync) : m_Window{ window }, m_VSync{ VSync }, m_Device{window}
 	{
-		init(); // a stand-in, to be removed later
+		init();
 
 		createPipelineLayout(m_GlobalSetLayout->getLayout());
 		recreateSwapChain();
@@ -60,28 +60,22 @@ namespace Carnival {
 				.writeBuffer(0, &bufferInfo)
 				.build(m_GlobalDescriptorSets[i]);
 		}
-
-		loadModel();
-		//vkDeviceWaitIdle(m_Device.device()); // does this need to be here?
 	}
 
-	// Vertex and index buffer are to come from the outside
-	// how? an array of models passed?
-	void CL_VKRenderer::loadModel()
+	
+	void CL_VKRenderer::loadModel(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
 	{
-		const std::vector<Carnival::Vertex> vertices{
-			{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-			{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-			{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-			{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}} };
-		const std::vector<uint32_t> indices = {
-			0, 1, 2, 2, 3, 0
-		};
-
 		m_Model = std::make_unique<CL_VKModel>(m_Device, vertices, indices);
 	}
 
-	void CL_VKRenderer::createPipelineLayout(VkDescriptorSetLayout setLayout) {
+	void CL_VKRenderer::createPipelineLayout(VkDescriptorSetLayout setLayout) 
+	{
+		// Push Constants
+		VkPushConstantRange pcr{
+			.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+			.offset = 0,
+			.size = sizeof(PushConstantData)
+		};
 
 		std::vector<VkDescriptorSetLayout> setLayouts{ setLayout };
 
@@ -89,9 +83,10 @@ namespace Carnival {
 			.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
 			.setLayoutCount = static_cast<uint32_t>(setLayouts.size()),
 			.pSetLayouts = setLayouts.data(),
-			.pushConstantRangeCount = 0, // Optional
-			.pPushConstantRanges = nullptr // Optional
+			.pushConstantRangeCount = 1, // Optional
+			.pPushConstantRanges = &pcr// Optional
 		};
+
 		if (vkCreatePipelineLayout(m_Device.device(), &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
 			CL_CORE_CRITICAL("pipeline layout!");
 			throw std::runtime_error("failed to create pipeline layout!");
@@ -119,7 +114,7 @@ namespace Carnival {
 				createCommandBuffers();
 			}
 		}
-		//createPipeline(); if new swapchain is compatible with the previous one, there is no need to recreate the pipeline
+		//createPipeline(); // if new swapchain is compatible with the previous one, there is no need to recreate the pipeline
 	}
 	void CL_VKRenderer::createPipeline()
 	{
@@ -177,8 +172,8 @@ namespace Carnival {
 	}
 	void CL_VKRenderer::drawFrame()
 	{
-		recordCommandBuffer(m_ImageIndex);
-		updateUniformBuffer(m_CurrentFrame);
+		recordCommandBuffer();
+		updateUniformBuffer();
 	}
 	void CL_VKRenderer::swapBuffers()
 	{
@@ -194,25 +189,23 @@ namespace Carnival {
 		m_CurrentFrame = (m_CurrentFrame + 1) % CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT;
 	}
 
-
-	void CL_VKRenderer::updateUniformBuffer(uint32_t currentFrame)
+	void CL_VKRenderer::updateUniformBuffer()
 	{
 		static auto startTime = std::chrono::high_resolution_clock::now();
-
 		auto currentTime = std::chrono::high_resolution_clock::now();
 		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
 		Carnival::UniformBufferObject ubo{
 			.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-			.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
-			.proj = glm::perspective(glm::radians(45.0f), (float)m_SwapChain->getWidth()/ (float)m_SwapChain->getHeight(), 0.1f, 10.0f)
+			//+ glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
+			.view = glm::lookAt(glm::vec3(0.0f, -0.7f, 1.0f), glm::vec3{}, glm::vec3{0.0f, 1.0f, 0.0f}),
+			.proj = glm::perspective(glm::radians(75.0f), (float)m_SwapChain->getWidth() / (float)m_SwapChain->getHeight(), 0.1f, 10.0f)
 		};
 		ubo.proj[1][1] *= -1; // do this for vulkan, not for OGL
-
-		m_UniformBuffers[currentFrame]->writeToBuffer(&ubo);
-		m_UniformBuffers[currentFrame]->flush();
+		m_UniformBuffers[m_CurrentFrame]->writeToBuffer(&ubo);
+		m_UniformBuffers[m_CurrentFrame]->flush();
 	}
-	void CL_VKRenderer::recordCommandBuffer(uint32_t imageindex)
+	void CL_VKRenderer::recordCommandBuffer()
 	{
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -225,7 +218,7 @@ namespace Carnival {
 		VkRenderPassBeginInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		renderPassInfo.renderPass = m_SwapChain->getRenderPass();
-		renderPassInfo.framebuffer = m_SwapChain->getFrameBuffer(imageindex);
+		renderPassInfo.framebuffer = m_SwapChain->getFrameBuffer(m_ImageIndex);
 		renderPassInfo.renderArea.offset = { 0,0 };
 		renderPassInfo.renderArea.extent = m_SwapChain->getSwapChainExtent();
 
@@ -250,8 +243,9 @@ namespace Carnival {
 		vkCmdSetScissor(m_CommandBuffers[m_CurrentFrame], 0, 1, &scissor);
 
 		m_Pipeline->bind(m_CommandBuffers[m_CurrentFrame]);
+		m_Model->bind(m_CommandBuffers[m_CurrentFrame]);
 
-		// TODO: Descriptor Set Bind function?
+
 		vkCmdBindDescriptorSets(
 			m_CommandBuffers[m_CurrentFrame],
 			VK_PIPELINE_BIND_POINT_GRAPHICS,
@@ -260,8 +254,25 @@ namespace Carnival {
 			&m_GlobalDescriptorSets[m_CurrentFrame],
 			0, nullptr); // dynamic offsets
 
-		m_Model->bind(m_CommandBuffers[m_CurrentFrame]);
+
+		for (int j = 0; j < 4; j++) {
+			PushConstantData push{
+				.offset = {0.0f, j * 0.35f},
+				.color = {0.1f * j * j, 0.3f * j, 0.2f + 0.2f * j}
+			};
+
+			vkCmdPushConstants(
+				m_CommandBuffers[m_CurrentFrame],
+				m_PipelineLayout,
+				VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0,
+				sizeof(PushConstantData),
+				&push
+			);
+
 		m_Model->draw(m_CommandBuffers[m_CurrentFrame]);
+		}
+
 
 		vkCmdEndRenderPass(m_CommandBuffers[m_CurrentFrame]);
 		if (vkEndCommandBuffer(m_CommandBuffers[m_CurrentFrame]) != VK_SUCCESS)

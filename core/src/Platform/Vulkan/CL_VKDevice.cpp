@@ -45,14 +45,12 @@ namespace Carnival {
             CreateInstance();
             SetupDebugMessenger();
         }
-        if (!s_DebugMessenger) {
-            SetupDebugMessenger();
-        }
 
         CreateSurface();
         PickPhysicalDevice();
         CreateLogicalDevice();
         CreateCommandPool();
+        logDeviceProperties();
     }
     CL_VKDevice::~CL_VKDevice()
     {
@@ -81,6 +79,50 @@ namespace Carnival {
             CL_CORE_ERROR("Failed to Create Vulkan Image!");
             throw std::runtime_error("Failed to create vulkan image!");
         }
+    }
+
+    // Useful stuff:
+    // Device Name, API / Driver Version
+    // Device Type
+    static constexpr std::string_view deviceType(VkPhysicalDeviceType type) {
+        switch (type)
+        {
+        case 1:
+            return "Integrated";
+            break;
+        case 2:
+            return "Discrete";
+            break;
+        case 3:
+            return "Virtual";
+            break;
+        case 4:
+            return "CPU";
+            break;
+        default:
+            return "Other";
+        }
+    }
+    void CL_VKDevice::logDeviceProperties()
+    {
+        CL_CORE_TRACE("API Version: {0}", m_PhysicalDeviceProperties.apiVersion);
+        CL_CORE_TRACE("Driver Version: {0}", m_PhysicalDeviceProperties.driverVersion);
+        //CL_CORE_TRACE("Vendor ID: {0}", m_PhysicalDeviceProperties.vendorID);
+        //CL_CORE_TRACE("Device ID: {0}", m_PhysicalDeviceProperties.deviceID);
+        CL_CORE_TRACE("Device Type: {0}", deviceType(m_PhysicalDeviceProperties.deviceType));
+        CL_CORE_TRACE("Device Name: {0}", m_PhysicalDeviceProperties.deviceName);
+        
+        // LIMITS
+
+        // Sparse Properties
+        /*
+        CL_CORE_TRACE("Sparse Properties: ");
+        CL_CORE_TRACE("2D Block Shape: {0}", m_PhysicalDeviceProperties.sparseProperties.residencyStandard2DBlockShape);
+        CL_CORE_TRACE("2D Multisample BlockShape: {0}", m_PhysicalDeviceProperties.sparseProperties.residencyStandard2DMultisampleBlockShape);
+        CL_CORE_TRACE("3D Block Shape: {0}", m_PhysicalDeviceProperties.sparseProperties.residencyStandard3DBlockShape);
+        CL_CORE_TRACE("Aligned Mip Size: {0}", m_PhysicalDeviceProperties.sparseProperties.residencyAlignedMipSize);
+        CL_CORE_TRACE("Non Resident Strict: {0}", m_PhysicalDeviceProperties.sparseProperties.residencyNonResidentStrict);
+        */
     }
 
     void CL_VKDevice::CreateInstance() {
@@ -513,17 +555,17 @@ namespace Carnival {
         std::vector<VkExtensionProperties> extensions(extensionCount);
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
 
-        CL_CORE_TRACE("Available Extensions:");
+        //CL_CORE_TRACE("Available Extensions:");
         std::unordered_set<std::string> available;
         for (const auto& extension : extensions) {
-            CL_CORE_TRACE("\t{0}", extension.extensionName);
+            //CL_CORE_TRACE("\t{0}", extension.extensionName);
             available.insert(extension.extensionName);
         }
 
-        CL_CORE_TRACE("Required Extensions:");
+        //CL_CORE_TRACE("Required Extensions:");
         auto requiredExtensions = GetRequiredExtensions();
         for (const auto& required : requiredExtensions) {
-            CL_CORE_TRACE("\t{0}", required);
+            //CL_CORE_TRACE("\t{0}", required);
             if (available.find(required) == available.end()) {
                 CL_CORE_CRITICAL("Missing Required GLFW Extension(s)!");
                 throw std::runtime_error("Missing required glfw extension");

@@ -16,8 +16,7 @@ namespace Carnival {
 		CL_VKRenderer(GLFWwindow* window, bool VSync = true);
 		~CL_VKRenderer();
 
-		// this is basically a stand-in for data that's supposed to be passed to the class from the outside
-		void init();
+		void loadModel(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) override;
 
 		void clear() override;
 		void drawFrame() override;
@@ -25,16 +24,19 @@ namespace Carnival {
 
 		void setSwapInterval(bool VSync) override;
 		void framebufferResizeCallback() override;
+
 	private:
-		void loadModel();
+		// this is basically a stand-in for data that's supposed to be passed to the class from the outside
+		void init();
+
 		void createPipelineLayout(VkDescriptorSetLayout setLayout);
 		void createPipeline();
 		void createCommandBuffers();
 		void freeCommandBuffers();
 		void recreateSwapChain();
 		
-		void updateUniformBuffer(uint32_t currentFrame);
-		void recordCommandBuffer(uint32_t imageindex);
+		void updateUniformBuffer();
+		void recordCommandBuffer();
 
 		uint32_t m_CurrentFrame{};
 		uint32_t m_ImageIndex{};
