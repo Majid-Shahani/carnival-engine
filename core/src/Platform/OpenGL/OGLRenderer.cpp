@@ -1,6 +1,6 @@
 #include "clpch.h"
 #include "OGLRenderer.h"
-
+/*
 namespace Carnival {
 	static uint32_t rendererID{};
 
@@ -125,3 +125,4 @@ namespace Carnival {
 
 
 }
+*/

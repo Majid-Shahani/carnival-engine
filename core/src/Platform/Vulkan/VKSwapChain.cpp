@@ -1,5 +1,5 @@
 #include <clpch.h>
-#include "CL_VKSwapChain.h"
+#include "VKSwapChain.h"
 
 namespace Carnival {
 	CL_VKSwapChain::CL_VKSwapChain(
@@ -8,7 +8,11 @@ namespace Carnival {
         bool            VSync) 
 		: m_Device{deviceRef}, m_WindowExtent{extent}, m_VSync{VSync}
 	{
-        init();
+        createSwapChain();
+        createImageViews();
+        createRenderPass();
+        createFramebuffers();
+        createSyncObjects();
 	}
 
     CL_VKSwapChain::CL_VKSwapChain(
@@ -18,7 +22,11 @@ namespace Carnival {
         bool VSync)
         : m_Device{ deviceRef }, m_WindowExtent{ extent }, m_OldSwapChain{previous}, m_VSync{VSync}
     {
-        init();
+        createSwapChain();
+        createImageViews();
+        createRenderPass();
+        createFramebuffers();
+        createSyncObjects();
         m_OldSwapChain = nullptr;
     }
 
@@ -43,15 +51,6 @@ namespace Carnival {
             vkDestroySemaphore(m_Device.device(), m_RenderFinishedSemaphores[i], nullptr);
             vkDestroyFence(m_Device.device(), m_InFlightFences[i], nullptr);
         }
-    }
-
-    void CL_VKSwapChain::init()
-    {
-        createSwapChain();
-        createImageViews();
-        createRenderPass();
-        createFramebuffers();
-        createSyncObjects();
     }
 
     void CL_VKSwapChain::createSwapChain()
@@ -169,11 +168,11 @@ namespace Carnival {
         dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
         dependency.dstSubpass = 0;
 
-        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
         dependency.srcAccessMask = 0;
 
-        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-        dependency.dstStageMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
         // Render Pass
         VkRenderPassCreateInfo renderPassInfo{};
@@ -189,9 +188,10 @@ namespace Carnival {
             throw std::runtime_error("Failed To Create Render Pass!");
         }
     }
-
     void CL_VKSwapChain::createDepthResources() {
         VkFormat depthFormat = findDepthFormat();
+        m_SwapChainDepthFormat = depthFormat;
+
         VkExtent2D swapChainExtent = getSwapChainExtent();
 
         m_DepthImages.resize(getImageCount());
@@ -296,7 +296,6 @@ namespace Carnival {
         vkResetFences(m_Device.device(), 1, &m_InFlightFences[currentFrame]);
         return result;
     }
-
     VkResult CL_VKSwapChain::submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex, const uint32_t& currentFrame)
     {
         VkSubmitInfo submitInfo{};

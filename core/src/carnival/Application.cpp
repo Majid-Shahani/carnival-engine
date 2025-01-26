@@ -1,6 +1,5 @@
 #include "clpch.h"
 #include "Application.h"
-#include "Platform/Vulkan/CL_VKRenderer.h"
 
 namespace Carnival {
 
@@ -24,7 +23,7 @@ namespace Carnival {
 		m_Window = Window::Create(carnival);
 		m_Window->setEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 		
-		m_Renderer = Renderer::Create(s_API, m_Window, true);
+		m_Renderer = Renderer::Create(s_API, m_Window);
 
 		// MODELS
 		const std::vector<Carnival::Vertex> vertices{
@@ -52,10 +51,8 @@ namespace Carnival {
 	{
 		while (m_Running) 
 		{
-			m_Renderer->clear();
 			m_Window->onUpdate();
-			m_Renderer->drawFrame();
-
+			m_Renderer->render();
 			/*
 			for (Layer* layer : m_LayerStack)
 			{
@@ -66,8 +63,6 @@ namespace Carnival {
 			m_ImGuiLayer->OnRender();
 			m_ImGuiLayer->End();
 			*/
-
-			m_Renderer->swapBuffers();
 		}
 	}
 

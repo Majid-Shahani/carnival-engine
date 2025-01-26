@@ -3,7 +3,7 @@
 #include "WindowImpl.h"
 
 #include <Platform/OpenGL/OGLRenderer.h>
-#include <Platform/Vulkan/CL_VKRenderer.h>
+#include <Platform/Vulkan/VKRenderer.h>
 
 #include "carnival/Event/ApplicationEvent.h"
 #include "carnival/Event/KeyEvent.h"

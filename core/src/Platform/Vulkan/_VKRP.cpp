@@ -1,8 +1,10 @@
 #include <clpch.h>
-#include "CL_VKRenderer.h"
-#include "CL_VKBuffer.h"
+/*
+#include "VKRenderSystem.h"
+#include "VKBuffer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include "VKRenderer.h"
 
 namespace Carnival {
 
@@ -23,43 +25,6 @@ namespace Carnival {
         vkDestroyPipelineLayout(m_Device.device(), m_PipelineLayout, nullptr);
 	}
 
-	void CL_VKRenderer::init() { 
-		// Mostly UBO and Descriptors
-		// Make uniform buffers
-		m_UniformBuffers.resize(CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
-		for (int i = 0; i < m_UniformBuffers.size(); i++) {
-			m_UniformBuffers[i] = std::make_unique<CL_VKBuffer>(
-				m_Device,
-				sizeof(Carnival::UniformBufferObject),
-				1,
-				VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, // | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT can also be used but for now we flush manually
-				m_Device.m_PhysicalDeviceProperties.limits.minUniformBufferOffsetAlignment);
-			m_UniformBuffers[i]->map();
-		}
-		
-		// Make Descriptor Pools and Descriptor Sets
-		m_GlobalSetLayout = std::make_unique<CL_VKDescriptorSetLayout>();
-		m_GlobalSetLayout->addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT);
-		m_GlobalSetLayout->build(m_Device.device());
-
-		std::vector<VkDescriptorPoolSize> poolSize;
-		poolSize.emplace_back(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
-		m_GlobalPool = std::make_unique<CL_VKDescriptorPoolGrowable>(
-			m_Device,
-			CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT,
-			0,
-			poolSize);
-
-		m_GlobalDescriptorSets.resize(CL_VKSwapChain::MAX_FRAMES_IN_FLIGHT);
-		for (int i = 0; i < m_GlobalDescriptorSets.size(); i++)
-		{
-			auto bufferInfo = m_UniformBuffers[i]->descriptorInfo();
-			CL_VKDescriptorWriter(*m_GlobalSetLayout, *m_GlobalPool)
-				.writeBuffer(0, &bufferInfo)
-				.build(m_GlobalDescriptorSets[i]);
-		}
-	}
 
 	
 	void CL_VKRenderer::loadModel(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
@@ -223,6 +188,7 @@ namespace Carnival {
 		scissor.extent = m_SwapChain->getSwapChainExtent();
 		vkCmdSetScissor(m_CommandBuffers[m_CurrentFrame], 0, 1, &scissor);
 
+
 		m_Pipeline->bind(m_CommandBuffers[m_CurrentFrame]);
 		m_Model->bind(m_CommandBuffers[m_CurrentFrame]);
 
@@ -286,4 +252,4 @@ namespace Carnival {
 	{
 		m_FramebufferResized = true;
 	}
-}
+	*/

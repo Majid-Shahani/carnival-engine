@@ -1,20 +1,21 @@
 #pragma once
 #include <carnival/Renderer/Renderer.h>
 
-#include "CL_VKDevice.h"
-#include "CL_VKPipeline.h"
-#include "CL_VKBuffer.h"
+#include "VKDevice.h"
+#include "VKPipeline.h"
+#include "VKBuffer.h"
 
 namespace Carnival {
 	class CL_VKModel {
 	public:
-		CL_VKModel(CL_VKDevice& device, const std::vector<Carnival::Vertex>& vertices, const std::vector<uint32_t>& indices);
+		CL_VKModel(CL_VKDevice& device, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 		~CL_VKModel();
 
         CL_VKModel(const CL_VKModel&) = delete;
         CL_VKModel& operator=(const CL_VKModel&) = delete;
-        CL_VKModel(CL_VKModel&&) = delete;
-        CL_VKModel& operator=(CL_VKModel&&) = delete;
+
+        CL_VKModel(CL_VKModel&&) = default;
+        CL_VKModel& operator=(CL_VKModel&&) = default;
 
 		void bind(VkCommandBuffer commandBuffer) const;
 		void draw(VkCommandBuffer commandBuffer) const;

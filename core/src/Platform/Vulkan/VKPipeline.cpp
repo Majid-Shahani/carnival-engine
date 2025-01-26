@@ -1,6 +1,6 @@
 #include <clpch.h>
-#include "CL_VKPipeline.h"
-#include "CL_VKModel.h"
+#include "VKPipeline.h"
+#include "VKModel.h"
 
 namespace Carnival {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CL_VKDevice.h"
+#include "VKDevice.h"
 
 namespace Carnival {
 
@@ -14,8 +14,8 @@ namespace Carnival {
 
 		CL_VKSwapChain(const CL_VKSwapChain&) = delete;
 		CL_VKSwapChain& operator=(const CL_VKSwapChain&) = delete;
-		CL_VKSwapChain(CL_VKSwapChain&&) = delete;
-		CL_VKSwapChain& operator=(CL_VKSwapChain&&) = delete;
+		//CL_VKSwapChain(CL_VKSwapChain&&) = delete;
+		//CL_VKSwapChain& operator=(CL_VKSwapChain&&) = delete;
 
 		VkFramebuffer	getFrameBuffer(int index) const { return m_SwapChainFramebuffers[index]; }
 		VkRenderPass	getRenderPass() const			{ return m_RenderPass; }
@@ -34,6 +34,11 @@ namespace Carnival {
 		VkResult acquireNextImage(uint32_t* imageIndex, const uint32_t& currentFrame);
 		VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex, const uint32_t& currentFrame);
 
+		bool compareSwapFormats(const CL_VKSwapChain& sc) const {
+			return (sc.m_SwapChainDepthFormat == m_SwapChainDepthFormat
+				&& sc.m_SwapChainImageFormat == m_SwapChainImageFormat);
+		}
+
     private:
 		VkSwapchainKHR m_SwapChain = VK_NULL_HANDLE;
 		std::shared_ptr<CL_VKSwapChain> m_OldSwapChain;
@@ -41,6 +46,7 @@ namespace Carnival {
 		VkExtent2D m_WindowExtent;
 
 		VkFormat	m_SwapChainImageFormat = VK_FORMAT_UNDEFINED;
+		VkFormat	m_SwapChainDepthFormat = VK_FORMAT_UNDEFINED;
 		VkExtent2D	m_SwapChainExtent{};
 
 		std::vector<VkImage>		m_DepthImages;
@@ -60,7 +66,6 @@ namespace Carnival {
 
 		bool m_VSync;
 		
-		void init();
 		void createSwapChain();
 		void createImageViews();
 		void createDepthResources();

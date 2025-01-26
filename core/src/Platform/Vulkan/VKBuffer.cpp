@@ -1,5 +1,5 @@
 #include <clpch.h>
-#include "CL_VKBuffer.h"
+#include "VKBuffer.h"
 
 namespace Carnival {
 	CL_VKBuffer::CL_VKBuffer(

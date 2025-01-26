@@ -1,4 +1,5 @@
 #pragma once
+/*
 #include <carnival/Renderer/Renderer.h>
 struct GLFWwindow;
 
@@ -22,3 +23,4 @@ namespace Carnival {
 		uint32_t m_VertexArray{}, m_VertexBuffer{}, m_IndexBuffer{};
 	};
 }
+*/

@@ -1,5 +1,5 @@
 #pragma once
-#include "CL_VKDevice.h"
+#include "VKDevice.h"
 
 namespace Carnival {
 	class CL_VKBuffer {

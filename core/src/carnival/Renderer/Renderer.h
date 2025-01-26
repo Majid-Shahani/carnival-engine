@@ -35,13 +35,10 @@ namespace Carnival {
 	public:
 		virtual ~Renderer() = default;
 
-		static std::unique_ptr<Renderer> Create(RenderAPI api, void* pWindow, bool vSync);
+		static std::unique_ptr<Renderer> Create(RenderAPI api, void* pWindow);
 
-		virtual void clear() = 0;
-		virtual void drawFrame() = 0;
-		virtual void swapBuffers() = 0;
+		virtual void render() = 0;
 		virtual void loadModel(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) = 0;
-		virtual void setSwapInterval(bool VSync) = 0;
 		virtual void framebufferResizeCallback() = 0;
 	};
 }

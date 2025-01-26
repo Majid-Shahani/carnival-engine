@@ -1,5 +1,5 @@
 #include <clpch.h>
-#include "CL_VKModel.h"
+#include "VKModel.h"
 
 namespace Carnival {
 	CL_VKModel::CL_VKModel(CL_VKDevice& device, const std::vector<Carnival::Vertex>& vertices, const std::vector<uint32_t>& indices)

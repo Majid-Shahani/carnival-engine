@@ -1,5 +1,5 @@
 #include <clpch.h>
-#include "CL_VKDevice.h"
+#include "VKDevice.h"
 
 namespace Carnival {
     
